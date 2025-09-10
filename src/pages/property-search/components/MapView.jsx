@@ -83,15 +83,35 @@ const MapView = ({ properties = [], onPropertySelect, selectedProperty = null })
       {/* Map Container */}
       <div className="w-full h-full relative">
         {/* Mock Google Maps iframe */}
-        <iframe
-          width="100%"
-          height="100%"
-          loading="lazy"
-          title="Property Search Map"
-          referrerPolicy="no-referrer-when-downgrade"
-          src={`https://www.google.com/maps?q=${mapCenter?.lat},${mapCenter?.lng}&z=12&output=embed`}
-          className="border-0"
-        />
+        {/** Map iframe with load/fail detection */}
+        {!mapFailed ? (
+          <iframe
+            width="100%"
+            height="100%"
+            loading="lazy"
+            title="Property Search Map"
+            referrerPolicy="no-referrer-when-downgrade"
+            src={`https://www.google.com/maps?q=${mapCenter?.lat},${mapCenter?.lng}&z=12&output=embed`}
+            className="border-0"
+            onLoad={() => { clearTimeout(mapLoadTimerRef.current); setMapLoaded(true); }}
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center bg-muted text-center p-4">
+            <div>
+              <div className="text-lg font-semibold mb-2">Map unavailable</div>
+              <p className="text-sm text-muted-foreground mb-3">We couldn't load the embedded map. You can open it in a new tab.</p>
+              <div className="flex justify-center">
+                <a
+                  href={`https://www.google.com/maps?q=${mapCenter?.lat},${mapCenter?.lng}&z=12`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <button className="px-4 py-2 rounded bg-primary text-primary-foreground">Open in Google Maps</button>
+                </a>
+              </div>
+            </div>
+          </div>
+        )}
         
         {/* Property Markers Overlay */}
         <div className="absolute inset-0 pointer-events-none">
