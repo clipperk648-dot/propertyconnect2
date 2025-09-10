@@ -11,21 +11,7 @@ const LoginForm = ({ onLogin }) => {
   });
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  const [pendingRole, setPendingRole] = useState(null);
   const navigate = useNavigate();
-
-  const signOutAndProceed = () => {
-    // clear session then proceed to login with pending role
-    localStorage.clear();
-    if (pendingRole) {
-      // set session for pending role
-      localStorage.setItem('isAuthenticated', 'true');
-      localStorage.setItem('userRole', pendingRole.role);
-      localStorage.setItem('userEmail', pendingRole.email || '');
-      // navigate to appropriate dashboard
-      if (pendingRole.role === 'landlord') navigate('/landlord-dashboard'); else navigate('/tenant-dashboard');
-    }
-  };
 
   // Mock credentials for demo
   const mockCredentials = {
@@ -39,7 +25,7 @@ const LoginForm = ({ onLogin }) => {
       ...prev,
       [name]: value
     }));
-    
+
     // Clear error when user starts typing
     if (errors?.[name]) {
       setErrors(prev => ({
@@ -70,10 +56,8 @@ const LoginForm = ({ onLogin }) => {
 
   const handleSubmit = async (e) => {
     e?.preventDefault();
-    
-    if (!validateForm()) {
-      return;
-    }
+
+    if (!validateForm()) return;
 
     setIsLoading(true);
 
@@ -81,55 +65,32 @@ const LoginForm = ({ onLogin }) => {
       // Simulate API call delay
       await new Promise(resolve => setTimeout(resolve, 1000));
 
-      // Check credentials
+      // Determine role: if matches demo creds use that role, otherwise accept the sign-in and default to 'tenant' for testing
       let userRole = null;
-      if (formData?.email === mockCredentials?.landlord?.email && 
-          formData?.password === mockCredentials?.landlord?.password) {
+      if (formData?.email === mockCredentials?.landlord?.email && formData?.password === mockCredentials?.landlord?.password) {
         userRole = 'landlord';
-      } else if (formData?.email === mockCredentials?.tenant?.email && 
-                 formData?.password === mockCredentials?.tenant?.password) {
+      } else if (formData?.email === mockCredentials?.tenant?.email && formData?.password === mockCredentials?.tenant?.password) {
+        userRole = 'tenant';
+      } else {
+        // Accept any credentials for testing
         userRole = 'tenant';
       }
 
-      if (userRole) {
-        // If there is an existing authenticated session with a different role, require sign-out first
-        const existingRole = localStorage.getItem('userRole');
-        const existingAuth = localStorage.getItem('isAuthenticated') === 'true';
+      // Store user session
+      localStorage.setItem('isAuthenticated', 'true');
+      localStorage.setItem('userRole', userRole);
+      localStorage.setItem('userEmail', formData?.email || '');
 
-        if (existingAuth && existingRole && existingRole !== userRole) {
-          // Prompt user to sign out before switching roles
-          setErrors({
-            general: `You're currently signed in as ${existingRole}. Please sign out before signing in as a ${userRole}.`,
-          });
+      if (typeof onLogin === 'function') onLogin(userRole);
 
-          // store pending desired role so user can choose to sign out and continue
-          setPendingRole({ role: userRole, email: formData?.email });
-          setIsLoading(false);
-          return;
-        }
-
-        // Store user session
-        localStorage.setItem('isAuthenticated', 'true');
-        localStorage.setItem('userRole', userRole);
-        localStorage.setItem('userEmail', formData?.email);
-
-        onLogin(userRole);
-
-        // Navigate to appropriate dashboard
-        if (userRole === 'landlord') {
-          navigate('/landlord-dashboard');
-        } else {
-          navigate('/tenant-dashboard');
-        }
+      // Navigate to appropriate dashboard
+      if (userRole === 'landlord') {
+        navigate('/landlord-dashboard');
       } else {
-        setErrors({
-          general: 'Invalid email or password. Please check your credentials and try again.'
-        });
+        navigate('/tenant-dashboard');
       }
     } catch (error) {
-      setErrors({
-        general: 'Login failed. Please try again later.'
-      });
+      setErrors({ general: 'Login failed. Please try again later.' });
     } finally {
       setIsLoading(false);
     }
@@ -145,6 +106,7 @@ const LoginForm = ({ onLogin }) => {
           </div>
         </div>
       )}
+
       <Input
         label="Email Address"
         type="email"
@@ -156,6 +118,7 @@ const LoginForm = ({ onLogin }) => {
         required
         disabled={isLoading}
       />
+
       <Input
         label="Password"
         type="password"
@@ -167,6 +130,7 @@ const LoginForm = ({ onLogin }) => {
         required
         disabled={isLoading}
       />
+
       <Button
         type="submit"
         variant="default"
@@ -177,17 +141,6 @@ const LoginForm = ({ onLogin }) => {
       >
         {isLoading ? 'Signing In...' : 'Sign In'}
       </Button>
-      {pendingRole && (
-        <div className="mt-4 p-3 bg-yellow-50 border border-yellow-100 rounded">
-          <div className="flex items-center justify-between">
-            <div className="text-sm text-yellow-800">You attempted to sign in as <strong>{pendingRole.role}</strong>. Sign out of the current account to continue.</div>
-            <div className="flex items-center space-x-2">
-              <Button variant="outline" size="sm" onClick={() => { setPendingRole(null); setErrors({}); }}>Cancel</Button>
-              <Button variant="default" size="sm" onClick={signOutAndProceed}>Sign out & Continue</Button>
-            </div>
-          </div>
-        </div>
-      )}
     </form>
   );
 };
