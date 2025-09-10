@@ -50,15 +50,28 @@ const LocationMap = ({ location = {} }) => {
       </div>
       {/* Map */}
       <div className="h-64 bg-muted relative">
-        <iframe
-          width="100%"
-          height="100%"
-          loading="lazy"
-          title="Property Location"
-          referrerPolicy="no-referrer-when-downgrade"
-          src={`https://www.google.com/maps?q=${mockLocation?.lat},${mockLocation?.lng}&z=14&output=embed`}
-          className="border-0"
-        />
+        {!mapFailed ? (
+          <iframe
+            width="100%"
+            height="100%"
+            loading="lazy"
+            title="Property Location"
+            referrerPolicy="no-referrer-when-downgrade"
+            src={`https://www.google.com/maps?q=${mockLocation?.lat},${mockLocation?.lng}&z=14&output=embed`}
+            className="border-0"
+            onLoad={() => { clearTimeout(mapTimerRef.current); setMapLoaded(true); }}
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center p-4 text-center">
+            <div>
+              <div className="text-lg font-semibold mb-2">Map unavailable</div>
+              <p className="text-sm text-muted-foreground mb-3">We couldn't load the map. Open it in Google Maps instead.</p>
+              <a href={`https://www.google.com/maps?q=${mockLocation?.lat},${mockLocation?.lng}&z=14`} target="_blank" rel="noreferrer" className="inline-block">
+                <button className="px-4 py-2 rounded bg-primary text-primary-foreground">Open in Google Maps</button>
+              </a>
+            </div>
+          </div>
+        )}
       </div>
       {/* Scores */}
       <div className="p-6 border-b border-border">
