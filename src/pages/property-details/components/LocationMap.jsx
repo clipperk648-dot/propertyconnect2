@@ -23,6 +23,15 @@ const LocationMap = ({ location = {} }) => {
     ...location
   };
 
+  const [mapLoaded, setMapLoaded] = useState(false);
+  const [mapFailed, setMapFailed] = useState(false);
+  const mapTimerRef = useRef(null);
+
+  useEffect(() => {
+    mapTimerRef.current = setTimeout(() => { if (!mapLoaded) setMapFailed(true); }, 7000);
+    return () => clearTimeout(mapTimerRef.current);
+  }, [mapLoaded]);
+
   const getScoreColor = (score) => {
     if (score >= 90) return 'text-success';
     if (score >= 70) return 'text-warning';
