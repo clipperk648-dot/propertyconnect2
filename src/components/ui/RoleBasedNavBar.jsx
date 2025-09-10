@@ -75,7 +75,7 @@ const RoleBasedNavBar = ({ userRole = 'tenant', isAuthenticated = true }) => {
                 <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
                   <Icon name="Building2" size={20} color="white" />
                 </div>
-                <span className="text-xl font-semibold">PropertyConnect</span>
+                <span className="text-xl font-semibold">Findmyhome</span>
               </button>
             </div>
             <div className="flex items-center space-x-4">
@@ -112,7 +112,7 @@ const RoleBasedNavBar = ({ userRole = 'tenant', isAuthenticated = true }) => {
               <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
                 <Icon name="Building2" size={20} color="white" />
               </div>
-              <span className="text-xl font-semibold">PropertyConnect</span>
+              <span className="text-xl font-semibold">Findmyhome</span>
             </button>
           </div>
 

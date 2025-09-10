@@ -94,12 +94,12 @@ const TenantDashboard = () => {
           <div className="flex flex-col md:flex-row items-center justify-between">
             <div className="flex items-center space-x-2 mb-4 md:mb-0">
               <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                <span className="text-primary-foreground font-bold text-sm">PC</span>
+                <span className="text-primary-foreground font-bold text-sm">FMH</span>
               </div>
-              <span className="text-lg font-semibold text-foreground">PropertyConnect</span>
+              <span className="text-lg font-semibold text-foreground">Findmyhome</span>
             </div>
             <div className="text-sm text-muted-foreground">
-              © {new Date()?.getFullYear()} PropertyConnect. All rights reserved.
+              © {new Date()?.getFullYear()} Findmyhome. All rights reserved.
             </div>
           </div>
         </div>
