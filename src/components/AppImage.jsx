@@ -13,7 +13,9 @@ function Image({
       alt={alt}
       className={className}
       onError={(e) => {
-        e.target.src = "/assets/images/no_image.png"
+        // Prevent infinite loop if fallback is missing
+        e.currentTarget.onerror = null;
+        e.currentTarget.src = "/assets/images/no_image.png";
       }}
       {...props}
     />
