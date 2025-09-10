@@ -7,6 +7,7 @@ import PropertyDetails from './pages/property-details';
 import LoginPage from './pages/login';
 import PropertySearch from './pages/property-search';
 import LandlordDashboard from './pages/landlord-dashboard';
+import LandlordActivity from './pages/landlord-dashboard/activity';
 import Register from './pages/register';
 import TenantDashboard from './pages/tenant-dashboard';
 import PropertyManagement from './pages/property-management';
@@ -35,6 +36,7 @@ const Routes = () => {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/property-search" element={<PropertySearch />} />
         <Route path="/landlord-dashboard" element={<LandlordDashboard />} />
+        <Route path="/landlord-dashboard/activity" element={<LandlordActivity />} />
         <Route path="/register" element={<Register />} />
         <Route path="/tenant-dashboard" element={<TenantDashboard />} />
         <Route path="/property-management" element={<PropertyManagement />} />
