@@ -40,7 +40,7 @@ const MobileAppFooter = ({ userRole = 'tenant' }) => {
           id: 'properties',
           label: 'Properties',
           icon: 'Building2',
-          path: '/landlord-dashboard',
+          path: '/properties',
           activeColor: 'text-orange-600',
           inactiveColor: 'text-gray-500'
         },
