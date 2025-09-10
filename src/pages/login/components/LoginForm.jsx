@@ -78,13 +78,29 @@ const LoginForm = ({ onLogin }) => {
       }
 
       if (userRole) {
+        // If there is an existing authenticated session with a different role, require sign-out first
+        const existingRole = localStorage.getItem('userRole');
+        const existingAuth = localStorage.getItem('isAuthenticated') === 'true';
+
+        if (existingAuth && existingRole && existingRole !== userRole) {
+          // Prompt user to sign out before switching roles
+          setErrors({
+            general: `You're currently signed in as ${existingRole}. Please sign out before signing in as a ${userRole}.`,
+          });
+
+          // store pending desired role so user can choose to sign out and continue
+          setPendingRole({ role: userRole, email: formData?.email });
+          setIsLoading(false);
+          return;
+        }
+
         // Store user session
         localStorage.setItem('isAuthenticated', 'true');
         localStorage.setItem('userRole', userRole);
         localStorage.setItem('userEmail', formData?.email);
-        
+
         onLogin(userRole);
-        
+
         // Navigate to appropriate dashboard
         if (userRole === 'landlord') {
           navigate('/landlord-dashboard');
