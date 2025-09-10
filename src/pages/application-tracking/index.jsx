@@ -233,7 +233,7 @@ const ApplicationTracking = () => {
               <span className="text-lg font-semibold text-foreground">Findmyhome</span>
             </div>
             <div className="text-sm text-muted-foreground">
-              © {new Date()?.getFullYear()} PropertyConnect. All rights reserved.
+              © {new Date()?.getFullYear()} Findmyhome. All rights reserved.
             </div>
           </div>
         </div>
