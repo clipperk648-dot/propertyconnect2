@@ -35,32 +35,39 @@ const Routes = () => {
       <ErrorBoundary>
       <ScrollToTop />
       <RouterRoutes>
-        {/* Define your route here */}
-        <Route path="/" element={<LandlordDashboard />} />
-        <Route path="/property-details" element={<PropertyDetails />} />
+        {/* Root shows splash then login */}
+        <Route path="/" element={<Splash />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/property-search" element={<PropertySearch />} />
-        <Route path="/landlord-dashboard" element={<LandlordDashboard />} />
-        <Route path="/landlord-dashboard/activity" element={<LandlordActivity />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/tenant-dashboard" element={<TenantDashboard />} />
-        <Route path="/property-management" element={<PropertyManagement />} />
-        <Route path="/inquiry-management" element={<InquiryManagement />} />
-        <Route path="/application-tracking" element={<ApplicationTracking />} />
-        <Route path="/properties" element={<Properties />} />
-        <Route path="/messages" element={<Messages />} />
-        <Route path="/analytics" element={<Analytics />} />
-        <Route path="/favorites" element={<Favorites />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/settings" element={<Settings />} />
-        <Route path="/billing" element={<Billing />} />
-        <Route path="/notifications" element={<Notifications />} />
-        <Route path="/help" element={<Help />} />
-        <Route path="/support" element={<Support />} />
-        <Route path="/bulk-edit" element={<BulkEdit />} />
-        <Route path="/export" element={<ExportPage />} />
-        <Route path="/reports" element={<Reports />} />
-        <Route path="/applications" element={<ApplicationTracking />} />
+
+        {/* Public pages */}
+        <Route path="/property-search" element={<PropertySearch />} />
+        <Route path="/property-details" element={<PropertyDetails />} />
+
+        {/* Protected: Landlord only */}
+        <Route path="/landlord-dashboard" element={<ProtectedRoute allowedRole="landlord"><LandlordDashboard /></ProtectedRoute>} />
+        <Route path="/landlord-dashboard/activity" element={<ProtectedRoute allowedRole="landlord"><LandlordActivity /></ProtectedRoute>} />
+        <Route path="/property-management" element={<ProtectedRoute allowedRole="landlord"><PropertyManagement /></ProtectedRoute>} />
+        <Route path="/bulk-edit" element={<ProtectedRoute allowedRole="landlord"><BulkEdit /></ProtectedRoute>} />
+
+        {/* Protected: Tenant only */}
+        <Route path="/tenant-dashboard" element={<ProtectedRoute allowedRole="tenant"><TenantDashboard /></ProtectedRoute>} />
+
+        {/* Shared protected pages (require auth but any role) */}
+        <Route path="/properties" element={<ProtectedRoute><Properties /></ProtectedRoute>} />
+        <Route path="/messages" element={<ProtectedRoute><Messages /></ProtectedRoute>} />
+        <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
+        <Route path="/favorites" element={<ProtectedRoute><Favorites /></ProtectedRoute>} />
+        <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+        <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+        <Route path="/billing" element={<ProtectedRoute><Billing /></ProtectedRoute>} />
+        <Route path="/notifications" element={<ProtectedRoute><Notifications /></ProtectedRoute>} />
+        <Route path="/help" element={<ProtectedRoute><Help /></ProtectedRoute>} />
+        <Route path="/support" element={<ProtectedRoute><Support /></ProtectedRoute>} />
+        <Route path="/export" element={<ProtectedRoute><ExportPage /></ProtectedRoute>} />
+        <Route path="/reports" element={<ProtectedRoute><Reports /></ProtectedRoute>} />
+        <Route path="/applications" element={<ProtectedRoute><ApplicationTracking /></ProtectedRoute>} />
+
         <Route path="*" element={<NotFound />} />
       </RouterRoutes>
       </ErrorBoundary>
