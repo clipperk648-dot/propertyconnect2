@@ -87,14 +87,6 @@ const MobileAppFooter = ({ userRole = 'tenant' }) => {
   };
 
   const handleNavigation = (item) => {
-    // Handle special cases for non-implemented routes
-    if (item?.path === '/messages' || item?.path === '/favorites' || item?.path === '/profile') {
-      console.log(`Navigate to ${item?.label} - Not implemented yet`);
-      // For demo purposes, show an alert
-      alert(`${item?.label} page - Coming soon!`);
-      return;
-    }
-    
     navigate(item?.path);
   };
 
