@@ -177,6 +177,17 @@ const LoginForm = ({ onLogin }) => {
       >
         {isLoading ? 'Signing In...' : 'Sign In'}
       </Button>
+      {pendingRole && (
+        <div className="mt-4 p-3 bg-yellow-50 border border-yellow-100 rounded">
+          <div className="flex items-center justify-between">
+            <div className="text-sm text-yellow-800">You attempted to sign in as <strong>{pendingRole.role}</strong>. Sign out of the current account to continue.</div>
+            <div className="flex items-center space-x-2">
+              <Button variant="outline" size="sm" onClick={() => { setPendingRole(null); setErrors({}); }}>Cancel</Button>
+              <Button variant="default" size="sm" onClick={signOutAndProceed}>Sign out & Continue</Button>
+            </div>
+          </div>
+        </div>
+      )}
     </form>
   );
 };
