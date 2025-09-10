@@ -11,7 +11,21 @@ const LoginForm = ({ onLogin }) => {
   });
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [pendingRole, setPendingRole] = useState(null);
   const navigate = useNavigate();
+
+  const signOutAndProceed = () => {
+    // clear session then proceed to login with pending role
+    localStorage.clear();
+    if (pendingRole) {
+      // set session for pending role
+      localStorage.setItem('isAuthenticated', 'true');
+      localStorage.setItem('userRole', pendingRole.role);
+      localStorage.setItem('userEmail', pendingRole.email || '');
+      // navigate to appropriate dashboard
+      if (pendingRole.role === 'landlord') navigate('/landlord-dashboard'); else navigate('/tenant-dashboard');
+    }
+  };
 
   // Mock credentials for demo
   const mockCredentials = {
