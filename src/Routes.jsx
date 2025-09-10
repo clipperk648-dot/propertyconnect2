@@ -55,6 +55,9 @@ const Routes = () => {
         <Route path="/notifications" element={<Notifications />} />
         <Route path="/help" element={<Help />} />
         <Route path="/support" element={<Support />} />
+        <Route path="/bulk-edit" element={<BulkEdit />} />
+        <Route path="/export" element={<ExportPage />} />
+        <Route path="/reports" element={<Reports />} />
         <Route path="/applications" element={<ApplicationTracking />} />
         <Route path="*" element={<NotFound />} />
       </RouterRoutes>
