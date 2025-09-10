@@ -26,6 +26,8 @@ import Support from './pages/support';
 import BulkEdit from './pages/bulk-edit';
 import ExportPage from './pages/export';
 import Reports from './pages/reports';
+import Splash from './pages/Splash';
+import ProtectedRoute from './components/ProtectedRoute';
 
 const Routes = () => {
   return (
