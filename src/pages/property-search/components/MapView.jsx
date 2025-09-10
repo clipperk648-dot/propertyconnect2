@@ -4,6 +4,18 @@ import Button from '../../../components/ui/Button';
 
 const MapView = ({ properties = [], onPropertySelect, selectedProperty = null }) => {
   const [mapCenter] = useState({ lat: 40.7128, lng: -74.0060 }); // New York City
+  const [mapLoaded, setMapLoaded] = useState(false);
+  const [mapFailed, setMapFailed] = useState(false);
+  const mapLoadTimerRef = useRef(null);
+
+  useEffect(() => {
+    // If the iframe doesn't load within 7s, mark as failed so we show a fallback
+    mapLoadTimerRef.current = setTimeout(() => {
+      if (!mapLoaded) setMapFailed(true);
+    }, 7000);
+
+    return () => clearTimeout(mapLoadTimerRef.current);
+  }, [mapLoaded]);
 
   const PropertyMarker = ({ property, isSelected, onClick }) => (
     <div
