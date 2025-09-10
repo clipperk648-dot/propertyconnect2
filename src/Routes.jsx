@@ -23,6 +23,9 @@ import Billing from './pages/billing';
 import Notifications from './pages/notifications';
 import Help from './pages/help';
 import Support from './pages/support';
+import BulkEdit from './pages/bulk-edit';
+import ExportPage from './pages/export';
+import Reports from './pages/reports';
 
 const Routes = () => {
   return (
