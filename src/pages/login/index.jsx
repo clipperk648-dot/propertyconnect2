@@ -58,7 +58,7 @@ const LoginPage = () => {
               <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
                 <Icon name="Building2" size={20} color="white" />
               </div>
-              <span className="text-xl font-semibold">PropertyConnect</span>
+              <span className="text-xl font-semibold">Findmyhome</span>
             </button>
             
             <div className="flex items-center space-x-4">
@@ -87,7 +87,7 @@ const LoginPage = () => {
               Welcome Back
             </h1>
             <p className="mt-2 text-sm text-muted-foreground">
-              Sign in to your PropertyConnect account to access your dashboard
+              Sign in to your Findmyhome account to access your dashboard
             </p>
           </div>
 
@@ -125,7 +125,7 @@ const LoginPage = () => {
           <div className="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
             <div className="flex items-center space-x-4">
               <p className="text-xs text-muted-foreground">
-                © {new Date()?.getFullYear()} PropertyConnect. All rights reserved.
+                © {new Date()?.getFullYear()} Findmyhome. All rights reserved.
               </p>
             </div>
             

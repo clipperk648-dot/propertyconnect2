@@ -13,7 +13,15 @@ function Image({
       alt={alt}
       className={className}
       onError={(e) => {
-        e.target.src = "/assets/images/no_image.png"
+        // Prevent infinite loop and use inline SVG fallback
+        e.currentTarget.onerror = null;
+        const svg = encodeURIComponent(
+          '<svg xmlns="http://www.w3.org/2000/svg" width="300" height="200" viewBox="0 0 300 200">\n' +
+          '  <rect width="300" height="200" fill="#f3f4f6"/>\n' +
+          '  <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#9ca3af" font-family="Inter, Arial" font-size="14">Image unavailable</text>\n' +
+          '</svg>'
+        );
+        e.currentTarget.src = `data:image/svg+xml;charset=utf-8,${svg}`;
       }}
       {...props}
     />

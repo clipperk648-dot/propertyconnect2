@@ -24,7 +24,7 @@ const InquiryManagement = () => {
   // Mock user data
   const currentUser = {
     name: "David Wilson",
-    email: "david.wilson@propertyconnect.com",
+    email: "david.wilson@findmyhome.com",
     avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
     role: "landlord"
   };

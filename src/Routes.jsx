@@ -12,6 +12,16 @@ import TenantDashboard from './pages/tenant-dashboard';
 import PropertyManagement from './pages/property-management';
 import InquiryManagement from './pages/inquiry-management';
 import ApplicationTracking from './pages/application-tracking';
+import Properties from './pages/properties';
+import Messages from './pages/messages';
+import Analytics from './pages/analytics';
+import Favorites from './pages/favorites';
+import Profile from './pages/profile';
+import Settings from './pages/settings';
+import Billing from './pages/billing';
+import Notifications from './pages/notifications';
+import Help from './pages/help';
+import Support from './pages/support';
 
 const Routes = () => {
   return (
@@ -30,6 +40,17 @@ const Routes = () => {
         <Route path="/property-management" element={<PropertyManagement />} />
         <Route path="/inquiry-management" element={<InquiryManagement />} />
         <Route path="/application-tracking" element={<ApplicationTracking />} />
+        <Route path="/properties" element={<Properties />} />
+        <Route path="/messages" element={<Messages />} />
+        <Route path="/analytics" element={<Analytics />} />
+        <Route path="/favorites" element={<Favorites />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/settings" element={<Settings />} />
+        <Route path="/billing" element={<Billing />} />
+        <Route path="/notifications" element={<Notifications />} />
+        <Route path="/help" element={<Help />} />
+        <Route path="/support" element={<Support />} />
+        <Route path="/applications" element={<ApplicationTracking />} />
         <Route path="*" element={<NotFound />} />
       </RouterRoutes>
       </ErrorBoundary>

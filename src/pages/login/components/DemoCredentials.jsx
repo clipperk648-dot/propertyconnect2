@@ -8,14 +8,14 @@ const DemoCredentials = ({ onCredentialSelect }) => {
   const demoAccounts = [
     {
       role: 'landlord',
-      email: 'landlord@propertyconnect.com',
+      email: 'landlord@findmyhome.com',
       password: 'landlord123',
       label: 'Property Owner Demo',
       description: 'Access landlord dashboard with property management features'
     },
     {
       role: 'tenant',
-      email: 'tenant@propertyconnect.com',
+      email: 'tenant@findmyhome.com',
       password: 'tenant123',
       label: 'Tenant Demo',
       description: 'Access tenant dashboard with property search features'

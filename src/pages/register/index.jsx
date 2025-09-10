@@ -12,8 +12,8 @@ const Register = () => {
   return (
     <>
       <Helmet>
-        <title>Create Account - PropertyConnect</title>
-        <meta name="description" content="Join PropertyConnect to list properties or find your perfect home. Create your account today." />
+        <title>Create Account - Findmyhome</title>
+        <meta name="description" content="Join Findmyhome to list properties or find your perfect home. Create your account today." />
       </Helmet>
       <div className="min-h-screen bg-background">
         {/* Header */}
@@ -27,7 +27,7 @@ const Register = () => {
                 <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
                   <Icon name="Building2" size={20} color="white" />
                 </div>
-                <span className="text-xl font-semibold">PropertyConnect</span>
+                <span className="text-xl font-semibold">Findmyhome</span>
               </button>
               
               <div className="flex items-center space-x-4">
@@ -57,18 +57,18 @@ const Register = () => {
                 <div className="space-y-6">
                   <div className="space-y-4">
                     <h1 className="text-4xl font-bold text-foreground leading-tight">
-                      Join PropertyConnect Today
+                      Join Findmyhome Today
                     </h1>
                     <p className="text-xl text-muted-foreground">
                       Whether you're looking to list properties or find your perfect home, 
-                      PropertyConnect makes real estate simple and efficient.
+                      Findmyhome makes real estate simple and efficient.
                     </p>
                   </div>
 
                   {/* Benefits */}
                   <div className="space-y-4">
                     <h2 className="text-lg font-semibold text-foreground">
-                      Why choose PropertyConnect?
+                      Why choose Findmyhome?
                     </h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       {[
@@ -96,7 +96,7 @@ const Register = () => {
                   <div className="relative rounded-2xl overflow-hidden elevation-2">
                     <Image
                       src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
-                      alt="Modern apartment building representing PropertyConnect platform"
+                      alt="Modern apartment building representing Findmyhome platform"
                       className="w-full h-64 object-cover"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
@@ -129,7 +129,7 @@ const Register = () => {
                     <div className="text-center space-y-2">
                       <h2 className="text-2xl font-bold text-foreground">Create Your Account</h2>
                       <p className="text-muted-foreground">
-                        Get started with PropertyConnect in just a few steps
+                        Get started with Findmyhome in just a few steps
                       </p>
                     </div>
 
@@ -161,7 +161,7 @@ const Register = () => {
                 <div className="w-6 h-6 bg-primary rounded flex items-center justify-center">
                   <Icon name="Building2" size={16} color="white" />
                 </div>
-                <span className="font-semibold text-foreground">PropertyConnect</span>
+                <span className="font-semibold text-foreground">Findmyhome</span>
               </div>
               
               <div className="flex items-center space-x-6 text-sm text-muted-foreground">
@@ -186,7 +186,7 @@ const Register = () => {
               </div>
               
               <p className="text-sm text-muted-foreground">
-                © {new Date()?.getFullYear()} PropertyConnect. All rights reserved.
+                © {new Date()?.getFullYear()} Findmyhome. All rights reserved.
               </p>
             </div>
           </div>

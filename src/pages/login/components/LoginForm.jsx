@@ -15,8 +15,8 @@ const LoginForm = ({ onLogin }) => {
 
   // Mock credentials for demo
   const mockCredentials = {
-    landlord: { email: 'landlord@propertyconnect.com', password: 'landlord123' },
-    tenant: { email: 'tenant@propertyconnect.com', password: 'tenant123' }
+    landlord: { email: 'landlord@findmyhome.com', password: 'landlord123' },
+    tenant: { email: 'tenant@findmyhome.com', password: 'tenant123' }
   };
 
   const handleInputChange = (e) => {

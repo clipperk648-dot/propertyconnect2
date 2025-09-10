@@ -98,7 +98,7 @@ const PropertyDetails = () => {
     name: "Sarah Johnson",
     avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face",
     phone: "(555) 123-4567",
-    email: "sarah.johnson@propertyconnect.com",
+    email: "sarah.johnson@findmyhome.com",
     responseTime: "Usually responds within 2 hours",
     rating: 4.8,
     reviewCount: 127,
