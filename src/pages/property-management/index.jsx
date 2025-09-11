@@ -203,12 +203,12 @@ const PropertyManagement = () => {
   }, [activeTab, currentFilters, currentSort, properties]);
 
   const applyFiltersAndSort = () => {
-    let filtered = mockProperties?.filter(property => {
+    let filtered = (properties || [])?.filter(property => {
       // Filter by tab status
       if (activeTab === 'active' && property?.status !== 'active') return false;
       if (activeTab === 'draft' && property?.status !== 'draft') return false;
       if (activeTab === 'archived' && property?.status !== 'archived') return false;
-      
+
       return true;
     });
 
