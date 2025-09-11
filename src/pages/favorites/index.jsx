@@ -205,8 +205,8 @@ const Favorites = () => {
 
                       <div className="flex items-center justify-between mt-3">
                         <div>
-                          <div className="text-2xl font-bold text-primary">${property.price.toLocaleString()}</div>
-                          <div className="text-xs text-muted-foreground">/month · {property.bedrooms} bd · {property.bathrooms} ba · {property.sqft} sqft</div>
+                          <div className="text-2xl font-bold text-primary">{formatCurrency(property.price, { monthly: true })}</div>
+                          <div className="text-xs text-muted-foreground">· {property.bedrooms} bd · {property.bathrooms} ba · {property.sqft} sqft</div>
                         </div>
                         <div className="flex flex-col items-end space-y-2">
                           <Button variant="outline" size="sm" onClick={() => navigate(`/property-details?id=${property.id}`)} iconName="Eye">View</Button>
