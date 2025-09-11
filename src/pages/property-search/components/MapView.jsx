@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Icon from '../../../components/AppIcon';
 import Button from '../../../components/ui/Button';
+import { formatCurrency } from '../../../utils/currency';
 
 const MapView = ({ properties = [], onPropertySelect, selectedProperty = null }) => {
   const [mapCenter] = useState({ lat: 40.7128, lng: -74.0060 }); // New York City
