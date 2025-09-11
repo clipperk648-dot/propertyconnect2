@@ -1,9 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Icon from '../../../components/AppIcon';
 import Button from '../../../components/ui/Button';
+import { formatCurrency } from '../../../utils/currency';
 
 const MapView = ({ properties = [], onPropertySelect, selectedProperty = null }) => {
   const [mapCenter] = useState({ lat: 40.7128, lng: -74.0060 }); // New York City
+  const [mapLoaded, setMapLoaded] = useState(false);
+  const [mapFailed, setMapFailed] = useState(false);
+  const mapLoadTimerRef = useRef(null);
+
+  useEffect(() => {
+    // If the iframe doesn't load within 7s, mark as failed so we show a fallback
+    mapLoadTimerRef.current = setTimeout(() => {
+      if (!mapLoaded) setMapFailed(true);
+    }, 7000);
+
+    return () => clearTimeout(mapLoadTimerRef.current);
+  }, [mapLoaded]);
 
   const PropertyMarker = ({ property, isSelected, onClick }) => (
     <div
@@ -21,7 +34,7 @@ const MapView = ({ properties = [], onPropertySelect, selectedProperty = null })
           ? 'bg-primary text-primary-foreground' 
           : 'bg-card text-foreground border border-border'
       }`}>
-        ${property?.price?.toLocaleString()}
+        {formatCurrency(property?.price)}
       </div>
       <div className={`w-3 h-3 transform rotate-45 mx-auto -mt-1.5 ${
         isSelected ? 'bg-primary' : 'bg-card border-r border-b border-border'
@@ -49,7 +62,7 @@ const MapView = ({ properties = [], onPropertySelect, selectedProperty = null })
       
       <div className="flex items-center justify-between">
         <div className="text-xl font-bold text-foreground">
-          ${property?.price?.toLocaleString()}
+          {formatCurrency(property?.price)}
           {property?.rentType && (
             <span className="text-sm font-normal text-muted-foreground">
               /{property?.rentType}
@@ -83,15 +96,35 @@ const MapView = ({ properties = [], onPropertySelect, selectedProperty = null })
       {/* Map Container */}
       <div className="w-full h-full relative">
         {/* Mock Google Maps iframe */}
-        <iframe
-          width="100%"
-          height="100%"
-          loading="lazy"
-          title="Property Search Map"
-          referrerPolicy="no-referrer-when-downgrade"
-          src={`https://www.google.com/maps?q=${mapCenter?.lat},${mapCenter?.lng}&z=12&output=embed`}
-          className="border-0"
-        />
+        {/** Map iframe with load/fail detection */}
+        {!mapFailed ? (
+          <iframe
+            width="100%"
+            height="100%"
+            loading="lazy"
+            title="Property Search Map"
+            referrerPolicy="no-referrer-when-downgrade"
+            src={`https://www.google.com/maps?q=${mapCenter?.lat},${mapCenter?.lng}&z=12&output=embed`}
+            className="border-0"
+            onLoad={() => { clearTimeout(mapLoadTimerRef.current); setMapLoaded(true); }}
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center bg-muted text-center p-4">
+            <div>
+              <div className="text-lg font-semibold mb-2">Map unavailable</div>
+              <p className="text-sm text-muted-foreground mb-3">We couldn't load the embedded map. You can open it in a new tab.</p>
+              <div className="flex justify-center">
+                <a
+                  href={`https://www.google.com/maps?q=${mapCenter?.lat},${mapCenter?.lng}&z=12`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <button className="px-4 py-2 rounded bg-primary text-primary-foreground">Open in Google Maps</button>
+                </a>
+              </div>
+            </div>
+          </div>
+        )}
         
         {/* Property Markers Overlay */}
         <div className="absolute inset-0 pointer-events-none">

@@ -98,10 +98,6 @@ const PropertyCard = ({ property, onEdit, onViewDetails, onStatusChange }) => {
             <div className="text-lg font-semibold text-foreground">{property?.inquiries}</div>
             <div className="text-xs text-muted-foreground">Inquiries</div>
           </div>
-          <div className="text-center">
-            <div className="text-lg font-semibold text-foreground">{property?.favorites}</div>
-            <div className="text-xs text-muted-foreground">Favorites</div>
-          </div>
         </div>
 
         {/* Action Buttons */}

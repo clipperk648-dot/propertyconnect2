@@ -34,11 +34,11 @@ const PropertyFilters = ({ onFilterChange, onSortChange, totalProperties }) => {
 
   const priceRangeOptions = [
     { value: '', label: 'Any Price' },
-    { value: '0-1000', label: 'Under $1,000' },
-    { value: '1000-2000', label: '$1,000 - $2,000' },
-    { value: '2000-3000', label: '$2,000 - $3,000' },
-    { value: '3000-5000', label: '$3,000 - $5,000' },
-    { value: '5000+', label: 'Above $5,000' }
+    { value: '0-1000', label: 'Under ₦1,000' },
+    { value: '1000-2000', label: '₦1,000 - ₦2,000' },
+    { value: '2000-3000', label: '₦2,000 - ₦3,000' },
+    { value: '3000-5000', label: '₦3,000 - ₦5,000' },
+    { value: '5000+', label: 'Above ₦5,000' }
   ];
 
   const sortOptions = [

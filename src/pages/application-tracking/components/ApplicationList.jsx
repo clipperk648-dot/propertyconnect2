@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Icon from '../../../components/AppIcon';
 import Image from '../../../components/AppImage';
 import Button from '../../../components/ui/Button';
+import { formatCurrency } from '../../../utils/currency';
 
 const ApplicationList = ({ applications, onUploadDocuments, onViewDetails }) => {
   const navigate = useNavigate();
@@ -110,7 +111,7 @@ const ApplicationList = ({ applications, onUploadDocuments, onViewDetails }) => 
                     {application?.propertyAddress}
                   </p>
                   <div className="flex items-center space-x-4 text-sm text-muted-foreground">
-                    <span>Rent: ${application?.monthlyRent?.toLocaleString()}/month</span>
+                    <span>Rent: {formatCurrency(application?.monthlyRent, { monthly: true })}</span>
                     <span>•</span>
                     <span>Start: {new Date(application?.leaseStart)?.toLocaleDateString()}</span>
                   </div>

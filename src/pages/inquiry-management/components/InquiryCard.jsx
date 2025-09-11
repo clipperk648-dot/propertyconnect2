@@ -1,6 +1,7 @@
 import React from 'react';
 import Button from '../../../components/ui/Button';
 import AppIcon from '../../../components/AppIcon';
+import { formatCurrency } from '../../../utils/currency';
 
 const InquiryCard = ({ inquiry, isSelected, onSelect, onAction, viewMode }) => {
   
@@ -45,13 +46,7 @@ const InquiryCard = ({ inquiry, isSelected, onSelect, onAction, viewMode }) => {
     }
   };
 
-  const formatPrice = (price) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0,
-    })?.format(price);
-  };
+  const formatPrice = (price) => formatCurrency(price, { monthly: true });
 
   const getInquiryTypeIcon = (type) => {
     const icons = {

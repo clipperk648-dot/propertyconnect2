@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Icon from '../../../components/AppIcon';
 import Image from '../../../components/AppImage';
 import Button from '../../../components/ui/Button';
+import { formatCurrency } from '../../../utils/currency';
 
 const SavedPropertiesGrid = () => {
   const navigate = useNavigate();
@@ -155,8 +156,7 @@ const SavedPropertiesGrid = () => {
               </div>
 
               <div className="flex items-center justify-between mb-3">
-                <span className="text-2xl font-bold text-primary">${property?.price?.toLocaleString()}</span>
-                <span className="text-xs text-muted-foreground">/month</span>
+                <span className="text-2xl font-bold text-primary">{formatCurrency(property?.price, { monthly: true })}</span>
               </div>
 
               <div className="flex items-center space-x-4 mb-3 text-sm text-muted-foreground">

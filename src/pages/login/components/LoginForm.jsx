@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../../components/ui/Button';
 import Input from '../../../components/ui/Input';
 import Icon from '../../../components/AppIcon';
 
-const LoginForm = ({ onLogin }) => {
+const LoginForm = ({ onLogin, fillCredentials = null }) => {
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -12,6 +12,16 @@ const LoginForm = ({ onLogin }) => {
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (fillCredentials && (fillCredentials.email || fillCredentials.password)) {
+      setFormData(prev => ({
+        ...prev,
+        email: fillCredentials.email || prev.email,
+        password: fillCredentials.password || prev.password
+      }));
+    }
+  }, [fillCredentials]);
 
   // Mock credentials for demo
   const mockCredentials = {
@@ -25,7 +35,7 @@ const LoginForm = ({ onLogin }) => {
       ...prev,
       [name]: value
     }));
-    
+
     // Clear error when user starts typing
     if (errors?.[name]) {
       setErrors(prev => ({
@@ -40,7 +50,7 @@ const LoginForm = ({ onLogin }) => {
 
     if (!formData?.email) {
       newErrors.email = 'Email is required';
-    } else if (!/\S+@\S+\.\S+/?.test(formData?.email)) {
+    } else if (!/\S+@\S+\.\S+/.test(formData?.email)) {
       newErrors.email = 'Please enter a valid email address';
     }
 
@@ -56,50 +66,45 @@ const LoginForm = ({ onLogin }) => {
 
   const handleSubmit = async (e) => {
     e?.preventDefault();
-    
-    if (!validateForm()) {
-      return;
-    }
+
+    if (!validateForm()) return;
 
     setIsLoading(true);
 
     try {
       // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise(resolve => setTimeout(resolve, 700));
 
-      // Check credentials
+      // Determine role: if matches demo creds use that role, otherwise accept the sign-in and default to 'tenant' for testing
       let userRole = null;
-      if (formData?.email === mockCredentials?.landlord?.email && 
-          formData?.password === mockCredentials?.landlord?.password) {
+      if (formData?.email === mockCredentials?.landlord?.email && formData?.password === mockCredentials?.landlord?.password) {
         userRole = 'landlord';
-      } else if (formData?.email === mockCredentials?.tenant?.email && 
-                 formData?.password === mockCredentials?.tenant?.password) {
+      } else if (formData?.email === mockCredentials?.tenant?.email && formData?.password === mockCredentials?.tenant?.password) {
         userRole = 'tenant';
+      } else {
+        // Accept any credentials for testing — if the email contains "landlord" prefer landlord
+        if (typeof formData?.email === 'string' && formData?.email.toLowerCase().includes('landlord')) {
+          userRole = 'landlord';
+        } else {
+          userRole = 'tenant';
+        }
       }
 
-      if (userRole) {
-        // Store user session
-        localStorage.setItem('isAuthenticated', 'true');
-        localStorage.setItem('userRole', userRole);
-        localStorage.setItem('userEmail', formData?.email);
-        
-        onLogin(userRole);
-        
-        // Navigate to appropriate dashboard
-        if (userRole === 'landlord') {
-          navigate('/landlord-dashboard');
-        } else {
-          navigate('/tenant-dashboard');
-        }
+      // Store user session
+      localStorage.setItem('isAuthenticated', 'true');
+      localStorage.setItem('userRole', userRole);
+      localStorage.setItem('userEmail', formData?.email || '');
+
+      if (typeof onLogin === 'function') onLogin(userRole);
+
+      // Navigate to appropriate dashboard
+      if (userRole === 'landlord') {
+        navigate('/landlord-dashboard');
       } else {
-        setErrors({
-          general: 'Invalid email or password. Please check your credentials and try again.'
-        });
+        navigate('/tenant-dashboard');
       }
     } catch (error) {
-      setErrors({
-        general: 'Login failed. Please try again later.'
-      });
+      setErrors({ general: 'Login failed. Please try again later.' });
     } finally {
       setIsLoading(false);
     }
@@ -115,6 +120,7 @@ const LoginForm = ({ onLogin }) => {
           </div>
         </div>
       )}
+
       <Input
         label="Email Address"
         type="email"
@@ -126,6 +132,7 @@ const LoginForm = ({ onLogin }) => {
         required
         disabled={isLoading}
       />
+
       <Input
         label="Password"
         type="password"
@@ -137,6 +144,7 @@ const LoginForm = ({ onLogin }) => {
         required
         disabled={isLoading}
       />
+
       <Button
         type="submit"
         variant="default"

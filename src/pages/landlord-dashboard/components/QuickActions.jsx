@@ -44,17 +44,17 @@ const QuickActions = ({ onAddProperty, onViewInquiries, metrics }) => {
     {
       title: 'Bulk Edit Properties',
       icon: 'Edit3',
-      action: () => console.log('Bulk edit')
+      action: () => navigate('/bulk-edit')
     },
     {
       title: 'Export Data',
       icon: 'Download',
-      action: () => console.log('Export data')
+      action: () => navigate('/export')
     },
     {
       title: 'Property Reports',
       icon: 'FileText',
-      action: () => console.log('Generate reports')
+      action: () => navigate('/reports')
     },
     {
       title: 'Settings',

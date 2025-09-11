@@ -12,6 +12,7 @@ import PropertyListItem from './components/PropertyListItem';
 import PropertyFilters from './components/PropertyFilters';
 import PropertyStats from './components/PropertyStats';
 import BulkActions from './components/BulkActions';
+import AddPropertyModal from './components/AddPropertyModal';
 
 const PropertyManagement = () => {
   const navigate = useNavigate();
@@ -21,6 +22,8 @@ const PropertyManagement = () => {
   const [currentFilters, setCurrentFilters] = useState({});
   const [currentSort, setCurrentSort] = useState('recent');
   const [filteredProperties, setFilteredProperties] = useState([]);
+  const [properties, setProperties] = useState([]);
+  const [isAddOpen, setIsAddOpen] = useState(false);
 
   // Mock user data
   const currentUser = {
@@ -178,28 +181,33 @@ const PropertyManagement = () => {
     }
   ];
 
-  // Property statistics
+  // Initialize properties state from mock data
+  useEffect(() => {
+    if (properties?.length === 0) setProperties(mockProperties);
+  }, []);
+
+  // Property statistics derived from current properties
   const propertyStats = {
-    total: mockProperties?.length,
-    active: mockProperties?.filter(p => p?.status === 'active')?.length,
-    draft: mockProperties?.filter(p => p?.status === 'draft')?.length,
-    archived: mockProperties?.filter(p => p?.status === 'archived')?.length,
-    totalViews: mockProperties?.reduce((sum, p) => sum + p?.views, 0),
-    totalInquiries: mockProperties?.reduce((sum, p) => sum + p?.inquiries, 0),
-    totalFavorites: mockProperties?.reduce((sum, p) => sum + p?.favorites, 0)
+    total: properties?.length || 0,
+    active: (properties || []).filter(p => p?.status === 'active')?.length,
+    draft: (properties || []).filter(p => p?.status === 'draft')?.length,
+    archived: (properties || []).filter(p => p?.status === 'archived')?.length,
+    totalViews: (properties || []).reduce((sum, p) => sum + (p?.views || 0), 0),
+    totalInquiries: (properties || []).reduce((sum, p) => sum + (p?.inquiries || 0), 0),
+    totalFavorites: (properties || []).reduce((sum, p) => sum + (p?.favorites || 0), 0)
   };
 
   useEffect(() => {
     applyFiltersAndSort();
-  }, [activeTab, currentFilters, currentSort]);
+  }, [activeTab, currentFilters, currentSort, properties]);
 
   const applyFiltersAndSort = () => {
-    let filtered = mockProperties?.filter(property => {
+    let filtered = (properties || [])?.filter(property => {
       // Filter by tab status
       if (activeTab === 'active' && property?.status !== 'active') return false;
       if (activeTab === 'draft' && property?.status !== 'draft') return false;
       if (activeTab === 'archived' && property?.status !== 'archived') return false;
-      
+
       return true;
     });
 
@@ -276,7 +284,16 @@ const PropertyManagement = () => {
   };
 
   const handleAddProperty = () => {
-    console.log('Add new property');
+    // open add property modal
+    setIsAddOpen(true);
+  };
+
+  const handleAddPropertySubmit = (newProperty) => {
+    // prepend newly added property to list
+    setProperties(prev => [newProperty, ...(prev || [])]);
+    // ensure selected tab shows active
+    setActiveTab('active');
+    setSelectedProperties([]);
   };
 
   const handleLogout = () => {
@@ -446,6 +463,12 @@ const PropertyManagement = () => {
       </div>
       {/* Mobile App Footer */}
       <MobileAppFooter userRole="landlord" />
+
+      <AddPropertyModal
+        open={isAddOpen}
+        onClose={() => setIsAddOpen(false)}
+        onAdd={(p) => handleAddPropertySubmit(p)}
+      />
     </div>
   );
 };

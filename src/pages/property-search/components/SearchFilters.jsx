@@ -113,7 +113,7 @@ const SearchFilters = ({
         <Input
           label="Min Price"
           type="number"
-          placeholder="$0"
+          placeholder="₦0"
           value={localFilters?.minPrice || ''}
           onChange={(e) => handleFilterChange('minPrice', e?.target?.value)}
         />
