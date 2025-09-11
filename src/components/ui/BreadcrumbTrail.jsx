@@ -95,7 +95,7 @@ const BreadcrumbTrail = ({ customBreadcrumbs = null, userRole = 'tenant' }) => {
     <nav className="flex items-center space-x-1 text-sm text-muted-foreground mb-6" aria-label="Breadcrumb">
       <ol className="flex items-center space-x-1">
         {breadcrumbs?.map((breadcrumb, index) => (
-          <li key={breadcrumb?.path} className="flex items-center">
+          <li key={`${breadcrumb?.path || breadcrumb?.label}-${index}`} className="flex items-center">
             {index > 0 && (
               <Icon 
                 name="ChevronRight" 
