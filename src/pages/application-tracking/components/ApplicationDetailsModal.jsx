@@ -143,7 +143,7 @@ const ApplicationDetailsModal = ({ application, onClose, onUploadDocuments }) =>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Monthly Rent:</span>
-                    <span className="font-medium text-foreground">${application?.monthlyRent?.toLocaleString()}</span>
+                    <span className="font-medium text-foreground">{formatCurrency(application?.monthlyRent, { monthly: true })}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Lease Start:</span>
