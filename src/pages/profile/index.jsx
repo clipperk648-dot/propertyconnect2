@@ -120,57 +120,10 @@ const Profile = () => {
             </div>
 
             <div>
-              <h3 className="text-lg font-medium mb-2">Connected accounts</h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                <div className="bg-muted p-3 rounded flex items-center justify-between">
-                  <div>
-                    <div className="text-sm font-medium">Google</div>
-                    <div className="text-xs text-muted-foreground">Connected</div>
-                  </div>
-                  <div>
-                    <Button variant="ghost" size="sm" onClick={() => alert('Disconnect Google (mock)')}>Disconnect</Button>
-                  </div>
-                </div>
-
-                <div className="bg-muted p-3 rounded flex items-center justify-between">
-                  <div>
-                    <div className="text-sm font-medium">Facebook</div>
-                    <div className="text-xs text-muted-foreground">Not connected</div>
-                  </div>
-                  <div>
-                    <Button variant="outline" size="sm" onClick={() => alert('Connect Facebook (mock)')}>Connect</Button>
-                  </div>
-                </div>
-
-                <div className="bg-muted p-3 rounded flex items-center justify-between">
-                  <div>
-                    <div className="text-sm font-medium">Apple</div>
-                    <div className="text-xs text-muted-foreground">Not connected</div>
-                  </div>
-                  <div>
-                    <Button variant="outline" size="sm" onClick={() => alert('Connect Apple (mock)')}>Connect</Button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div>
               <h3 className="text-lg font-medium mb-2">Danger Zone</h3>
               <div className="flex items-center space-x-3">
                 <Button variant="danger" onClick={handleDeleteAccount}>Delete account</Button>
                 <Button variant="ghost" onClick={() => alert('Export account data (mock)')}>Export data</Button>
-              </div>
-            </div>
-
-            <div>
-              <h3 className="text-lg font-medium mb-2">Recent activity</h3>
-              <div className="space-y-2 text-sm">
-                {mockActivity.map(a => (
-                  <div key={a.id} className="flex items-center justify-between bg-muted rounded p-2">
-                    <div>{a.text}</div>
-                    <div className="text-xs text-muted-foreground">{a.time}</div>
-                  </div>
-                ))}
               </div>
             </div>
 
