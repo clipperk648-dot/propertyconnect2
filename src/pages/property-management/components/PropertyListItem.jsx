@@ -20,8 +20,6 @@ const PropertyListItem = ({ property, isSelected, onSelect, onAction, activeTab 
     );
   };
 
-  import { formatCurrency } from '../../../utils/currency';
-
   const formatPrice = (price, type) => {
     return formatCurrency(price, { monthly: type !== 'sale' });
   };
