@@ -23,6 +23,8 @@ const PropertyManagement = () => {
   const [currentFilters, setCurrentFilters] = useState({});
   const [currentSort, setCurrentSort] = useState('recent');
   const [filteredProperties, setFilteredProperties] = useState([]);
+  const [properties, setProperties] = useState([]);
+  const [isAddOpen, setIsAddOpen] = useState(false);
 
   // Mock user data
   const currentUser = {
