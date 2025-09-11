@@ -73,7 +73,7 @@ const Messages = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <RoleBasedNavBar userRole="landlord" isAuthenticated={true} />
+      <RoleBasedNavBar userRole="tenant" isAuthenticated={true} />
 
       <div className="max-w-7xl mx-auto p-4 mt-20">
         <div className="flex items-center justify-between mb-4">
@@ -92,7 +92,7 @@ const Messages = () => {
         </div>
       </div>
 
-      <MobileAppFooter userRole="landlord" />
+      <MobileAppFooter userRole="tenant" />
     </div>
   );
 };
