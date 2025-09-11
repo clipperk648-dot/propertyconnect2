@@ -182,20 +182,25 @@ const PropertyManagement = () => {
     }
   ];
 
-  // Property statistics
+  // Initialize properties state from mock data
+  useEffect(() => {
+    if (properties?.length === 0) setProperties(mockProperties);
+  }, []);
+
+  // Property statistics derived from current properties
   const propertyStats = {
-    total: mockProperties?.length,
-    active: mockProperties?.filter(p => p?.status === 'active')?.length,
-    draft: mockProperties?.filter(p => p?.status === 'draft')?.length,
-    archived: mockProperties?.filter(p => p?.status === 'archived')?.length,
-    totalViews: mockProperties?.reduce((sum, p) => sum + p?.views, 0),
-    totalInquiries: mockProperties?.reduce((sum, p) => sum + p?.inquiries, 0),
-    totalFavorites: mockProperties?.reduce((sum, p) => sum + p?.favorites, 0)
+    total: properties?.length || 0,
+    active: (properties || []).filter(p => p?.status === 'active')?.length,
+    draft: (properties || []).filter(p => p?.status === 'draft')?.length,
+    archived: (properties || []).filter(p => p?.status === 'archived')?.length,
+    totalViews: (properties || []).reduce((sum, p) => sum + (p?.views || 0), 0),
+    totalInquiries: (properties || []).reduce((sum, p) => sum + (p?.inquiries || 0), 0),
+    totalFavorites: (properties || []).reduce((sum, p) => sum + (p?.favorites || 0), 0)
   };
 
   useEffect(() => {
     applyFiltersAndSort();
-  }, [activeTab, currentFilters, currentSort]);
+  }, [activeTab, currentFilters, currentSort, properties]);
 
   const applyFiltersAndSort = () => {
     let filtered = mockProperties?.filter(property => {
