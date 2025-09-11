@@ -19,14 +19,10 @@ const PropertyGrid = ({ properties, selectedProperties, onPropertySelect, onProp
     );
   };
 
+  import { formatCurrency } from '../../../utils/currency';
+
   const formatPrice = (price, type) => {
-    const formatted = new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0,
-    })?.format(price);
-    
-    return type === 'sale' ? formatted : `${formatted}/month`;
+    return formatCurrency(price, { monthly: type !== 'sale' });
   };
 
   const getActionButtons = (property) => {
