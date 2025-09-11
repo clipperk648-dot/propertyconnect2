@@ -43,8 +43,20 @@ const initialConversations = [
 ];
 
 const Messages = () => {
+  const location = useLocation();
   const [conversations, setConversations] = useState(initialConversations);
-  const [activeId, setActiveId] = useState(conversations?.[0]?.id || null);
+  const [activeId, setActiveId] = useState(null);
+
+  useEffect(() => {
+    // if navigation provided an openConversationId, open it; otherwise default to first
+    const openId = location?.state?.openConversationId;
+    if (openId) {
+      setActiveId(openId);
+    } else if (!activeId) {
+      setActiveId(initialConversations?.[0]?.id || null);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location?.state]);
 
   const handleSelect = (id) => setActiveId(id);
 
