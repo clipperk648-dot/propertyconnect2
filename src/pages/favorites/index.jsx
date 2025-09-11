@@ -5,6 +5,7 @@ import Icon from '../../components/AppIcon';
 import Image from '../../components/AppImage';
 import Button from '../../components/ui/Button';
 import { useNavigate } from 'react-router-dom';
+import { formatCurrency } from '../../utils/currency';
 
 const initialSaved = [
   {
