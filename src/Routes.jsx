@@ -57,6 +57,7 @@ const Routes = () => {
         {/* Shared protected pages (require auth but any role) */}
         <Route path="/properties" element={<ProtectedRoute><Properties /></ProtectedRoute>} />
         <Route path="/messages" element={<ProtectedRoute><Messages /></ProtectedRoute>} />
+        <Route path="/messages/:id" element={<ProtectedRoute><MessageThread /></ProtectedRoute>} />
         <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
         <Route path="/favorites" element={<ProtectedRoute><Favorites /></ProtectedRoute>} />
         <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
