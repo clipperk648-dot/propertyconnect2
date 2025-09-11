@@ -9,13 +9,14 @@ import DemoCredentials from './components/DemoCredentials';
 
 const LoginPage = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [fillCredentials, setFillCredentials] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     // Check if user is already authenticated
     const authStatus = localStorage.getItem('isAuthenticated');
     const userRole = localStorage.getItem('userRole');
-    
+
     if (authStatus === 'true' && userRole) {
       // Redirect to appropriate dashboard
       if (userRole === 'landlord') {
@@ -31,18 +32,7 @@ const LoginPage = () => {
   };
 
   const handleDemoCredentialSelect = (email, password) => {
-    // Auto-fill the form with demo credentials
-    const emailInput = document.querySelector('input[name="email"]');
-    const passwordInput = document.querySelector('input[name="password"]');
-    
-    if (emailInput && passwordInput) {
-      emailInput.value = email;
-      passwordInput.value = password;
-      
-      // Trigger change events
-      emailInput?.dispatchEvent(new Event('input', { bubbles: true }));
-      passwordInput?.dispatchEvent(new Event('input', { bubbles: true }));
-    }
+    setFillCredentials({ email, password });
   };
 
   return (
@@ -54,13 +44,14 @@ const LoginPage = () => {
             <button
               onClick={() => navigate('/')}
               className="flex items-center space-x-2 text-primary hover:text-primary/80 transition-smooth"
+              type="button"
             >
               <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
                 <Icon name="Building2" size={20} color="white" />
               </div>
               <span className="text-xl font-semibold">Findmyhome</span>
             </button>
-            
+
             <div className="flex items-center space-x-4">
               <span className="text-sm text-muted-foreground hidden sm:inline">
                 New to PropertyConnect?
@@ -68,6 +59,7 @@ const LoginPage = () => {
               <button
                 onClick={() => navigate('/register')}
                 className="text-sm text-primary hover:text-primary/80 transition-colors"
+                type="button"
               >
                 Create Account
               </button>
@@ -93,14 +85,14 @@ const LoginPage = () => {
 
           {/* Login Form Card */}
           <div className="bg-card p-8 rounded-lg border border-border elevation-1">
-            <LoginForm onLogin={handleLogin} />
-            
+            <LoginForm onLogin={handleLogin} fillCredentials={fillCredentials} />
+
             <div className="mt-6">
               <AuthLinks />
             </div>
 
             <DemoCredentials onCredentialSelect={handleDemoCredentialSelect} />
-            
+
             <TrustSignals />
           </div>
 
@@ -108,11 +100,11 @@ const LoginPage = () => {
           <div className="text-center">
             <p className="text-xs text-muted-foreground">
               By signing in, you agree to our{' '}
-              <button className="text-primary hover:text-primary/80 transition-colors">
+              <button className="text-primary hover:text-primary/80 transition-colors" type="button">
                 Terms of Service
               </button>{' '}
               and{' '}
-              <button className="text-primary hover:text-primary/80 transition-colors">
+              <button className="text-primary hover:text-primary/80 transition-colors" type="button">
                 Privacy Policy
               </button>
             </p>
@@ -128,15 +120,15 @@ const LoginPage = () => {
                 © {new Date()?.getFullYear()} Findmyhome. All rights reserved.
               </p>
             </div>
-            
+
             <div className="flex items-center space-x-6">
-              <button className="text-xs text-muted-foreground hover:text-foreground transition-colors">
+              <button className="text-xs text-muted-foreground hover:text-foreground transition-colors" type="button">
                 Help Center
               </button>
-              <button className="text-xs text-muted-foreground hover:text-foreground transition-colors">
+              <button className="text-xs text-muted-foreground hover:text-foreground transition-colors" type="button">
                 Contact Support
               </button>
-              <button className="text-xs text-muted-foreground hover:text-foreground transition-colors">
+              <button className="text-xs text-muted-foreground hover:text-foreground transition-colors" type="button">
                 System Status
               </button>
             </div>
