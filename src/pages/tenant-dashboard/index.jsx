@@ -10,6 +10,7 @@ import SearchSummaryPanel from './components/SearchSummaryPanel';
 import RecentActivityFeed from './components/RecentActivityFeed';
 import MessageNotifications from './components/MessageNotifications';
 import ApplicationTracker from './components/ApplicationTracker';
+import SlideshowBanner from './components/SlideshowBanner';
 import MobileAppFooter from '../../components/ui/MobileAppFooter';
 
 const TenantDashboard = () => {
