@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import RoleBasedNavBar from '../../components/ui/RoleBasedNavBar';
 import UserProfileDropdown from '../../components/ui/UserProfileDropdown';
@@ -12,6 +13,7 @@ import PropertyListItem from './components/PropertyListItem';
 import PropertyFilters from './components/PropertyFilters';
 import PropertyStats from './components/PropertyStats';
 import BulkActions from './components/BulkActions';
+import AddPropertyModal from './components/AddPropertyModal';
 
 const PropertyManagement = () => {
   const navigate = useNavigate();
