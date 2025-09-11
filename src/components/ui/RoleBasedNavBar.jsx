@@ -64,38 +64,43 @@ const RoleBasedNavBar = ({ userRole = 'tenant', isAuthenticated = true }) => {
 
   if (!isAuthenticated) {
     return (
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-card border-b border-border">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
-              <button
-                onClick={() => navigate('/')}
-                className="flex items-center space-x-2 text-primary hover:text-primary/80 transition-smooth"
-              >
-                <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                  <Icon name="Building2" size={20} color="white" />
-                </div>
-                <span className="text-xl font-semibold">Findmyhome</span>
-              </button>
-            </div>
-            <div className="flex items-center space-x-4">
-              <Button
-                variant="ghost"
-                onClick={() => navigate('/login')}
-                className="text-foreground hover:text-primary"
-              >
-                Sign In
-              </Button>
-              <Button
-                variant="default"
-                onClick={() => navigate('/register')}
-              >
-                Get Started
-              </Button>
+      <>
+        <nav className="fixed top-0 left-0 right-0 z-50 bg-card border-b border-border">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between items-center h-16">
+              <div className="flex items-center">
+                <button
+                  onClick={() => navigate('/')}
+                  className="flex items-center space-x-2 text-primary hover:text-primary/80 transition-smooth"
+                  type="button"
+                >
+                  <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                    <Icon name="Building2" size={20} color="white" />
+                  </div>
+                  <span className="text-xl font-semibold">Findmyhome</span>
+                </button>
+              </div>
+              <div className="flex items-center space-x-4">
+                <Button
+                  variant="ghost"
+                  onClick={() => navigate('/login')}
+                  className="text-foreground hover:text-primary"
+                >
+                  Sign In
+                </Button>
+                <Button
+                  variant="default"
+                  onClick={() => navigate('/register')}
+                >
+                  Get Started
+                </Button>
+              </div>
             </div>
           </div>
-        </div>
-      </nav>
+        </nav>
+
+        <div className="h-16" aria-hidden="true" />
+      </>
     );
   }
 
