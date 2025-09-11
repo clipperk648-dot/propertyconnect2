@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import Button from '../../../components/ui/Button';
 import Input from '../../../components/ui/Input';
 
-const propertyTypes = ['Apartment', 'House', 'Condo', 'Townhouse', 'Studio', 'Loft', 'Commercial'];
-const amenitiesList = ['Parking', 'Gym', 'Pool', 'Laundry', 'Pet Friendly', 'Elevator', 'Air Conditioning', 'Heating'];
+const propertyTypes = ['Selfcon', 'Single room', 'Duplex', 'Hostel', 'Shop', 'Store'];
+const amenitiesList = ['Well tiled', 'Running water', 'Electricity', 'Well water', 'Painted', 'POP', 'Fenced', 'Security', 'Solar', 'Prepaid'];
 
 const AddPropertyModal = ({ open = false, onClose = () => {}, onAdd = () => {} }) => {
   const [form, setForm] = useState({
