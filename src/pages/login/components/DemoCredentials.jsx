@@ -23,7 +23,9 @@ const DemoCredentials = ({ onCredentialSelect }) => {
   ];
 
   const handleCredentialClick = (account) => {
-    onCredentialSelect(account?.email, account?.password);
+    if (typeof onCredentialSelect === 'function') {
+      onCredentialSelect(account?.email, account?.password);
+    }
   };
 
   return (
@@ -31,6 +33,7 @@ const DemoCredentials = ({ onCredentialSelect }) => {
       <button
         onClick={() => setIsExpanded(!isExpanded)}
         className="flex items-center justify-between w-full text-left"
+        type="button"
       >
         <div className="flex items-center space-x-2">
           <Icon name="Info" size={16} className="text-primary" />
@@ -49,7 +52,7 @@ const DemoCredentials = ({ onCredentialSelect }) => {
           <p className="text-xs text-muted-foreground">
             Use these demo accounts to explore the platform:
           </p>
-          
+
           {demoAccounts?.map((account) => (
             <div key={account?.role} className="p-3 bg-card rounded border border-border">
               <div className="flex items-center justify-between">
