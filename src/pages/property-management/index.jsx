@@ -464,6 +464,12 @@ const PropertyManagement = () => {
       </div>
       {/* Mobile App Footer */}
       <MobileAppFooter userRole="landlord" />
+
+      <AddPropertyModal
+        open={isAddOpen}
+        onClose={() => setIsAddOpen(false)}
+        onAdd={(p) => handleAddPropertySubmit(p)}
+      />
     </div>
   );
 };
