@@ -57,6 +57,11 @@ const TenantDashboard = () => {
         {/* Breadcrumb */}
         <BreadcrumbTrail userRole="tenant" />
 
+        {/* Slideshow Banner */}
+        <div className="mb-8">
+          <SlideshowBanner />
+        </div>
+
         {/* Dashboard Stats */}
         <DashboardStats />
 
