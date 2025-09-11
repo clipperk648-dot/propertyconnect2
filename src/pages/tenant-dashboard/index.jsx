@@ -6,9 +6,7 @@ import BreadcrumbTrail from '../../components/ui/BreadcrumbTrail';
 import DashboardStats from './components/DashboardStats';
 import QuickActionButtons from './components/QuickActionButtons';
 import SavedPropertiesGrid from './components/SavedPropertiesGrid';
-import SearchSummaryPanel from './components/SearchSummaryPanel';
 import RecentActivityFeed from './components/RecentActivityFeed';
-import MessageNotifications from './components/MessageNotifications';
 import ApplicationTracker from './components/ApplicationTracker';
 import SlideshowBanner from './components/SlideshowBanner';
 import MobileAppFooter from '../../components/ui/MobileAppFooter';
@@ -76,9 +74,6 @@ const TenantDashboard = () => {
           <div className="lg:col-span-2 space-y-8">
             {/* Saved Properties */}
             <SavedPropertiesGrid />
-            
-            {/* Search Summary */}
-            <SearchSummaryPanel />
           </div>
 
           {/* Right Column - Secondary Content */}
@@ -86,8 +81,6 @@ const TenantDashboard = () => {
             {/* Application Tracker */}
             <ApplicationTracker />
             
-            {/* Message Notifications */}
-            <MessageNotifications />
             
             {/* Recent Activity Feed */}
             <RecentActivityFeed />
