@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../../components/ui/Button';
 import Input from '../../../components/ui/Input';
 import Icon from '../../../components/AppIcon';
 
-const LoginForm = ({ onLogin }) => {
+const LoginForm = ({ onLogin, fillCredentials = null }) => {
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -12,6 +12,16 @@ const LoginForm = ({ onLogin }) => {
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (fillCredentials && (fillCredentials.email || fillCredentials.password)) {
+      setFormData(prev => ({
+        ...prev,
+        email: fillCredentials.email || prev.email,
+        password: fillCredentials.password || prev.password
+      }));
+    }
+  }, [fillCredentials]);
 
   // Mock credentials for demo
   const mockCredentials = {
@@ -40,7 +50,7 @@ const LoginForm = ({ onLogin }) => {
 
     if (!formData?.email) {
       newErrors.email = 'Email is required';
-    } else if (!/\S+@\S+\.\S+/?.test(formData?.email)) {
+    } else if (!/\S+@\S+\.\S+/.test(formData?.email)) {
       newErrors.email = 'Please enter a valid email address';
     }
 
@@ -63,7 +73,7 @@ const LoginForm = ({ onLogin }) => {
 
     try {
       // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise(resolve => setTimeout(resolve, 700));
 
       // Determine role: if matches demo creds use that role, otherwise accept the sign-in and default to 'tenant' for testing
       let userRole = null;
@@ -72,8 +82,12 @@ const LoginForm = ({ onLogin }) => {
       } else if (formData?.email === mockCredentials?.tenant?.email && formData?.password === mockCredentials?.tenant?.password) {
         userRole = 'tenant';
       } else {
-        // Accept any credentials for testing
-        userRole = 'tenant';
+        // Accept any credentials for testing — if the email contains "landlord" prefer landlord
+        if (typeof formData?.email === 'string' && formData?.email.toLowerCase().includes('landlord')) {
+          userRole = 'landlord';
+        } else {
+          userRole = 'tenant';
+        }
       }
 
       // Store user session
