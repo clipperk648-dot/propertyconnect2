@@ -1,5 +1,4 @@
 import React from 'react';
-import React from 'react';
 import RoleBasedNavBar from '../../components/ui/RoleBasedNavBar';
 import MetricsPanel from '../landlord-dashboard/components/MetricsPanel';
 import Button from '../../components/ui/Button';
