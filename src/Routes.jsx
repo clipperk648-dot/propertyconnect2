@@ -15,6 +15,7 @@ import InquiryManagement from './pages/inquiry-management';
 import ApplicationTracking from './pages/application-tracking';
 import Properties from './pages/properties';
 import Messages from './pages/messages';
+import MessageThread from './pages/messages/Thread';
 import Analytics from './pages/analytics';
 import Favorites from './pages/favorites';
 import Profile from './pages/profile';
