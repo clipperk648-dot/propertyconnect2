@@ -34,7 +34,7 @@ const MapView = ({ properties = [], onPropertySelect, selectedProperty = null })
           ? 'bg-primary text-primary-foreground' 
           : 'bg-card text-foreground border border-border'
       }`}>
-        ${property?.price?.toLocaleString()}
+        {formatCurrency(property?.price)}
       </div>
       <div className={`w-3 h-3 transform rotate-45 mx-auto -mt-1.5 ${
         isSelected ? 'bg-primary' : 'bg-card border-r border-b border-border'
@@ -62,7 +62,7 @@ const MapView = ({ properties = [], onPropertySelect, selectedProperty = null })
       
       <div className="flex items-center justify-between">
         <div className="text-xl font-bold text-foreground">
-          ${property?.price?.toLocaleString()}
+          {formatCurrency(property?.price)}
           {property?.rentType && (
             <span className="text-sm font-normal text-muted-foreground">
               /{property?.rentType}
