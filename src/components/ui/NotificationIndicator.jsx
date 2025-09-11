@@ -1,4 +1,3 @@
-import React, { useState, useEffect, useRef } from 'react';
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Icon from '../AppIcon';
