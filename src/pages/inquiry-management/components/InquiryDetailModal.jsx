@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Button from '../../../components/ui/Button';
 import AppIcon from '../../../components/AppIcon';
+import { formatCurrency } from '../../../utils/currency';
 
 const InquiryDetailModal = ({ inquiry, onClose, onAction }) => {
   const [response, setResponse] = useState('');
