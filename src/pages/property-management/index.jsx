@@ -285,7 +285,16 @@ const PropertyManagement = () => {
   };
 
   const handleAddProperty = () => {
-    console.log('Add new property');
+    // open add property modal
+    setIsAddOpen(true);
+  };
+
+  const handleAddPropertySubmit = (newProperty) => {
+    // prepend newly added property to list
+    setProperties(prev => [newProperty, ...(prev || [])]);
+    // ensure selected tab shows active
+    setActiveTab('active');
+    setSelectedProperties([]);
   };
 
   const handleLogout = () => {
