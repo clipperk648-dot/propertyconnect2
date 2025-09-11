@@ -1,6 +1,7 @@
 import React from 'react';
 import Button from '../../../components/ui/Button';
 import AppIcon from '../../../components/AppIcon';
+import { formatCurrency } from '../../../utils/currency';
 
 const PropertyListItem = ({ property, isSelected, onSelect, onAction, activeTab }) => {
   
