@@ -128,7 +128,7 @@ const NotificationIndicator = ({
   };
 
   return (
-    <div className="relative" ref={dropdownRef}>
+    <div className="relative z-40" ref={dropdownRef}>
       {/* Notification Bell Button */}
       <button
         onClick={toggleDropdown}
@@ -152,7 +152,7 @@ const NotificationIndicator = ({
       </button>
       {/* Dropdown Menu */}
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-80 bg-popover border border-border rounded-lg elevation-2 animate-slide-down max-h-96 overflow-hidden">
+        <div className="absolute right-0 mt-2 w-80 bg-popover border border-border rounded-lg elevation-2 animate-slide-down max-h-96 overflow-hidden z-50">
           {/* Header */}
           <div className="px-4 py-3 border-b border-border flex items-center justify-between">
             <h3 className="text-sm font-semibold text-popover-foreground">Notifications</h3>
