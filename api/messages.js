@@ -15,9 +15,9 @@ const threads = [
   }
 ];
 
-import { getDb, isConfigured } from './lib/mongo.js';
+const { getDb, isConfigured } = require('./lib/mongo.js');
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   res.setHeader('Content-Type', 'application/json');
   if (req.method !== 'GET') return res.status(405).json({ error: 'Method Not Allowed' });
 
@@ -31,6 +31,6 @@ export default async function handler(req, res) {
     const docs = await col.find({}).limit(100).toArray();
     return res.status(200).json({ items: docs, total: docs.length, source: 'mongodb' });
   } catch (e) {
-    return res.status(200).json({ items: [], total: 0, source: 'error', error: e?.message });
+    return res.status(200).json({ items: [], total: 0, source: 'error', error: e && e.message ? e.message : 'unknown error' });
   }
-}
+};
