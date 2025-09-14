@@ -1,18 +1,16 @@
-import { MongoClient } from 'mongodb';
+const { MongoClient } = require('mongodb');
 
 const uri = process.env.MONGODB_URI;
-export const isConfigured = Boolean(uri);
+const isConfigured = Boolean(uri);
 
 let client;
 let clientPromise;
 
-export async function getDb() {
+async function getDb() {
   if (!isConfigured) return null;
 
   if (!clientPromise) {
-    client = new MongoClient(uri, {
-      // leave defaults; Vercel functions create/close sockets per invocation, we cache the client
-    });
+    client = new MongoClient(uri);
     clientPromise = client.connect();
   }
 
@@ -22,7 +20,7 @@ export async function getDb() {
   if (!dbName) {
     try {
       const parsed = new URL(uri);
-      const path = parsed.pathname?.replace(/^\//, '') || '';
+      const path = parsed.pathname ? parsed.pathname.replace(/^\//, '') : '';
       dbName = path || 'appdb';
     } catch {
       dbName = 'appdb';
@@ -31,13 +29,15 @@ export async function getDb() {
   return conn.db(dbName);
 }
 
-export async function ping() {
+async function ping() {
   if (!isConfigured) return { ok: false, reason: 'MONGODB_URI not set' };
   try {
     const db = await getDb();
     await db.command({ ping: 1 });
     return { ok: true };
   } catch (e) {
-    return { ok: false, reason: e?.message || 'ping failed' };
+    return { ok: false, reason: e && e.message ? e.message : 'ping failed' };
   }
 }
+
+module.exports = { getDb, ping, isConfigured };
