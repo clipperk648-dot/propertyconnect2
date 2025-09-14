@@ -1,4 +1,4 @@
-import { getDb, isConfigured } from './lib/mongo.js';
+const { getDb, isConfigured } = require('./lib/mongo.js');
 
 const fallback = [
   { id: 1, title: 'Modern Apartment in Downtown', price: 3200, beds: 2, baths: 2, sqft: 1100, image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&h=600&fit=crop', city: 'Seattle', state: 'WA' },
@@ -6,7 +6,7 @@ const fallback = [
   { id: 3, title: 'Luxury Condo with View', price: 5200, beds: 2, baths: 2, sqft: 1350, image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&h=600&fit=crop', city: 'Kirkland', state: 'WA' }
 ];
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   res.setHeader('Content-Type', 'application/json');
   if (req.method !== 'GET') return res.status(405).json({ error: 'Method Not Allowed' });
 
@@ -26,6 +26,6 @@ export default async function handler(req, res) {
     const docs = await col.find(query).limit(Number(limit)).toArray();
     return res.status(200).json({ items: docs, total: docs.length, source: 'mongodb' });
   } catch (e) {
-    return res.status(200).json({ items: [], total: 0, source: 'error', error: e?.message });
+    return res.status(200).json({ items: [], total: 0, source: 'error', error: e && e.message ? e.message : 'unknown error' });
   }
-}
+};
