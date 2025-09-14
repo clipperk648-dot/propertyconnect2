@@ -39,8 +39,19 @@ const Properties = () => {
   const [properties, setProperties] = useState([]);
 
   useEffect(() => {
-    // Load mock data (replace with API call when available)
-    setProperties(mockProperties);
+    const controller = new AbortController();
+    async function load() {
+      try {
+        const res = await fetch('/api/properties', { signal: controller.signal });
+        const json = await res.json();
+        const items = Array.isArray(json?.items) ? json.items : [];
+        setProperties(items);
+      } catch (e) {
+        if (e.name !== 'AbortError') setProperties([]);
+      }
+    }
+    load();
+    return () => controller.abort();
   }, []);
 
   const formatCurrency = (v) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(v);
