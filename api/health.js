@@ -1,6 +1,6 @@
-import { ping, isConfigured } from './lib/mongo.js';
+const { ping, isConfigured } = require('./lib/mongo.js');
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   res.setHeader('Content-Type', 'application/json');
   let db = { configured: isConfigured };
   if (isConfigured) {
@@ -8,4 +8,4 @@ export default async function handler(req, res) {
     db = { ...db, ...r };
   }
   return res.status(200).json({ status: 'ok', timestamp: Date.now(), version: '1.0.0', db });
-}
+};
