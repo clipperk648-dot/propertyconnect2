@@ -68,7 +68,7 @@ const UserProfileDropdown = ({
   };
 
   return (
-    <div className="relative" ref={dropdownRef}>
+    <div className="relative z-40" ref={dropdownRef}>
       {/* Profile Trigger Button */}
       <button
         onClick={toggleDropdown}
