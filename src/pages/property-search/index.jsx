@@ -18,14 +18,14 @@ const PropertySearch = () => {
   const [sortBy, setSortBy] = useState('relevance');
   const [isLoading, setIsLoading] = useState(false);
   const [selectedMapProperty, setSelectedMapProperty] = useState(null);
-  const [savedProperties, setSavedProperties] = useState([1, 3, 7]);
+  const [savedProperties, setSavedProperties] = useState([]);
 
-  // Mock user data
+  // Read basic user info from session
   const currentUser = {
-    name: 'Sarah Johnson',
-    email: 'sarah.johnson@email.com',
-    avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
-    role: 'tenant'
+    name: localStorage.getItem('userEmail') || 'User',
+    email: localStorage.getItem('userEmail') || '',
+    avatar: '',
+    role: localStorage.getItem('userRole') || 'tenant'
   };
 
   // Initial filters state
@@ -43,7 +43,7 @@ const PropertySearch = () => {
     availableFrom: ''
   });
 
-  // Mock properties data
+  // Mock properties data (removed in favor of API fetch)
   const mockProperties = [
     {
       id: 1,
@@ -205,13 +205,37 @@ const PropertySearch = () => {
     }
   ];
 
-  const [filteredProperties, setFilteredProperties] = useState(mockProperties);
+  const [filteredProperties, setFilteredProperties] = useState([]);
 
-  // Filter properties based on current filters
+  // Fetch properties from API when filters change
   useEffect(() => {
-    let filtered = [...mockProperties];
+    const controller = new AbortController();
+    async function load() {
+      setIsLoading(true);
+      try {
+        const params = new URLSearchParams();
+        if (filters?.location) params.set('city', filters.location);
+        if (filters?.propertyType && filters?.propertyType !== 'all') params.set('type', filters.propertyType);
+        const res = await fetch(`/api/properties?${params.toString()}`, { signal: controller.signal });
+        const json = await res.json();
+        let items = Array.isArray(json?.items) ? json.items : [];
+        if (filters?.minPrice) items = items.filter(p => Number(p.price) >= Number(filters.minPrice));
+        if (filters?.maxPrice) items = items.filter(p => Number(p.price) <= Number(filters.maxPrice));
+        if (filters?.bedrooms && filters.bedrooms !== 'any') items = items.filter(p => Number(p.beds ?? p.bedrooms ?? 0) >= Number(filters.bedrooms));
+        if (filters?.bathrooms && filters.bathrooms !== 'any') items = items.filter(p => Number(p.baths ?? p.bathrooms ?? 0) >= Number(filters.bathrooms));
+        if (filters?.minSqft) items = items.filter(p => Number(p.sqft ?? 0) >= Number(filters.minSqft));
+        if (filters?.maxSqft) items = items.filter(p => Number(p.sqft ?? 0) <= Number(filters.maxSqft));
+        setFilteredProperties(items);
+      } catch (e) {
+        if (e.name !== 'AbortError') setFilteredProperties([]);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    load();
+    return () => controller.abort();
 
-    // Location filter
+    // client-side filtering logic removed
     if (filters?.location) {
       filtered = filtered?.filter(property =>
         property?.location?.toLowerCase()?.includes(filters?.location?.toLowerCase())
@@ -274,41 +298,35 @@ const PropertySearch = () => {
       );
     }
 
-    setFilteredProperties(filtered);
+    // no-op; results are set from API response
   }, [filters]);
 
   // Sort properties
   useEffect(() => {
-    let sorted = [...filteredProperties];
-
-    switch (sortBy) {
-      case 'price-low':
-        sorted?.sort((a, b) => a?.price - b?.price);
-        break;
-      case 'price-high':
-        sorted?.sort((a, b) => b?.price - a?.price);
-        break;
-      case 'newest':
-        sorted?.sort((a, b) => b?.id - a?.id);
-        break;
-      case 'oldest':
-        sorted?.sort((a, b) => a?.id - b?.id);
-        break;
-      default:
-        // Keep original order for relevance
-        break;
-    }
-
-    setFilteredProperties(sorted);
+    setFilteredProperties(prev => {
+      const sorted = [...prev];
+      switch (sortBy) {
+        case 'price-low':
+          sorted.sort((a, b) => Number(a?.price ?? 0) - Number(b?.price ?? 0));
+          break;
+        case 'price-high':
+          sorted.sort((a, b) => Number(b?.price ?? 0) - Number(a?.price ?? 0));
+          break;
+        case 'newest':
+          sorted.sort((a, b) => Number(b?._id?.toString().slice(-6)) - Number(a?._id?.toString().slice(-6)));
+          break;
+        case 'oldest':
+          sorted.sort((a, b) => Number(a?._id?.toString().slice(-6)) - Number(b?._id?.toString().slice(-6)));
+          break;
+        default:
+          break;
+      }
+      return sorted;
+    });
   }, [sortBy]);
 
   const handleFiltersChange = (newFilters) => {
     setFilters(newFilters);
-    setIsLoading(true);
-    // Simulate API call delay
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 500);
   };
 
   const handleSaveProperty = (propertyId) => {
