@@ -15,10 +15,22 @@ const threads = [
   }
 ];
 
+import { getDb, isConfigured } from './lib/mongo.js';
+
 export default async function handler(req, res) {
   res.setHeader('Content-Type', 'application/json');
-  if (req.method === 'GET') {
-    return res.status(200).json({ items: threads, total: threads.length });
+  if (req.method !== 'GET') return res.status(405).json({ error: 'Method Not Allowed' });
+
+  if (!isConfigured) {
+    return res.status(200).json({ items: threads, total: threads.length, source: 'fallback' });
   }
-  return res.status(405).json({ error: 'Method Not Allowed' });
+
+  try {
+    const db = await getDb();
+    const col = db.collection('messages');
+    const docs = await col.find({}).limit(100).toArray();
+    return res.status(200).json({ items: docs, total: docs.length, source: 'mongodb' });
+  } catch (e) {
+    return res.status(200).json({ items: threads, total: threads.length, source: 'fallback', error: e?.message });
+  }
 }
