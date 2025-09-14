@@ -86,8 +86,8 @@ const Properties = () => {
                     <p className="text-sm text-muted-foreground">{p.location || [p.city, p.state].filter(Boolean).join(', ')}</p>
                   </div>
                   <div className="text-right">
-                    <div className="font-semibold text-primary">{formatCurrency(p.price)}{p.type === 'rent' ? '/mo' : ''}</div>
-                    <div className="text-xs text-muted-foreground">{p.status}</div>
+                    <div className="font-semibold text-primary">{formatCurrency(p.price || 0)}{(p.type || 'rent') === 'rent' ? '/mo' : ''}</div>
+                    <div className="text-xs text-muted-foreground">{p.status || 'Available'}</div>
                   </div>
                 </div>
 
