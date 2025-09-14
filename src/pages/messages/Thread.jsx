@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import RoleBasedNavBar from '../../components/ui/RoleBasedNavBar';
 import MobileAppFooter from '../../components/ui/MobileAppFooter';
@@ -28,12 +28,17 @@ const Thread = () => {
   }, [convId]);
 
   const handleSend = (message) => {
-    setConversations(prev => prev.map(c => c.id === convId ? {
-      ...c,
-      messages: [...(c.messages || []), message],
-      lastMessage: message.text || (message.images?.length ? 'Image' : 'Video'),
-      time: 'Now'
-    } : c));
+    setConversation(prev => {
+      if (!prev) return prev;
+      const messages = Array.isArray(prev.messages) ? prev.messages : [];
+      return {
+        ...prev,
+        messages: [...messages, message],
+        lastMessage: message.text || (message.images?.length ? 'Image' : 'Video'),
+        time: 'Now'
+      };
+    });
+    // TODO: Persist message via API when backend endpoint is available
   };
 
   if (!conversation) {
