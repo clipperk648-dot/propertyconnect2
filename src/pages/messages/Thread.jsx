@@ -7,10 +7,25 @@ import ChatWindow from './components/ChatWindow';
 const Thread = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const convId = Number(id);
-  const [conversations, setConversations] = useState(initialConversations);
+  const convId = String(id);
+  const [conversation, setConversation] = useState(null);
 
-  const conversation = conversations.find(c => c.id === convId);
+  useEffect(() => {
+    let ignore = false;
+    async function load() {
+      try {
+        const res = await fetch('/api/messages');
+        const json = await res.json();
+        const items = Array.isArray(json?.items) ? json.items : [];
+        const found = items.find(c => String(c.id) === convId || String(c._id) === convId) || null;
+        if (!ignore) setConversation(found);
+      } catch {
+        if (!ignore) setConversation(null);
+      }
+    }
+    load();
+    return () => { ignore = true; };
+  }, [convId]);
 
   const handleSend = (message) => {
     setConversations(prev => prev.map(c => c.id === convId ? {
