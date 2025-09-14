@@ -39,8 +39,19 @@ const Properties = () => {
   const [properties, setProperties] = useState([]);
 
   useEffect(() => {
-    // Load mock data (replace with API call when available)
-    setProperties(mockProperties);
+    const controller = new AbortController();
+    async function load() {
+      try {
+        const res = await fetch('/api/properties', { signal: controller.signal });
+        const json = await res.json();
+        const items = Array.isArray(json?.items) ? json.items : [];
+        setProperties(items);
+      } catch (e) {
+        if (e.name !== 'AbortError') setProperties([]);
+      }
+    }
+    load();
+    return () => controller.abort();
   }, []);
 
   const formatCurrency = (v) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(v);
@@ -66,17 +77,17 @@ const Properties = () => {
           {properties.map((p) => (
             <div key={p.id} className="bg-card border border-border rounded-lg overflow-hidden flex">
               <div className="w-32 h-32 flex-shrink-0">
-                <Image src={p.image} alt={p.title} className="w-full h-full object-cover" />
+                <Image src={p.image || (Array.isArray(p.images) ? p.images[0] : '')} alt={p.title || p.name || 'Property'} className="w-full h-full object-cover" />
               </div>
               <div className="p-4 flex-1">
                 <div className="flex items-start justify-between">
                   <div>
-                    <h3 className="font-semibold text-foreground">{p.title}</h3>
-                    <p className="text-sm text-muted-foreground">{p.location}</p>
+                    <h3 className="font-semibold text-foreground">{p.title || p.name || 'Property'}</h3>
+                    <p className="text-sm text-muted-foreground">{p.location || [p.city, p.state].filter(Boolean).join(', ')}</p>
                   </div>
                   <div className="text-right">
-                    <div className="font-semibold text-primary">{formatCurrency(p.price)}{p.type === 'rent' ? '/mo' : ''}</div>
-                    <div className="text-xs text-muted-foreground">{p.status}</div>
+                    <div className="font-semibold text-primary">{formatCurrency(p.price || 0)}{(p.type || 'rent') === 'rent' ? '/mo' : ''}</div>
+                    <div className="text-xs text-muted-foreground">{p.status || 'Available'}</div>
                   </div>
                 </div>
 

@@ -39,6 +39,8 @@ const Routes = () => {
         {/* Root shows splash then login */}
         <Route path="/" element={<Splash />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/login/landlord" element={<LoginPage intendedRole="landlord" />} />
+        <Route path="/login/tenant" element={<LoginPage intendedRole="tenant" />} />
         <Route path="/register" element={<Register />} />
 
         {/* Public pages */}

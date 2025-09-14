@@ -7,9 +7,10 @@ import AuthLinks from './components/AuthLinks';
 import TrustSignals from './components/TrustSignals';
 import DemoCredentials from './components/DemoCredentials';
 
-const LoginPage = () => {
+const LoginPage = ({ intendedRole: roleFromRoute = null }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [fillCredentials, setFillCredentials] = useState(null);
+  const [selectedRole, setSelectedRole] = useState(roleFromRoute);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -26,6 +27,10 @@ const LoginPage = () => {
       }
     }
   }, [navigate]);
+
+  useEffect(() => {
+    setSelectedRole(roleFromRoute);
+  }, [roleFromRoute]);
 
   const handleLogin = (userRole) => {
     setIsAuthenticated(true);
@@ -83,9 +88,31 @@ const LoginPage = () => {
             </p>
           </div>
 
+          {/* Role Selector */}
+          <div className="bg-card p-4 rounded-lg border border-border elevation-1 mb-4">
+            <div className="flex items-center justify-center gap-3">
+              <button
+                type="button"
+                onClick={() => { setSelectedRole('landlord'); navigate('/login/landlord', { replace: true }); }}
+                aria-pressed={selectedRole === 'landlord'}
+                className={`px-4 py-2 rounded-md border ${selectedRole === 'landlord' ? 'bg-primary text-primary-foreground border-primary' : 'bg-background border-border text-foreground hover:bg-muted'}`}
+              >
+                Landlord / Property Owner
+              </button>
+              <button
+                type="button"
+                onClick={() => { setSelectedRole('tenant'); navigate('/login/tenant', { replace: true }); }}
+                aria-pressed={selectedRole === 'tenant'}
+                className={`px-4 py-2 rounded-md border ${selectedRole === 'tenant' ? 'bg-primary text-primary-foreground border-primary' : 'bg-background border-border text-foreground hover:bg-muted'}`}
+              >
+                Buyer / Tenant
+              </button>
+            </div>
+          </div>
+
           {/* Login Form Card */}
           <div className="bg-card p-8 rounded-lg border border-border elevation-1">
-            <LoginForm onLogin={handleLogin} fillCredentials={fillCredentials} />
+            <LoginForm onLogin={handleLogin} fillCredentials={fillCredentials} intendedRole={selectedRole} />
 
             <div className="mt-6">
               <AuthLinks />
