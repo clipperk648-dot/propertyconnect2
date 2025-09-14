@@ -1,20 +1,3 @@
-const threads = [
-  {
-    id: '1',
-    lastMessage: 'Is the apartment still available?',
-    from: 'Sarah Johnson',
-    avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=200&h=200&fit=crop&crop=face',
-    time: '2h'
-  },
-  {
-    id: '2',
-    lastMessage: 'Can we schedule a viewing this weekend?',
-    from: 'Michael Chen',
-    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face',
-    time: '1d'
-  }
-];
-
 const { getDb, isConfigured } = require('./lib/mongo.js');
 
 module.exports = async function handler(req, res) {

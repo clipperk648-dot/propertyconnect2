@@ -8,6 +8,16 @@ export default defineConfig({
   build: {
     outDir: "dist",
     chunkSizeWarningLimit: 2000,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          react: ["react", "react-dom"],
+          router: ["react-router-dom"],
+          charts: ["recharts", "d3"],
+          ui: ["framer-motion", "lucide-react"],
+        },
+      },
+    },
   },
   plugins: [tsconfigPaths(), react(), tagger()],
   server: {
