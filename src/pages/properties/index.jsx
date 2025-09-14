@@ -82,8 +82,8 @@ const Properties = () => {
               <div className="p-4 flex-1">
                 <div className="flex items-start justify-between">
                   <div>
-                    <h3 className="font-semibold text-foreground">{p.title}</h3>
-                    <p className="text-sm text-muted-foreground">{p.location}</p>
+                    <h3 className="font-semibold text-foreground">{p.title || p.name || 'Property'}</h3>
+                    <p className="text-sm text-muted-foreground">{p.location || [p.city, p.state].filter(Boolean).join(', ')}</p>
                   </div>
                   <div className="text-right">
                     <div className="font-semibold text-primary">{formatCurrency(p.price)}{p.type === 'rent' ? '/mo' : ''}</div>
