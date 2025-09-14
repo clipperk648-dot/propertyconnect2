@@ -2,7 +2,6 @@ import React from 'react';
 import RoleBasedNavBar from '../../components/ui/RoleBasedNavBar';
 import MobileAppFooter from '../../components/ui/MobileAppFooter';
 import ConversationList from './components/ConversationList';
-import { initialConversations as dataConversations } from './data';
 import { useNavigate } from 'react-router-dom';
 
 const Messages = () => {
