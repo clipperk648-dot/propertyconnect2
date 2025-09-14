@@ -22,7 +22,7 @@ export default async function handler(req, res) {
   if (req.method !== 'GET') return res.status(405).json({ error: 'Method Not Allowed' });
 
   if (!isConfigured) {
-    return res.status(200).json({ items: threads, total: threads.length, source: 'fallback' });
+    return res.status(200).json({ items: [], total: 0, source: 'unconfigured' });
   }
 
   try {
@@ -31,6 +31,6 @@ export default async function handler(req, res) {
     const docs = await col.find({}).limit(100).toArray();
     return res.status(200).json({ items: docs, total: docs.length, source: 'mongodb' });
   } catch (e) {
-    return res.status(200).json({ items: threads, total: threads.length, source: 'fallback', error: e?.message });
+    return res.status(200).json({ items: [], total: 0, source: 'error', error: e?.message });
   }
 }
