@@ -4,7 +4,7 @@ import Button from '../../../components/ui/Button';
 import Input from '../../../components/ui/Input';
 import Icon from '../../../components/AppIcon';
 
-const LoginForm = ({ onLogin, fillCredentials = null }) => {
+const LoginForm = ({ onLogin, fillCredentials = null, intendedRole = null }) => {
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -75,15 +75,14 @@ const LoginForm = ({ onLogin, fillCredentials = null }) => {
       // Simulate API call delay
       await new Promise(resolve => setTimeout(resolve, 700));
 
-      // Determine role: if matches demo creds use that role, otherwise accept the sign-in and default to 'tenant' for testing
-      let userRole = null;
-      if (formData?.email === mockCredentials?.landlord?.email && formData?.password === mockCredentials?.landlord?.password) {
-        userRole = 'landlord';
-      } else if (formData?.email === mockCredentials?.tenant?.email && formData?.password === mockCredentials?.tenant?.password) {
-        userRole = 'tenant';
-      } else {
-        // Accept any credentials for testing — if the email contains "landlord" prefer landlord
-        if (typeof formData?.email === 'string' && formData?.email.toLowerCase().includes('landlord')) {
+      // Determine role with explicit selection precedence
+      let userRole = intendedRole;
+      if (!userRole) {
+        if (formData?.email === mockCredentials?.landlord?.email && formData?.password === mockCredentials?.landlord?.password) {
+          userRole = 'landlord';
+        } else if (formData?.email === mockCredentials?.tenant?.email && formData?.password === mockCredentials?.tenant?.password) {
+          userRole = 'tenant';
+        } else if (typeof formData?.email === 'string' && formData?.email.toLowerCase().includes('landlord')) {
           userRole = 'landlord';
         } else {
           userRole = 'tenant';
