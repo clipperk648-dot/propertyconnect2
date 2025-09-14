@@ -104,7 +104,7 @@ const UserProfileDropdown = ({
       </button>
       {/* Dropdown Menu */}
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-64 bg-popover border border-border rounded-lg elevation-2 animate-slide-down">
+        <div className="absolute right-0 mt-2 w-64 bg-popover border border-border rounded-lg elevation-2 animate-slide-down z-50">
           {/* User Info Header */}
           <div className="px-4 py-3 border-b border-border">
             <div className="flex items-center space-x-3">
