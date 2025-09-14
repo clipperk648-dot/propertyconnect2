@@ -3,7 +3,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 import RoleBasedNavBar from '../../components/ui/RoleBasedNavBar';
 import MobileAppFooter from '../../components/ui/MobileAppFooter';
 import ChatWindow from './components/ChatWindow';
-import { initialConversations } from './data';
 
 const Thread = () => {
   const { id } = useParams();
