@@ -41,7 +41,7 @@ const Thread = () => {
       <div className="min-h-screen bg-background">
         <RoleBasedNavBar userRole="tenant" isAuthenticated={true} />
         <div className="max-w-7xl mx-auto p-4 mt-20">
-          <div className="bg-card border border-border rounded-lg p-6 text-center">Conversation not found. <button className="ml-2 text-blue-600" onClick={() => navigate('/messages')}>Back to conversations</button></div>
+          <div className="bg-card border border-border rounded-lg p-6 text-center">No conversation selected. <button className="ml-2 text-primary" onClick={() => navigate('/messages')}>Back to conversations</button></div>
         </div>
         <MobileAppFooter userRole="tenant" />
       </div>
