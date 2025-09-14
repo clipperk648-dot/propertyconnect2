@@ -13,8 +13,7 @@ export default async function handler(req, res) {
   const { city, type, limit = 50 } = req.query || {};
 
   if (!isConfigured) {
-    const data = city ? fallback.filter(p => p.city.toLowerCase() === String(city).toLowerCase()) : fallback;
-    return res.status(200).json({ items: data, total: data.length, source: 'fallback' });
+    return res.status(200).json({ items: [], total: 0, source: 'unconfigured' });
   }
 
   try {
@@ -27,6 +26,6 @@ export default async function handler(req, res) {
     const docs = await col.find(query).limit(Number(limit)).toArray();
     return res.status(200).json({ items: docs, total: docs.length, source: 'mongodb' });
   } catch (e) {
-    return res.status(200).json({ items: fallback, total: fallback.length, source: 'fallback', error: e?.message });
+    return res.status(200).json({ items: [], total: 0, source: 'error', error: e?.message });
   }
 }
