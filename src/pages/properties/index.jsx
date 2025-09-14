@@ -77,7 +77,7 @@ const Properties = () => {
           {properties.map((p) => (
             <div key={p.id} className="bg-card border border-border rounded-lg overflow-hidden flex">
               <div className="w-32 h-32 flex-shrink-0">
-                <Image src={p.image} alt={p.title} className="w-full h-full object-cover" />
+                <Image src={p.image || (Array.isArray(p.images) ? p.images[0] : '')} alt={p.title || p.name || 'Property'} className="w-full h-full object-cover" />
               </div>
               <div className="p-4 flex-1">
                 <div className="flex items-start justify-between">
