@@ -21,7 +21,7 @@ const defaultSlides = [
   }
 ];
 
-const SlideshowBanner = ({ slides = defaultSlides, interval = 5000 }) => {
+const SlideshowBanner = ({ slides = defaultSlides, interval = 2000 }) => {
   const [index, setIndex] = useState(0);
   const timeoutRef = useRef(null);
 

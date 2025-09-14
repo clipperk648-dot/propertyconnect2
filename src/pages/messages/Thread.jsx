@@ -3,15 +3,29 @@ import { useParams, useNavigate } from 'react-router-dom';
 import RoleBasedNavBar from '../../components/ui/RoleBasedNavBar';
 import MobileAppFooter from '../../components/ui/MobileAppFooter';
 import ChatWindow from './components/ChatWindow';
-import { initialConversations } from './data';
 
 const Thread = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const convId = Number(id);
-  const [conversations, setConversations] = useState(initialConversations);
+  const convId = String(id);
+  const [conversation, setConversation] = useState(null);
 
-  const conversation = conversations.find(c => c.id === convId);
+  useEffect(() => {
+    let ignore = false;
+    async function load() {
+      try {
+        const res = await fetch('/api/messages');
+        const json = await res.json();
+        const items = Array.isArray(json?.items) ? json.items : [];
+        const found = items.find(c => String(c.id) === convId || String(c._id) === convId) || null;
+        if (!ignore) setConversation(found);
+      } catch {
+        if (!ignore) setConversation(null);
+      }
+    }
+    load();
+    return () => { ignore = true; };
+  }, [convId]);
 
   const handleSend = (message) => {
     setConversations(prev => prev.map(c => c.id === convId ? {
@@ -27,7 +41,7 @@ const Thread = () => {
       <div className="min-h-screen bg-background">
         <RoleBasedNavBar userRole="tenant" isAuthenticated={true} />
         <div className="max-w-7xl mx-auto p-4 mt-20">
-          <div className="bg-card border border-border rounded-lg p-6 text-center">Conversation not found. <button className="ml-2 text-blue-600" onClick={() => navigate('/messages')}>Back to conversations</button></div>
+          <div className="bg-card border border-border rounded-lg p-6 text-center">No conversation selected. <button className="ml-2 text-primary" onClick={() => navigate('/messages')}>Back to conversations</button></div>
         </div>
         <MobileAppFooter userRole="tenant" />
       </div>

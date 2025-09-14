@@ -6,9 +6,15 @@ const Splash = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // Clear any existing session to require login on initial app open
+    try {
+      localStorage.removeItem('isAuthenticated');
+      localStorage.removeItem('userRole');
+      localStorage.removeItem('userEmail');
+    } catch {}
     const t = setTimeout(() => {
       navigate('/login');
-    }, 800);
+    }, 5000);
     return () => clearTimeout(t);
   }, [navigate]);
 

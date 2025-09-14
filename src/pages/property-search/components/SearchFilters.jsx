@@ -16,11 +16,12 @@ const SearchFilters = ({
 
   const propertyTypes = [
     { value: 'all', label: 'All Types' },
-    { value: 'apartment', label: 'Apartment' },
-    { value: 'house', label: 'House' },
-    { value: 'condo', label: 'Condo' },
-    { value: 'townhouse', label: 'Townhouse' },
-    { value: 'studio', label: 'Studio' }
+    { value: 'selfcon', label: 'Selfcon' },
+    { value: 'single-room', label: 'Single room' },
+    { value: 'duplex', label: 'Duplex' },
+    { value: 'hostel', label: 'Hostel' },
+    { value: 'shop', label: 'Shop' },
+    { value: 'store', label: 'Store' }
   ];
 
   const bedroomOptions = [
