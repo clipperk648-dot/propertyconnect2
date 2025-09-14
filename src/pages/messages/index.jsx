@@ -6,7 +6,22 @@ import { useNavigate } from 'react-router-dom';
 
 const Messages = () => {
   const navigate = useNavigate();
-  const conversations = dataConversations;
+  const [conversations, setConversations] = useState([]);
+
+  useEffect(() => {
+    let ignore = false;
+    async function load() {
+      try {
+        const res = await fetch('/api/messages');
+        const json = await res.json();
+        if (!ignore) setConversations(Array.isArray(json?.items) ? json.items : []);
+      } catch {
+        if (!ignore) setConversations([]);
+      }
+    }
+    load();
+    return () => { ignore = true; };
+  }, []);
 
   const handleSelect = (id) => {
     // navigate to thread page for the selected conversation
