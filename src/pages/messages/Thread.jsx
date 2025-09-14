@@ -38,7 +38,6 @@ const Thread = () => {
         time: 'Now'
       };
     });
-    // TODO: Persist message via API when backend endpoint is available
   };
 
   if (!conversation) {
