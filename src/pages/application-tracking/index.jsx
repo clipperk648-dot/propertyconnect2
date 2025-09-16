@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import RoleBasedNavBar from '../../components/ui/RoleBasedNavBar';
-import UserProfileDropdown from '../../components/ui/UserProfileDropdown';
-import NotificationIndicator from '../../components/ui/NotificationIndicator';
 import BreadcrumbTrail from '../../components/ui/BreadcrumbTrail';
 import MobileAppFooter from '../../components/ui/MobileAppFooter';
 import ApplicationStatusOverview from './components/ApplicationStatusOverview';
@@ -165,16 +163,12 @@ const ApplicationTracking = () => {
                 Monitor your rental applications and manage required documents
               </p>
             </div>
-            <div className="flex items-center space-x-4">
-              <NotificationIndicator />
-              <UserProfileDropdown user={currentUser} onLogout={handleLogout} />
-            </div>
           </div>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-20 md:pb-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-24">
         {/* Breadcrumb */}
         <BreadcrumbTrail userRole="tenant" currentPage="Application Tracking" />
 
@@ -222,8 +216,6 @@ const ApplicationTracking = () => {
         />
       )}
 
-      {/* Footer */}
-      <footer className="bg-card border-t border-border mt-16 hidden md:block">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex flex-col md:flex-row items-center justify-between">
             <div className="flex items-center space-x-2 mb-4 md:mb-0">
@@ -237,10 +229,8 @@ const ApplicationTracking = () => {
             </div>
           </div>
         </div>
-      </footer>
-
       {/* Mobile App Footer */}
-      <MobileAppFooter userRole="tenant" />
+      <MobileAppFooter userRole="tenant" showOnDesktop />
     </div>
   );
 };

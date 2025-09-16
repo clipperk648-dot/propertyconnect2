@@ -1,5 +1,6 @@
 import React from 'react';
 import RoleBasedNavBar from '../../components/ui/RoleBasedNavBar';
+import MobileAppFooter from '../../components/ui/MobileAppFooter';
 import MetricsPanel from '../landlord-dashboard/components/MetricsPanel';
 import Button from '../../components/ui/Button';
 
@@ -16,7 +17,7 @@ const Analytics = () => {
     <div className="min-h-screen bg-background">
       <RoleBasedNavBar userRole="landlord" isAuthenticated={true} />
 
-      <div className="max-w-7xl mx-auto p-6 mt-20 space-y-6">
+      <div className="max-w-7xl mx-auto p-6 mt-20 space-y-6 pb-24">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-semibold">Analytics & Insights</h1>
@@ -55,6 +56,7 @@ const Analytics = () => {
           </div>
         </div>
 
+        <MobileAppFooter userRole="landlord" showOnDesktop />
       </div>
     </div>
   );

@@ -44,10 +44,10 @@ const Thread = () => {
     return (
       <div className="min-h-screen bg-background">
         <RoleBasedNavBar userRole="tenant" isAuthenticated={true} />
-        <div className="max-w-7xl mx-auto p-4 mt-20">
+        <div className="max-w-7xl mx-auto p-4 mt-20 pb-24">
           <div className="bg-card border border-border rounded-lg p-6 text-center">No conversation selected. <button className="ml-2 text-primary" onClick={() => navigate('/messages')}>Back to conversations</button></div>
         </div>
-        <MobileAppFooter userRole="tenant" />
+        <MobileAppFooter userRole="tenant" showOnDesktop />
       </div>
     );
   }
@@ -56,7 +56,7 @@ const Thread = () => {
     <div className="min-h-screen bg-background">
       <RoleBasedNavBar userRole="tenant" isAuthenticated={true} />
 
-      <div className="max-w-7xl mx-auto p-4 mt-20">
+      <div className="max-w-7xl mx-auto p-4 mt-20 pb-24">
         <div className="mb-4">
           <button className="text-sm text-blue-600 mb-2" onClick={() => navigate('/messages')}>Back</button>
           <h1 className="text-2xl font-semibold">{conversation.name}</h1>

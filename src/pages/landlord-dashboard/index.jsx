@@ -99,15 +99,15 @@ const LandlordDashboard = () => {
       <div className="pt-16 pb-24">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           {/* Header */}
-          <div className="flex items-start justify-between mb-6">
-            <div>
-              <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
+          <div className="flex items-start justify-between mb-6 gap-2">
+            <div className="min-w-0">
+              <h1 className="text-xl sm:text-3xl font-bold text-foreground truncate">
                 Welcome back, {currentUser.name.split(' ')[0]}!
               </h1>
-              <p className="text-muted-foreground mt-1">Here's what's happening with your properties today.</p>
+              <p className="hidden sm:block text-muted-foreground mt-1">Here's what's happening with your properties today.</p>
             </div>
 
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center shrink-0 gap-3">
               <NotificationIndicator />
               <UserProfileDropdown user={currentUser} onLogout={() => navigate('/login')} />
             </div>
@@ -184,7 +184,7 @@ const LandlordDashboard = () => {
         </div>
       </div>
 
-      <MobileAppFooter userRole="landlord" />
+      <MobileAppFooter userRole="landlord" showOnDesktop />
     </div>
   );
 };

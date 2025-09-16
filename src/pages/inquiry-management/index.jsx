@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import RoleBasedNavBar from '../../components/ui/RoleBasedNavBar';
-import UserProfileDropdown from '../../components/ui/UserProfileDropdown';
-import NotificationIndicator from '../../components/ui/NotificationIndicator';
 import BreadcrumbTrail from '../../components/ui/BreadcrumbTrail';
 import Button from '../../components/ui/Button';
 import MobileAppFooter from '../../components/ui/MobileAppFooter';
@@ -279,7 +277,7 @@ const InquiryManagement = () => {
       {/* Navigation */}
       <RoleBasedNavBar userRole="landlord" isAuthenticated={true} />
       {/* Main Content */}
-      <div className="pt-16 pb-20 md:pb-0">
+      <div className="pt-16 pb-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           {/* Header Section */}
           <div className="flex items-center justify-between mb-6">
@@ -299,8 +297,6 @@ const InquiryManagement = () => {
               >
                 View All Messages
               </Button>
-              <NotificationIndicator />
-              <UserProfileDropdown user={currentUser} onLogout={handleLogout} />
             </div>
           </div>
 
@@ -417,7 +413,7 @@ const InquiryManagement = () => {
         />
       )}
       {/* Mobile App Footer */}
-      <MobileAppFooter userRole="landlord" />
+      <MobileAppFooter userRole="landlord" showOnDesktop />
     </div>
   );
 };

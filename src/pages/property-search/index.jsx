@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import RoleBasedNavBar from '../../components/ui/RoleBasedNavBar';
-import UserProfileDropdown from '../../components/ui/UserProfileDropdown';
-import NotificationIndicator from '../../components/ui/NotificationIndicator';
+import MobileAppFooter from '../../components/ui/MobileAppFooter';
 import BreadcrumbTrail from '../../components/ui/BreadcrumbTrail';
 import SearchFilters from './components/SearchFilters';
 import SearchHeader from './components/SearchHeader';
@@ -352,7 +351,7 @@ const PropertySearch = () => {
       {/* Navigation */}
       <RoleBasedNavBar userRole="tenant" isAuthenticated={true} />
       {/* Main Content */}
-      <div className="pt-16">
+      <div className="pt-16 pb-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {/* Header with User Actions */}
           <div className="flex items-center justify-between mb-6">
@@ -361,10 +360,6 @@ const PropertySearch = () => {
               <p className="text-muted-foreground mt-2">
                 Discover amazing properties that match your lifestyle
               </p>
-            </div>
-            <div className="flex items-center space-x-4">
-              <NotificationIndicator />
-              <UserProfileDropdown user={currentUser} onLogout={handleLogout} />
             </div>
           </div>
 
@@ -446,6 +441,7 @@ const PropertySearch = () => {
           iconName="Filter"
         />
       </div>
+      <MobileAppFooter userRole={currentUser.role} showOnDesktop />
     </div>
   );
 };
