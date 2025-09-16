@@ -31,10 +31,10 @@ const TenantDashboard = () => {
       {/* Header */}
       <div className="bg-card border-b border-border mt-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <div>
-              <h1 className="text-2xl font-bold text-foreground">Welcome back, {currentUser?.name?.split(' ')?.[0]}!</h1>
-              <p className="text-sm text-muted-foreground">
+          <div className="flex items-center justify-between h-16 gap-2">
+            <div className="min-w-0">
+              <h1 className="text-xl md:text-2xl font-bold text-foreground truncate">Welcome back, {currentUser?.name?.split(' ')?.[0]}!</h1>
+              <p className="hidden sm:block text-sm text-muted-foreground">
                 {new Date()?.toLocaleDateString('en-US', { 
                   weekday: 'long', 
                   year: 'numeric', 
@@ -43,7 +43,7 @@ const TenantDashboard = () => {
                 })}
               </p>
             </div>
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center shrink-0 gap-3 sm:gap-4">
               <NotificationIndicator />
               <UserProfileDropdown user={currentUser} onLogout={handleLogout} />
             </div>
