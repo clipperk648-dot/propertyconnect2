@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import RoleBasedNavBar from '../../components/ui/RoleBasedNavBar';
-import UserProfileDropdown from '../../components/ui/UserProfileDropdown';
-import NotificationIndicator from '../../components/ui/NotificationIndicator';
 import BreadcrumbTrail from '../../components/ui/BreadcrumbTrail';
 import MobileAppFooter from '../../components/ui/MobileAppFooter';
 import ApplicationStatusOverview from './components/ApplicationStatusOverview';
@@ -164,10 +162,6 @@ const ApplicationTracking = () => {
               <p className="text-sm text-muted-foreground">
                 Monitor your rental applications and manage required documents
               </p>
-            </div>
-            <div className="flex items-center space-x-4">
-              <NotificationIndicator />
-              <UserProfileDropdown user={currentUser} onLogout={handleLogout} />
             </div>
           </div>
         </div>
