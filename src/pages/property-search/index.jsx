@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import RoleBasedNavBar from '../../components/ui/RoleBasedNavBar';
 import MobileAppFooter from '../../components/ui/MobileAppFooter';
-import UserProfileDropdown from '../../components/ui/UserProfileDropdown';
-import NotificationIndicator from '../../components/ui/NotificationIndicator';
 import BreadcrumbTrail from '../../components/ui/BreadcrumbTrail';
 import SearchFilters from './components/SearchFilters';
 import SearchHeader from './components/SearchHeader';
@@ -362,10 +360,6 @@ const PropertySearch = () => {
               <p className="text-muted-foreground mt-2">
                 Discover amazing properties that match your lifestyle
               </p>
-            </div>
-            <div className="flex items-center space-x-4">
-              <NotificationIndicator />
-              <UserProfileDropdown user={currentUser} onLogout={handleLogout} />
             </div>
           </div>
 
