@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import RoleBasedNavBar from '../../components/ui/RoleBasedNavBar';
-import UserProfileDropdown from '../../components/ui/UserProfileDropdown';
-import NotificationIndicator from '../../components/ui/NotificationIndicator';
 import BreadcrumbTrail from '../../components/ui/BreadcrumbTrail';
 import PropertyImageGallery from './components/PropertyImageGallery';
 import PropertyInformation from './components/PropertyInformation';
@@ -172,10 +170,6 @@ const PropertyDetails = () => {
               Back to Search
             </Button>
             
-            <div className="flex items-center space-x-4">
-              <NotificationIndicator />
-              <UserProfileDropdown user={mockUser} onLogout={handleLogout} />
-            </div>
           </div>
         </div>
       </div>
