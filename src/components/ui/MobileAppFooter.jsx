@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Icon from '../AppIcon';
 
-const MobileAppFooter = ({ userRole = 'tenant' }) => {
+const MobileAppFooter = ({ userRole = 'tenant', showOnDesktop = false }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -91,8 +91,8 @@ const MobileAppFooter = ({ userRole = 'tenant' }) => {
   };
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-50 md:hidden">
-      <div className="grid grid-cols-5 h-16">
+    <div className={`fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-50 pb-[max(env(safe-area-inset-bottom),0px)]${showOnDesktop ? '' : ' md:hidden'}`}>
+      <div className="grid grid-cols-5 h-14 md:h-16">
         {navigationItems?.map((item) => {
           const active = isActive(item?.path);
           return (
@@ -106,7 +106,7 @@ const MobileAppFooter = ({ userRole = 'tenant' }) => {
             >
               <Icon
                 name={item?.icon}
-                size={20}
+                size={18}
                 className={`mb-1 ${
                   active ? item?.activeColor : item?.inactiveColor
                 }`}
