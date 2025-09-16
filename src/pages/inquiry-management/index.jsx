@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import RoleBasedNavBar from '../../components/ui/RoleBasedNavBar';
-import UserProfileDropdown from '../../components/ui/UserProfileDropdown';
-import NotificationIndicator from '../../components/ui/NotificationIndicator';
 import BreadcrumbTrail from '../../components/ui/BreadcrumbTrail';
 import Button from '../../components/ui/Button';
 import MobileAppFooter from '../../components/ui/MobileAppFooter';
