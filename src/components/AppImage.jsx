@@ -12,6 +12,8 @@ function Image({
       src={src}
       alt={alt}
       className={className}
+      loading="lazy"
+      decoding="async"
       onError={(e) => {
         // Prevent infinite loop and use inline SVG fallback
         e.currentTarget.onerror = null;
