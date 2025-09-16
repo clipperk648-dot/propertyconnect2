@@ -91,15 +91,15 @@ const MobileAppFooter = ({ userRole = 'tenant', showOnDesktop = false }) => {
   };
 
   return (
-    <div className={`fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-50 pb-[max(env(safe-area-inset-bottom),0px)]${showOnDesktop ? '' : ' md:hidden'}`}>
-      <div className="grid grid-cols-5 h-14 md:h-16">
+    <div className={`fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-40 pb-[max(env(safe-area-inset-bottom),0px)]${showOnDesktop ? '' : ' md:hidden'}`}>
+      <div className="grid grid-cols-5 h-14 md:h-16 select-none">
         {navigationItems?.map((item) => {
           const active = isActive(item?.path);
           return (
             <button
               key={item?.id}
               onClick={() => handleNavigation(item)}
-              className={`flex flex-col items-center justify-center px-2 py-1 transition-all duration-200 ${
+              className={`flex flex-col items-center justify-center px-2 py-1 transition-colors duration-200 ${
                 active
                   ? 'bg-blue-50 border-t-2 border-blue-600' :'hover:bg-gray-50 border-t-2 border-transparent'
               }`}
