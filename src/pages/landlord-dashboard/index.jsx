@@ -184,7 +184,7 @@ const LandlordDashboard = () => {
         </div>
       </div>
 
-      <MobileAppFooter userRole="landlord" />
+      <MobileAppFooter userRole="landlord" showOnDesktop />
     </div>
   );
 };
