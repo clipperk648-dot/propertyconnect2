@@ -299,8 +299,6 @@ const InquiryManagement = () => {
               >
                 View All Messages
               </Button>
-              <NotificationIndicator />
-              <UserProfileDropdown user={currentUser} onLogout={handleLogout} />
             </div>
           </div>
 
