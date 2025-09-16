@@ -99,7 +99,7 @@ const LandlordDashboard = () => {
       <div className="pt-16 pb-24">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           {/* Header */}
-          <div className="flex items-start justify-between mb-6 gap-2">
+          <div className="flex items-center justify-between mb-6 gap-2 h-16">
             <div className="min-w-0">
               <h1 className="text-xl sm:text-3xl font-bold text-foreground truncate">
                 Welcome back, {currentUser.name.split(' ')[0]}!
