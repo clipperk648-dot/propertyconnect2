@@ -32,7 +32,7 @@ const LandlordActivity = () => {
           <RecentActivity activities={mockRecentActivities} />
         </div>
       </div>
-      <MobileAppFooter userRole="landlord" />
+      <MobileAppFooter userRole="landlord" showOnDesktop />
     </div>
   );
 };

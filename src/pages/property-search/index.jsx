@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import RoleBasedNavBar from '../../components/ui/RoleBasedNavBar';
+import MobileAppFooter from '../../components/ui/MobileAppFooter';
 import UserProfileDropdown from '../../components/ui/UserProfileDropdown';
 import NotificationIndicator from '../../components/ui/NotificationIndicator';
 import BreadcrumbTrail from '../../components/ui/BreadcrumbTrail';
@@ -352,7 +353,7 @@ const PropertySearch = () => {
       {/* Navigation */}
       <RoleBasedNavBar userRole="tenant" isAuthenticated={true} />
       {/* Main Content */}
-      <div className="pt-16">
+      <div className="pt-16 pb-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {/* Header with User Actions */}
           <div className="flex items-center justify-between mb-6">
@@ -446,6 +447,7 @@ const PropertySearch = () => {
           iconName="Filter"
         />
       </div>
+      <MobileAppFooter userRole={currentUser.role} showOnDesktop />
     </div>
   );
 };

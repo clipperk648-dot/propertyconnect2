@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import RoleBasedNavBar from '../../components/ui/RoleBasedNavBar';
 import Button from '../../components/ui/Button';
 import Image from '../../components/AppImage';
+import MobileAppFooter from '../../components/ui/MobileAppFooter';
 
 const mockProperties = [
   {
@@ -60,7 +61,7 @@ const Properties = () => {
     <div className="min-h-screen bg-background">
       <RoleBasedNavBar userRole="landlord" isAuthenticated={true} />
 
-      <div className="max-w-6xl mx-auto p-6 mt-20">
+      <div className="max-w-6xl mx-auto p-6 mt-20 pb-24">
         <div className="flex items-center justify-between mb-6">
           <div>
             <h1 className="text-2xl font-semibold">My Properties</h1>
@@ -106,6 +107,7 @@ const Properties = () => {
             </div>
           ))}
         </div>
+        <MobileAppFooter userRole="landlord" showOnDesktop />
       </div>
     </div>
   );

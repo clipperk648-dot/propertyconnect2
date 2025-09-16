@@ -305,7 +305,7 @@ const PropertyManagement = () => {
       {/* Navigation */}
       <RoleBasedNavBar userRole="landlord" isAuthenticated={true} />
       {/* Main Content */}
-      <div className="pt-16 pb-20 md:pb-0">
+      <div className="pt-16 pb-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           {/* Header Section */}
           <div className="flex items-center justify-between mb-6">
@@ -462,7 +462,7 @@ const PropertyManagement = () => {
         </div>
       </div>
       {/* Mobile App Footer */}
-      <MobileAppFooter userRole="landlord" />
+      <MobileAppFooter userRole="landlord" showOnDesktop />
 
       <AddPropertyModal
         open={isAddOpen}

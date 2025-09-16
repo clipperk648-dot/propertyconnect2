@@ -174,7 +174,7 @@ const ApplicationTracking = () => {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-20 md:pb-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-24">
         {/* Breadcrumb */}
         <BreadcrumbTrail userRole="tenant" currentPage="Application Tracking" />
 
@@ -222,8 +222,6 @@ const ApplicationTracking = () => {
         />
       )}
 
-      {/* Footer */}
-      <footer className="bg-card border-t border-border mt-16 hidden md:block">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex flex-col md:flex-row items-center justify-between">
             <div className="flex items-center space-x-2 mb-4 md:mb-0">
@@ -237,10 +235,8 @@ const ApplicationTracking = () => {
             </div>
           </div>
         </div>
-      </footer>
-
       {/* Mobile App Footer */}
-      <MobileAppFooter userRole="tenant" />
+      <MobileAppFooter userRole="tenant" showOnDesktop />
     </div>
   );
 };
