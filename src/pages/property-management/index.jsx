@@ -325,8 +325,6 @@ const PropertyManagement = () => {
               >
                 Add Property
               </Button>
-              <NotificationIndicator />
-              <UserProfileDropdown user={currentUser} onLogout={handleLogout} />
             </div>
           </div>
 
