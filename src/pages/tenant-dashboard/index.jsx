@@ -51,7 +51,7 @@ const TenantDashboard = () => {
         </div>
       </div>
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-20 md:pb-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-24">
         {/* Breadcrumb */}
         <BreadcrumbTrail userRole="tenant" />
 
@@ -87,25 +87,8 @@ const TenantDashboard = () => {
           </div>
         </div>
       </div>
-      {/* Footer */}
-      <footer className="bg-card border-t border-border mt-16 hidden md:block">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="flex flex-col md:flex-row items-center justify-between">
-            <div className="flex items-center space-x-2 mb-4 md:mb-0">
-              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                <span className="text-primary-foreground font-bold text-sm">FMH</span>
-              </div>
-              <span className="text-lg font-semibold text-foreground">Findmyhome</span>
-            </div>
-            <div className="text-sm text-muted-foreground">
-              © {new Date()?.getFullYear()} Findmyhome. All rights reserved.
-            </div>
-          </div>
-        </div>
-      </footer>
-
       {/* Mobile App Footer */}
-      <MobileAppFooter userRole="tenant" />
+      <MobileAppFooter userRole="tenant" showOnDesktop />
     </div>
   );
 };
