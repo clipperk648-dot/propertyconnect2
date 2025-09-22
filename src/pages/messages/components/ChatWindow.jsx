@@ -72,7 +72,8 @@ const ChatWindow = ({ conversation, onSend }) => {
       <div className="bg-card border border-border rounded-lg p-6 flex items-center justify-center h-80">
         <div className="text-center text-muted-foreground">
           <div className="mb-2">Select a conversation to start chatting</div>
-          <div className="text-sm">Conversations are private between you and the other party.</div>
+          <div className="text-sm">
+            Conversations are private between you and the other party.</div>
         </div>
       </div>
     );

@@ -54,11 +54,11 @@ const LoginPage = ({ intendedRole: roleFromRoute = null }) => {
               <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
                 <Icon name="Building2" size={20} color="white" />
               </div>
-              <span className="text-xl font-semibold">Findmyhome</span>
+              <span className="text-xl C font-semibold">Findmyhome</span>
             </button>
 
             <div className="flex items-center space-x-4">
-              <span className="text-sm text-muted-foreground hidden sm:inline">
+              <span className="text-sm font-inter text-muted-foreground hidden sm:inline">
                 New to PropertyConnect?
               </span>
               <button

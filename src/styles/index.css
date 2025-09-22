@@ -4,7 +4,7 @@ html, body {
   width: 100%;
   max-width: 100%;
   overflow-x: hidden;
-  font-family: Inter;
+  @apply font-sans; /* ✅ Tailwind global font */
 }
 
 * {
