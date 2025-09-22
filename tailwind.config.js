@@ -123,6 +123,10 @@ export default {
         '18': '4.5rem',
         '88': '22rem',
       },
+       fontFamily: {
+        inter: ["Inter", "sans-serif"],   // 👈 register Google font
+        poppins: ["Poppins", "sans-serif"], // add more if you like
+      },
     },
   },
   plugins: [
