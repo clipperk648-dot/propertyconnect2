@@ -126,9 +126,7 @@ const RegistrationForm = () => {
          const dashboardPath = formData?.role === 'landlord' ? '/landlord-dashboard' : '/tenant-dashboard';
       navigate(dashboardPath)
       } catch (err) {
-      //    console.log("Error response:", err.response.data);
-      // console.log("Status:", err.response.status);
-      // console.log("Headers:", err.response.headers);
+     
      toast.error(err.response.data.error || "❌ Registration failed!");
         // console.error("Login failed:", err);
       }
