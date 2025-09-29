@@ -29,7 +29,7 @@ const Support = lazy(() => import("./pages/support"));
 const BulkEdit = lazy(() => import("./pages/bulk-edit"));
 const ExportPage = lazy(() => import("./pages/export"));
 const Reports = lazy(() => import("./pages/reports"));
-const Splash = lazy(() => import("./pages/Splash"));
+const LandingPage = lazy(() => import("./pages/LandingPage"));
 
 const Routes = () => {
   return (
@@ -38,7 +38,7 @@ const Routes = () => {
         <ScrollToTop />
         <Suspense fallback={<div className="p-6">Loading…</div>}>
           <RouterRoutes>
-            <Route path="/" element={<Splash />} />
+            <Route path="/" element={<LandingPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/login/landlord" element={<LoginPage intendedRole="landlord" />} />
             <Route path="/login/tenant" element={<LoginPage intendedRole="tenant" />} />
