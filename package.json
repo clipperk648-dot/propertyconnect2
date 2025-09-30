@@ -2,7 +2,9 @@
   "name": "findmyhome",
   "version": "0.1.0",
   "private": true,
-  "engines": { "node": ">=18" },
+  "engines": {
+    "node": ">=18"
+  },
   "rocketCritical": {
     "dependencies": [
       "@dhiwise/component-tagger",
@@ -44,12 +46,14 @@
     "framer-motion": "^10.16.4",
     "lucide-react": "^0.484.0",
     "mongodb": "^5.9.2",
+    "path": "^0.12.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-helmet": "^6.1.0",
     "react-hook-form": "^7.55.0",
     "react-router-dom": "6.0.2",
     "react-router-hash-link": "^2.4.3",
+    "react-toastify": "^11.0.5",
     "recharts": "^2.15.2",
     "redux": "^5.0.1",
     "tailwind-merge": "^3.3.1",

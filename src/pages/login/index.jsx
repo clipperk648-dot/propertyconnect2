@@ -78,7 +78,9 @@ const LoginPage = ({ intendedRole: roleFromRoute = null }) => {
           {/* Welcome Section */}
           <div className="text-center">
             <div className="mx-auto w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4">
-              <Icon name="LogIn" size={32} className="text-primary" />
+             <div className="w-14 h-14 bg-primary rounded-lg flex items-center justify-center">
+                <Icon name="Building2" size={30} color="white" />
+              </div>
             </div>
             <h1 className="text-3xl font-bold text-foreground">
               Welcome Back
@@ -89,7 +91,7 @@ const LoginPage = ({ intendedRole: roleFromRoute = null }) => {
           </div>
 
           {/* Role Selector */}
-          <div className="bg-card p-4 rounded-lg border border-border elevation-1 mb-4">
+          <div className="bg-card hidden p-4 rounded-lg border border-border elevation-1 mb-4">
             <div className="flex items-center justify-center gap-3">
               <button
                 type="button"
@@ -111,7 +113,7 @@ const LoginPage = ({ intendedRole: roleFromRoute = null }) => {
           </div>
 
           {/* Login Form Card */}
-          <div className="bg-card p-8 rounded-lg border border-border elevation-1">
+          <div className="bg-card bg p-8 rounded-lg border border-border elevation-1">
             <LoginForm onLogin={handleLogin} fillCredentials={fillCredentials} intendedRole={selectedRole} />
 
             <div className="mt-6">
@@ -120,11 +122,11 @@ const LoginPage = ({ intendedRole: roleFromRoute = null }) => {
 
             <DemoCredentials onCredentialSelect={handleDemoCredentialSelect} />
 
-            <TrustSignals />
+           <div className='hidden'> <TrustSignals /></div>
           </div>
 
           {/* Additional Info */}
-          <div className="text-center">
+          <div className="text-center ">
             <p className="text-xs text-muted-foreground">
               By signing in, you agree to our{' '}
               <button className="text-primary hover:text-primary/80 transition-colors" type="button">

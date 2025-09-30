@@ -1,9 +1,22 @@
 import React from "react";
 import Routes from "./Routes";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
-    <Routes />
+    <>
+      <Routes />
+      {/* Toast container (must be inside App once) */}
+      <ToastContainer
+        position="top-right"
+        autoClose={3000} // auto close after 3s
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        pauseOnHover
+      />
+    </>
   );
 }
 

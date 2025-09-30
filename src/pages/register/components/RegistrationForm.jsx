@@ -6,7 +6,8 @@ import { Checkbox } from '../../../components/ui/Checkbox';
 import Icon from '../../../components/AppIcon';
 import RoleSelector from './RoleSelector';
 import PasswordStrengthIndicator from './PasswordStrengthIndicator';
-
+import { registerUser } from '../../../services/authServices';
+import { toast } from "react-toastify";
 const RegistrationForm = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
@@ -15,7 +16,7 @@ const RegistrationForm = () => {
     email: '',
     password: '',
     confirmPassword: '',
-    phone: '',
+    phoneNumber: '',
     role: '',
     agreeToTerms: false,
     agreeToPrivacy: false
@@ -65,10 +66,10 @@ const RegistrationForm = () => {
     }
 
     // Phone validation
-    if (!formData?.phone) {
-      newErrors.phone = 'Phone number is required';
-    } else if (!/^\+?[\d\s\-\(\)]{10,}$/?.test(formData?.phone)) {
-      newErrors.phone = 'Please enter a valid phone number';
+    if (!formData?.phoneNumber) {
+      newErrors.phoneNumber = 'Phone number is required';
+    } else if (!/^\+?[\d\s\-\(\)]{10,}$/?.test(formData?.phoneNumber)) {
+      newErrors.phoneNumber = 'Please enter a valid phone number';
     }
 
     // Role validation
@@ -86,6 +87,8 @@ const RegistrationForm = () => {
       newErrors.agreeToPrivacy = 'You must agree to the Privacy Policy';
     }
 
+
+
     setErrors(newErrors);
     return Object.keys(newErrors)?.length === 0;
   };
@@ -100,7 +103,7 @@ const RegistrationForm = () => {
 
   const handleSubmit = async (e) => {
     e?.preventDefault();
-    
+     
     if (!validateForm()) return;
 
     setIsLoading(true);
@@ -108,15 +111,30 @@ const RegistrationForm = () => {
     try {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 2000));
-      
+
       // Mock successful registration
       console.log('Registration successful:', formData);
-      
+      try {
+        const res = await registerUser(formData, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        console.log("Login success:", res.data);
+        toast.success( res.data);
+         const dashboardPath = formData?.role === 'landlord' ? '/landlord-dashboard' : '/tenant-dashboard';
+      navigate(dashboardPath)
+      } catch (err) {
+     
+     toast.error(err.response.data.error || "❌ Registration failed!");
+        // console.error("Login failed:", err);
+      }
       // Redirect based on role
-      const dashboardPath = formData?.role === 'landlord' ? '/landlord-dashboard' : '/tenant-dashboard';
-      navigate(dashboardPath);
-      
+     ;
+
     } catch (error) {
+       toast.success('error')
       console.error('Registration failed:', error);
       setErrors({ submit: 'Registration failed. Please try again.' });
     } finally {
@@ -193,9 +211,9 @@ const RegistrationForm = () => {
         label="Phone Number"
         type="tel"
         placeholder="+1 (555) 123-4567"
-        value={formData?.phone}
-        onChange={(e) => handleInputChange('phone', e?.target?.value)}
-        error={errors?.phone}
+        value={formData?.phoneNumber}
+        onChange={(e) => handleInputChange('phoneNumber', e?.target?.value)}
+        error={errors?.phoneNumber}
         description="We'll use this for important account notifications"
         required
       />
