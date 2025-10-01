@@ -5,7 +5,8 @@ const { getDb } = require('../../api/lib/mongo');
 
 exports.handler = async function handler(event) {
   const headers = { 'Content-Type': 'application/json', 'Access-Control-Allow-Credentials': 'true' };
-  headers['Access-Control-Allow-Origin'] = event.headers.origin || '*';
+  const origin = event.headers.origin || (event.headers.host ? `https://${event.headers.host}` : '*');
+  headers['Access-Control-Allow-Origin'] = origin;
   headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization';
   if (event.httpMethod === 'OPTIONS') return { statusCode: 200, headers };
   if (event.httpMethod !== 'POST') return { statusCode: 405, headers, body: JSON.stringify({ error: 'Method Not Allowed' }) };
