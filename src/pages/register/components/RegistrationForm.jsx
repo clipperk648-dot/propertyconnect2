@@ -101,38 +101,36 @@ const RegistrationForm = () => {
 
   const handleSubmit = async (e) => {
     e?.preventDefault();
-     
     if (!validateForm()) return;
 
     setIsLoading(true);
 
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      const res = await registerUser(
+        {
+          fullName: formData.fullName,
+          email: formData.email,
+          password: formData.password,
+          phoneNumber: formData.phoneNumber,
+          role: formData.role,
+        },
+        { headers: { "Content-Type": "application/json" } }
+      );
 
-      // Mock successful registration
-      console.log('Registration successful:', formData);
-      try {
-        const res = await registerUser(formData, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-
-        console.log("Login success:", res.data);
-        toast.success( res.data);
-         const dashboardPath = formData?.role === 'landlord' ? '/landlord-dashboard' : '/tenant-dashboard';
-      navigate(dashboardPath)
-      } catch (err) {
-        toast.error(err?.response?.data?.error || "❌ Registration failed!");
+      const user = res?.data?.user;
+      if (user) {
+        localStorage.setItem('isAuthenticated', 'true');
+        localStorage.setItem('userRole', user.role);
+        localStorage.setItem('userEmail', user.email);
+        toast.success('Account created successfully');
+        const dashboardPath = user.role === 'landlord' ? '/landlord-dashboard' : '/tenant-dashboard';
+        navigate(dashboardPath);
+      } else {
+        toast.error('Unexpected response from server');
       }
-      // Redirect based on role
-      ;
-
-    } catch (error) {
-      toast.error('Registration failed. Please try again.');
-      console.error('Registration failed:', error);
-      setErrors({ submit: 'Registration failed. Please try again.' });
+    } catch (err) {
+      toast.error(err?.response?.data?.error || 'Registration failed');
+      setErrors({ submit: err?.response?.data?.error || 'Registration failed. Please try again.' });
     } finally {
       setIsLoading(false);
     }
