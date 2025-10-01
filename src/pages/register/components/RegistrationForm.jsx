@@ -45,9 +45,9 @@ const RegistrationForm = () => {
     // Email validation
     if (!formData?.email) {
       newErrors.email = 'Email is required';
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/?.test(formData?.email)) {
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData?.email)) {
       newErrors.email = 'Please enter a valid email address';
-    } else if (existingEmails?.includes(formData?.email?.toLowerCase())) {
+    } else if (existingEmails?.includes(String(formData?.email || '').toLowerCase())) {
       newErrors.email = 'An account with this email already exists';
     }
 
@@ -86,8 +86,6 @@ const RegistrationForm = () => {
     if (!formData?.agreeToPrivacy) {
       newErrors.agreeToPrivacy = 'You must agree to the Privacy Policy';
     }
-
-
 
     setErrors(newErrors);
     return Object.keys(newErrors)?.length === 0;
