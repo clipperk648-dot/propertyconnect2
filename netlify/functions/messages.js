@@ -1,5 +1,7 @@
 const { getDb, isConfigured } = require('../../api/lib/mongo.js');
 
+const { getDb, isConfigured } = require('../../api/lib/mongo');
+
 exports.handler = async function handler(event) {
   const headers = { 'Content-Type': 'application/json' };
   if (event.httpMethod !== 'GET') {
