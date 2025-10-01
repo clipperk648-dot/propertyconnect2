@@ -7,7 +7,7 @@ module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', req.headers.origin || '*');
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, PUT, OPTIONS');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, PUT, POST, OPTIONS');
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   try {
@@ -20,7 +20,7 @@ module.exports = async function handler(req, res) {
       return res.status(200).json({ user: payload });
     }
 
-    if (req.method === 'PUT') {
+    if (req.method === 'PUT' || req.method === 'POST') {
       const { fullName } = req.body || {};
       if (!fullName || !String(fullName).trim()) return res.status(400).json({ error: 'fullName is required' });
 
