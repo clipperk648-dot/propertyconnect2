@@ -6,7 +6,7 @@ exports.handler = async function handler(event) {
   const headers = { 'Content-Type': 'application/json', 'Access-Control-Allow-Credentials': 'true' };
   headers['Access-Control-Allow-Origin'] = event.headers.origin || '*';
   headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization';
-  headers['Access-Control-Allow-Methods'] = 'GET, PUT, OPTIONS';
+  headers['Access-Control-Allow-Methods'] = 'GET, PUT, POST, OPTIONS';
   if (event.httpMethod === 'OPTIONS') return { statusCode: 200, headers };
 
   try {
@@ -20,7 +20,7 @@ exports.handler = async function handler(event) {
       return { statusCode: 200, headers, body: JSON.stringify({ user: payload }) };
     }
 
-    if (event.httpMethod === 'PUT') {
+    if (event.httpMethod === 'PUT' || event.httpMethod === 'POST') {
       const body = JSON.parse(event.body || '{}');
       const { fullName } = body;
       if (!fullName || !String(fullName).trim()) return { statusCode: 400, headers, body: JSON.stringify({ error: 'fullName is required' }) };
