@@ -56,12 +56,26 @@ const Profile = () => {
     reader.readAsDataURL(file);
   };
 
-  const handleSaveProfile = () => {
+  const handleSaveProfile = async () => {
     setSaving(true);
-    setTimeout(() => {
+    try {
+      const name = String(profile.name || '').trim();
+      if (!name) return alert('Name is required');
+      const { updateProfile } = await import('../../services/authServices');
+      const res = await updateProfile({ fullName: name }, { headers: { 'Content-Type': 'application/json' } });
+      const u = res?.data?.user;
+      if (u) {
+        setProfile(prev => ({ ...prev, name: u.fullName || name }));
+        try { localStorage.setItem('userEmail', u.email || ''); } catch {}
+        alert('Profile updated');
+      } else {
+        alert('Unexpected response updating profile');
+      }
+    } catch (e) {
+      alert('Failed to update profile');
+    } finally {
       setSaving(false);
-      alert('Profile updated');
-    }, 700);
+    }
   };
 
   const handleChangePassword = () => {
