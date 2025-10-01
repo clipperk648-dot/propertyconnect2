@@ -62,17 +62,32 @@ const Profile = () => {
       const name = String(profile.name || '').trim();
       if (!name) return alert('Name is required');
       const { updateProfile } = await import('../../services/authServices');
-      const res = await updateProfile({ fullName: name }, { headers: { 'Content-Type': 'application/json' } });
-      const u = res?.data?.user;
-      if (u) {
-        setProfile(prev => ({ ...prev, name: u.fullName || name }));
-        try { localStorage.setItem('userEmail', u.email || ''); } catch {}
-        alert('Profile updated');
-      } else {
-        alert('Unexpected response updating profile');
+      try {
+        const res = await updateProfile({ fullName: name }, { headers: { 'Content-Type': 'application/json' } });
+        const u = res?.data?.user;
+        if (u) {
+          setProfile(prev => ({ ...prev, name: u.fullName || name }));
+          try { localStorage.setItem('userEmail', u.email || ''); } catch {}
+          alert('Profile updated');
+          return;
+        }
+      } catch (err) {
+        // Fallback: some proxies block PUT; try POST
+        const api = (await import('../../utils/api')).default;
+        const res2 = await api.post('/auth/profile', { fullName: name }, { headers: { 'Content-Type': 'application/json' } });
+        const u2 = res2?.data?.user;
+        if (u2) {
+          setProfile(prev => ({ ...prev, name: u2.fullName || name }));
+          try { localStorage.setItem('userEmail', u2.email || ''); } catch {}
+          alert('Profile updated');
+          return;
+        }
+        throw err;
       }
+      alert('Unexpected response updating profile');
     } catch (e) {
-      alert('Failed to update profile');
+      const msg = e?.response?.data?.error || e?.message || 'Failed to update profile';
+      alert(msg);
     } finally {
       setSaving(false);
     }
