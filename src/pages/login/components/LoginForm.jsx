@@ -97,6 +97,8 @@ const LoginForm = ({ onLogin, fillCredentials = null, intendedRole = null }) => 
         });
 
         const user = res?.data?.user;
+        const token = res?.data?.token;
+        if (token) try { localStorage.setItem('authToken', token); } catch {}
         if (user) {
           const resolvedRole = user?.role || userRole || 'tenant';
           localStorage.setItem('isAuthenticated', 'true');
