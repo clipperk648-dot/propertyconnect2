@@ -9,3 +9,6 @@ export const registerUser = (data, config = {}) =>
 
 export const getProfile = (config = {}) =>
   api.get("/auth/profile", config);
+
+export const updateProfile = (data, config = {}) =>
+  api.put("/auth/profile", data, config);
