@@ -7,18 +7,27 @@ import MobileAppFooter from '../../components/ui/MobileAppFooter';
 import Button from '../../components/ui/Button';
 import PropertyCard from './components/PropertyCard';
 import Image from '../../components/AppImage';
+import { getProfile } from '../../services/authServices';
 
 const LandlordDashboard = () => {
   const navigate = useNavigate();
   const [properties, setProperties] = useState([]);
+  const [currentUser, setCurrentUser] = useState({ name: '', email: '', role: 'landlord', avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face' });
 
-  const currentUser = {
-    name: 'David Wilson',
-    email: 'david.wilson@findmyhome.com',
-    avatar:
-      'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face',
-    role: 'landlord',
-  };
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await getProfile();
+        const u = res?.data?.user || {};
+        setCurrentUser({
+          name: u.fullName || u.name || '',
+          email: u.email || '',
+          role: u.role || 'landlord',
+          avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face',
+        });
+      } catch {}
+    })();
+  }, []);
 
   // Mock properties (kept from original mock dataset)
   const mockProperties = [
@@ -94,7 +103,7 @@ const LandlordDashboard = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <RoleBasedNavBar userRole="landlord" isAuthenticated />
+      <RoleBasedNavBar userRole={currentUser.role} isAuthenticated />
 
       <div className="pt-16 pb-24">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -102,7 +111,7 @@ const LandlordDashboard = () => {
           <div className="flex items-center justify-between mb-6 gap-2 h-16">
             <div className="min-w-0">
               <h1 className="text-xl sm:text-3xl font-bold text-foreground truncate">
-                Welcome back, {currentUser.name.split(' ')[0]}!
+                Welcome back, {currentUser?.name?.split(' ')?.[0] || '—'}!
               </h1>
               <p className="hidden sm:block text-muted-foreground mt-1">Here's what's happening with your properties today.</p>
             </div>
