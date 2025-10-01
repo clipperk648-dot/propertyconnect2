@@ -69,7 +69,7 @@ const RegistrationForm = () => {
     // Phone validation
     if (!formData?.phoneNumber) {
       newErrors.phoneNumber = 'Phone number is required';
-    } else if (!/^\+?[\d\s\-\(\)]{10,}$/?.test(formData?.phoneNumber)) {
+    } else if (!/^\+?[\d\s\-\(\)]{10,}$/.test(String(formData?.phoneNumber || '').trim())) {
       newErrors.phoneNumber = 'Please enter a valid phone number';
     }
 
