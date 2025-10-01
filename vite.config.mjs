@@ -3,6 +3,8 @@ import react from "@vitejs/plugin-react";
 import tsconfigPaths from "vite-tsconfig-paths";
 import tagger from "@dhiwise/component-tagger";
 import fs from "node:fs";
+import path from "node:path";
+import { pathToFileURL } from "node:url";
 
 function netlifyFunctionsMiddleware() {
   return {
@@ -16,8 +18,9 @@ function netlifyFunctionsMiddleware() {
           "/api/auth/profile": "./netlify/functions/auth-profile.js",
           "/api/health": "./netlify/functions/health.js",
         };
-        const fnPath = map[url];
-        if (!fnPath) return next();
+        const fnRel = map[url];
+        if (!fnRel) return next();
+        const fnAbs = path.resolve(process.cwd(), fnRel);
 
         const collectBody = () => new Promise((resolve) => {
           const chunks = [];
@@ -29,18 +32,20 @@ function netlifyFunctionsMiddleware() {
         (async () => {
           try {
             const body = await collectBody();
-            delete require.cache[require.resolve(fnPath)];
-            const mod = require(fnPath);
-            const result = await mod.handler({
+            const fileUrl = pathToFileURL(fnAbs).href + `?t=${Date.now()}`;
+            const imported = await import(fileUrl);
+            const mod = imported?.default || imported;
+            const handler = mod?.handler || mod;
+            const result = await handler({
               httpMethod: req.method || "GET",
               headers: req.headers || {},
               body,
             });
             res.statusCode = result.statusCode || 200;
             const headers = result.headers || {};
-            Object.keys(headers).forEach((k) => {
+            for (const k of Object.keys(headers)) {
               try { res.setHeader(k, headers[k]); } catch {}
-            });
+            }
             res.end(result.body || "");
           } catch (err) {
             res.statusCode = 500;
