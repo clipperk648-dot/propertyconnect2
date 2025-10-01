@@ -1,8 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Button } from '../components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
-import { Input } from '../components/ui/input';
+import Button from '../components/ui/Button';
+import Input from '../components/ui/Input';
 import { Search, Home, Shield, Users, BarChart2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -105,17 +104,17 @@ const LandingPage = () => {
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
               >
-                <Card className="h-full hover:shadow-lg transition-shadow">
-                  <CardHeader>
+                <div className="h-full hover:shadow-lg transition-shadow bg-card border border-border rounded-lg p-6">
+                  <div className="mb-4">
                     <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
                       {feature.icon}
                     </div>
-                    <CardTitle className="text-xl">{feature.title}</CardTitle>
-                  </CardHeader>
-                  <CardContent>
+                    <h3 className="text-xl font-semibold">{feature.title}</h3>
+                  </div>
+                  <div>
                     <p className="text-muted-foreground">{feature.description}</p>
-                  </CardContent>
-                </Card>
+                  </div>
+                </div>
               </motion.div>
             ))}
           </div>
