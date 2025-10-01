@@ -5,7 +5,8 @@ const { getDb } = require('../../api/lib/mongo');
 
 exports.handler = async function handler(event) {
   const headers = { 'Content-Type': 'application/json', 'Access-Control-Allow-Credentials': 'true' };
-  headers['Access-Control-Allow-Origin'] = event.headers.origin || '*';
+  const origin = event.headers.origin || (event.headers.host ? `https://${event.headers.host}` : '*');
+  headers['Access-Control-Allow-Origin'] = origin;
   headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization';
   if (event.httpMethod === 'OPTIONS') return { statusCode: 200, headers };
   if (event.httpMethod !== 'POST') return { statusCode: 405, headers, body: JSON.stringify({ error: 'Method Not Allowed' }) };
@@ -16,6 +17,7 @@ exports.handler = async function handler(event) {
     if (!email || !password) return { statusCode: 400, headers, body: JSON.stringify({ error: 'Missing email or password' }) };
 
     const db = await getDb();
+    if (!db) return { statusCode: 500, headers, body: JSON.stringify({ error: 'Database not configured' }) };
     const users = db.collection('users');
 
     const user = await users.findOne({ email: String(email).toLowerCase() });
@@ -28,7 +30,7 @@ exports.handler = async function handler(event) {
     const token = jwt.sign(publicUser, process.env.JWT_SECRET || 'dev-secret', { expiresIn: '7d' });
     headers['Set-Cookie'] = cookie.serialize('auth_token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'lax', path: '/', maxAge: 60 * 60 * 24 * 7 });
 
-    return { statusCode: 200, headers, body: JSON.stringify({ user: publicUser }) };
+    return { statusCode: 200, headers, body: JSON.stringify({ user: publicUser, token }) };
   } catch (e) {
     return { statusCode: 500, headers, body: JSON.stringify({ error: 'Internal Server Error' }) };
   }

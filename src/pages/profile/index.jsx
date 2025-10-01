@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import RoleBasedNavBar from '../../components/ui/RoleBasedNavBar';
 import Button from '../../components/ui/Button';
 import Input from '../../components/ui/Input';
 import Image from '../../components/AppImage';
+import { getProfile } from '../../services/authServices';
 
 const mockActivity = [
   { id: 1, text: 'Applied to Modern Downtown Apartment', time: '2 days ago' },
@@ -14,13 +15,38 @@ const mockActivity = [
 const Profile = () => {
   const navigate = useNavigate();
   const [profile, setProfile] = useState({
-    name: 'Alex Thompson',
-    email: 'alex.thompson@email.com',
-    role: 'tenant',
+    name: '',
+    email: '',
+    role: '',
     avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face'
   });
   const [passwords, setPasswords] = useState({ current: '', newPassword: '', confirm: '' });
   const [saving, setSaving] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      try {
+        const res = await getProfile();
+        const u = res?.data?.user || {};
+        if (!mounted) return;
+        setProfile(prev => ({
+          ...prev,
+          name: u.fullName || u.name || '',
+          email: u.email || '',
+          role: u.role || 'tenant',
+        }));
+      } catch (e) {
+        if (!mounted) return;
+        setError('Unable to load profile');
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    })();
+    return () => { mounted = false };
+  }, []);
 
   const handleFile = (e) => {
     const file = e.target.files?.[0];
@@ -30,12 +56,41 @@ const Profile = () => {
     reader.readAsDataURL(file);
   };
 
-  const handleSaveProfile = () => {
+  const handleSaveProfile = async () => {
     setSaving(true);
-    setTimeout(() => {
+    try {
+      const name = String(profile.name || '').trim();
+      if (!name) return alert('Name is required');
+      const { updateProfile } = await import('../../services/authServices');
+      try {
+        const res = await updateProfile({ fullName: name }, { headers: { 'Content-Type': 'application/json' } });
+        const u = res?.data?.user;
+        if (u) {
+          setProfile(prev => ({ ...prev, name: u.fullName || name }));
+          try { localStorage.setItem('userEmail', u.email || ''); } catch {}
+          alert('Profile updated');
+          return;
+        }
+      } catch (err) {
+        // Fallback: some proxies block PUT; try POST
+        const api = (await import('../../utils/api')).default;
+        const res2 = await api.post('/auth/profile', { fullName: name }, { headers: { 'Content-Type': 'application/json' } });
+        const u2 = res2?.data?.user;
+        if (u2) {
+          setProfile(prev => ({ ...prev, name: u2.fullName || name }));
+          try { localStorage.setItem('userEmail', u2.email || ''); } catch {}
+          alert('Profile updated');
+          return;
+        }
+        throw err;
+      }
+      alert('Unexpected response updating profile');
+    } catch (e) {
+      const msg = e?.response?.data?.error || e?.message || 'Failed to update profile';
+      alert(msg);
+    } finally {
       setSaving(false);
-      alert('Profile updated');
-    }, 700);
+    }
   };
 
   const handleChangePassword = () => {
@@ -71,6 +126,8 @@ const Profile = () => {
           <div>
             <h1 className="text-2xl font-semibold">My Profile</h1>
             <p className="text-muted-foreground">Manage your account, security, and preferences.</p>
+            {loading && <p className="text-sm text-muted-foreground mt-2">Loading profile…</p>}
+            {error && <p className="text-sm text-error mt-2">{error}</p>}
           </div>
           <div className="flex items-center space-x-3">
             <Button variant="outline" onClick={() => navigate('/settings')}>Settings</Button>
@@ -84,9 +141,9 @@ const Profile = () => {
               <Image src={profile.avatar} alt={profile.name} className="w-full h-full object-cover" />
             </div>
             <div className="text-center md:text-left">
-              <div className="font-semibold text-foreground">{profile.name}</div>
-              <div className="text-sm text-muted-foreground">{profile.email}</div>
-              <div className="text-xs text-muted-foreground mt-2">Role: <span className="font-medium">{profile.role}</span></div>
+              <div className="font-semibold text-foreground">{profile.name || '—'}</div>
+              <div className="text-sm text-muted-foreground">{profile.email || '—'}</div>
+              <div className="text-xs text-muted-foreground mt-2">Role: <span className="font-medium">{profile.role || '—'}</span></div>
             </div>
 
             <div className="mt-4 w-full">

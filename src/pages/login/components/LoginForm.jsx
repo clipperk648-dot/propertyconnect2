@@ -93,36 +93,22 @@ const LoginForm = ({ onLogin, fillCredentials = null, intendedRole = null }) => 
       // Store user session
       try {
         const res = await loginUser(formData, {
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
         });
 
-        console.log("Login success:", res.data.user.role);
-        toast.success(res.data.user.role);
-        if (res.data.user) {
-          console.log('lfgnsd');
-
-          // Store user session
+        const user = res?.data?.user;
+        if (user) {
+          const resolvedRole = user?.role || userRole || 'tenant';
           localStorage.setItem('isAuthenticated', 'true');
-          localStorage.setItem('userRole', res.data.user);
-          localStorage.setItem('userEmail', formData?.email || '');
-
-          if (typeof onLogin === 'function') onLogin(userRole);
-
-          // Navigate to appropriate dashboard
-          if (userRole === 'landlord') {
-            navigate('/landlord-dashboard');
-          } else {
-            navigate('/tenant-dashboard');
-          }
-
+          localStorage.setItem('userRole', resolvedRole);
+          localStorage.setItem('userEmail', user.email || formData?.email || '');
+          if (typeof onLogin === 'function') onLogin(resolvedRole);
+          navigate(resolvedRole === 'landlord' ? '/landlord-dashboard' : '/tenant-dashboard');
+          return;
         }
-        return
+        toast.error('Unexpected response from server');
       } catch (err) {
-
-        toast.error(err.response.data.error || "❌ Registration failed!");
-        // console.error("Login failed:", err);
+        toast.error(err?.response?.data?.error || 'Login failed');
       }
       if (typeof onLogin === 'function') onLogin(userRole);
       // Navigate to appropriate dashboard

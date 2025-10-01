@@ -16,6 +16,7 @@ module.exports = async function handler(req, res) {
     if (!email || !password) return res.status(400).json({ error: 'Missing email or password' });
 
     const db = await getDb();
+    if (!db) return res.status(500).json({ error: 'Database not configured' });
     const users = db.collection('users');
 
     const user = await users.findOne({ email: String(email).toLowerCase() });
@@ -34,7 +35,7 @@ module.exports = async function handler(req, res) {
       maxAge: 60 * 60 * 24 * 7,
     }));
 
-    return res.status(200).json({ user: publicUser });
+    return res.status(200).json({ user: publicUser, token });
   } catch (e) {
     return res.status(500).json({ error: 'Internal Server Error' });
   }

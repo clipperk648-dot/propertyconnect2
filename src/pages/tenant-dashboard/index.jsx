@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import RoleBasedNavBar from '../../components/ui/RoleBasedNavBar';
 import UserProfileDropdown from '../../components/ui/UserProfileDropdown';
 import NotificationIndicator from '../../components/ui/NotificationIndicator';
@@ -10,42 +10,53 @@ import RecentActivityFeed from './components/RecentActivityFeed';
 import ApplicationTracker from './components/ApplicationTracker';
 import SlideshowBanner from './components/SlideshowBanner';
 import MobileAppFooter from '../../components/ui/MobileAppFooter';
+import { getProfile } from '../../services/authServices';
 
 const TenantDashboard = () => {
-  const currentUser = {
-    name: 'Alex Thompson',
-    email: 'alex.thompson@email.com',
-    avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face',
-    role: 'tenant'
-  };
+  const [user, setUser] = useState({ name: '', email: '', role: 'tenant', avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face' });
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await getProfile();
+        const u = res?.data?.user || {};
+        setUser({
+          name: u.fullName || u.name || '',
+          email: u.email || '',
+          role: u.role || 'tenant',
+          avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face',
+        });
+      } catch {}
+    })();
+  }, []);
 
   const handleLogout = () => {
-    // Handle logout logic
-    console.log('User logged out');
+    try { localStorage.clear(); sessionStorage.clear(); } catch {}
+    window.location.href = '/login';
   };
 
   return (
     <div className="min-h-screen bg-background">
       {/* Navigation */}
-      <RoleBasedNavBar userRole="tenant" isAuthenticated={true} />
+      <RoleBasedNavBar userRole={user.role} isAuthenticated={true} />
       {/* Header */}
       <div className="bg-card border-b border-border mt-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 gap-2">
             <div className="min-w-0">
-              <h1 className="text-xl md:text-2xl font-bold text-foreground truncate">Welcome back, {currentUser?.name?.split(' ')?.[0]}!</h1>
+              <h1 className="text-xl md:text-2xl font-bold text-foreground truncate">Welcome back, {user?.name?.split(' ')?.[0] || '—'}!</h1>
               <p className="hidden sm:block text-sm text-muted-foreground">
-                {new Date()?.toLocaleDateString('en-US', { 
-                  weekday: 'long', 
-                  year: 'numeric', 
-                  month: 'long', 
-                  day: 'numeric' 
+                {new Date()?.toLocaleDateString('en-US', {
+                  weekday: 'long',
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
                 })}
               </p>
             </div>
             <div className="flex items-center shrink-0 gap-3 sm:gap-4">
               <NotificationIndicator />
-              <UserProfileDropdown user={currentUser} onLogout={handleLogout} />
+              <UserProfileDropdown user={user} onLogout={handleLogout} />
             </div>
           </div>
         </div>

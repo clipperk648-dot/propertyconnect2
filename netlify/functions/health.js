@@ -1,5 +1,3 @@
-const { ping, isConfigured } = require('../../api/lib/mongo.js');
-
 const { ping, isConfigured } = require('../../api/lib/mongo');
 
 exports.handler = async function handler(event) {
