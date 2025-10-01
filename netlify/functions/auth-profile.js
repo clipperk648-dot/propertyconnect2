@@ -34,7 +34,7 @@ exports.handler = async function handler(event) {
       const updatedUser = { ...payload, fullName: String(fullName).trim() };
       const newToken = jwt.sign(updatedUser, process.env.JWT_SECRET || 'dev-secret', { expiresIn: '7d' });
       headers['Set-Cookie'] = cookie.serialize('auth_token', newToken, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'lax', path: '/', maxAge: 60 * 60 * 24 * 7 });
-      return { statusCode: 200, headers, body: JSON.stringify({ user: updatedUser }) };
+      return { statusCode: 200, headers, body: JSON.stringify({ user: updatedUser, token: newToken }) };
     }
 
     return { statusCode: 405, headers, body: JSON.stringify({ error: 'Method Not Allowed' }) };

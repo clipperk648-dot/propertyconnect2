@@ -39,7 +39,7 @@ module.exports = async function handler(req, res) {
         path: '/',
         maxAge: 60 * 60 * 24 * 7,
       }));
-      return res.status(200).json({ user: updatedUser });
+      return res.status(200).json({ user: updatedUser, token: newToken });
     }
 
     return res.status(405).json({ error: 'Method Not Allowed' });

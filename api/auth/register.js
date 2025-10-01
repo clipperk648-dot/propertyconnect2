@@ -49,7 +49,7 @@ module.exports = async function handler(req, res) {
       maxAge: 60 * 60 * 24 * 7,
     }));
 
-    return res.status(201).json({ user: publicUser });
+    return res.status(201).json({ user: publicUser, token });
   } catch (e) {
     return res.status(500).json({ error: 'Internal Server Error' });
   }

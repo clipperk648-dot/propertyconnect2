@@ -31,7 +31,7 @@ exports.handler = async function handler(event) {
     const token = jwt.sign(publicUser, process.env.JWT_SECRET || 'dev-secret', { expiresIn: '7d' });
     headers['Set-Cookie'] = cookie.serialize('auth_token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'lax', path: '/', maxAge: 60 * 60 * 24 * 7 });
 
-    return { statusCode: 201, headers, body: JSON.stringify({ user: publicUser }) };
+    return { statusCode: 201, headers, body: JSON.stringify({ user: publicUser, token }) };
   } catch (e) {
     return { statusCode: 500, headers, body: JSON.stringify({ error: 'Internal Server Error' }) };
   }

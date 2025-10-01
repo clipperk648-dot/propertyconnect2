@@ -118,6 +118,8 @@ const RegistrationForm = () => {
       );
 
       const user = res?.data?.user;
+      const token = res?.data?.token;
+      if (token) try { localStorage.setItem('authToken', token); } catch {}
       if (user) {
         localStorage.setItem('isAuthenticated', 'true');
         localStorage.setItem('userRole', user.role);
