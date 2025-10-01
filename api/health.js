@@ -1,5 +1,3 @@
-const { ping, isConfigured } = require('./lib/mongo.js');
-
 const { ping, isConfigured } = require('./lib/mongo');
 
 module.exports = async function handler(req, res) {
