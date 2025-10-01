@@ -127,15 +127,13 @@ const RegistrationForm = () => {
          const dashboardPath = formData?.role === 'landlord' ? '/landlord-dashboard' : '/tenant-dashboard';
       navigate(dashboardPath)
       } catch (err) {
-     
-     toast.error(err.response.data.error || "❌ Registration failed!");
-        // console.error("Login failed:", err);
+        toast.error(err?.response?.data?.error || "❌ Registration failed!");
       }
       // Redirect based on role
-     ;
+      ;
 
     } catch (error) {
-       toast.success('error')
+      toast.error('Registration failed. Please try again.');
       console.error('Registration failed:', error);
       setErrors({ submit: 'Registration failed. Please try again.' });
     } finally {
