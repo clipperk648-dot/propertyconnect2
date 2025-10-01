@@ -18,6 +18,7 @@ module.exports = async function handler(req, res) {
     }
 
     const db = await getDb();
+    if (!db) return res.status(500).json({ error: 'Database not configured' });
     const users = db.collection('users');
 
     const existing = await users.findOne({ email: String(email).toLowerCase() });

@@ -16,6 +16,7 @@ exports.handler = async function handler(event) {
     if (!email || !password) return { statusCode: 400, headers, body: JSON.stringify({ error: 'Missing email or password' }) };
 
     const db = await getDb();
+    if (!db) return { statusCode: 500, headers, body: JSON.stringify({ error: 'Database not configured' }) };
     const users = db.collection('users');
 
     const user = await users.findOne({ email: String(email).toLowerCase() });

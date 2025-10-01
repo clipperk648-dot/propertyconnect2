@@ -18,6 +18,7 @@ exports.handler = async function handler(event) {
     }
 
     const db = await getDb();
+    if (!db) return { statusCode: 500, headers, body: JSON.stringify({ error: 'Database not configured' }) };
     const users = db.collection('users');
     const existing = await users.findOne({ email: String(email).toLowerCase() });
     if (existing) return { statusCode: 409, headers, body: JSON.stringify({ error: 'Email already in use' }) };
