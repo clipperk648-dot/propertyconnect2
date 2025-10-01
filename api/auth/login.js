@@ -2,6 +2,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const cookie = require('cookie');
 const { getDb } = require('../lib/mongo');
+const { getJwtSecret } = require('../lib/jwt');
 
 module.exports = async function handler(req, res) {
   res.setHeader('Content-Type', 'application/json');
@@ -26,7 +27,7 @@ module.exports = async function handler(req, res) {
     if (!ok) return res.status(401).json({ error: 'Invalid credentials' });
 
     const publicUser = { id: user._id, fullName: user.fullName, email: user.email, phoneNumber: user.phoneNumber, role: user.role };
-    const token = jwt.sign(publicUser, process.env.JWT_SECRET || 'dev-secret', { expiresIn: '7d' });
+    const token = jwt.sign(publicUser, getJwtSecret(), { expiresIn: '7d' });
     res.setHeader('Set-Cookie', cookie.serialize('auth_token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',

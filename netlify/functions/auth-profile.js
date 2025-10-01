@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const cookie = require('cookie');
 const { getDb } = require('../../api/lib/mongo');
+const { getJwtSecret } = require('../../api/lib/jwt');
 
 exports.handler = async function handler(event) {
   const headers = { 'Content-Type': 'application/json', 'Access-Control-Allow-Credentials': 'true' };
@@ -15,7 +16,7 @@ exports.handler = async function handler(event) {
     const cookies = Object.fromEntries(cookieHeader.split(';').map(c => c.trim().split('=')));
     const token = cookies.auth_token || (event.headers.authorization || '').replace(/^Bearer\s+/i, '');
     if (!token) return { statusCode: 401, headers, body: JSON.stringify({ error: 'Unauthorized' }) };
-    const payload = jwt.verify(token, process.env.JWT_SECRET || 'dev-secret');
+    const payload = jwt.verify(token, getJwtSecret());
 
     if (event.httpMethod === 'GET') {
       return { statusCode: 200, headers, body: JSON.stringify({ user: payload }) };
@@ -33,7 +34,7 @@ exports.handler = async function handler(event) {
       await users.updateOne({ email: String(email).toLowerCase() }, { $set: { fullName: String(fullName).trim(), updatedAt: new Date() } });
 
       const updatedUser = { ...payload, fullName: String(fullName).trim() };
-      const newToken = jwt.sign(updatedUser, process.env.JWT_SECRET || 'dev-secret', { expiresIn: '7d' });
+      const newToken = jwt.sign(updatedUser, getJwtSecret(), { expiresIn: '7d' });
       headers['Set-Cookie'] = cookie.serialize('auth_token', newToken, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'lax', path: '/', maxAge: 60 * 60 * 24 * 7 });
       return { statusCode: 200, headers, body: JSON.stringify({ user: updatedUser, token: newToken }) };
     }
