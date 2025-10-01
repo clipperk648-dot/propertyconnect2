@@ -4,7 +4,8 @@ const { getDb } = require('../../api/lib/mongo');
 
 exports.handler = async function handler(event) {
   const headers = { 'Content-Type': 'application/json', 'Access-Control-Allow-Credentials': 'true' };
-  headers['Access-Control-Allow-Origin'] = event.headers.origin || '*';
+  const origin = event.headers.origin || (event.headers.host ? `https://${event.headers.host}` : '*');
+  headers['Access-Control-Allow-Origin'] = origin;
   headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization';
   headers['Access-Control-Allow-Methods'] = 'GET, PUT, POST, OPTIONS';
   if (event.httpMethod === 'OPTIONS') return { statusCode: 200, headers };
