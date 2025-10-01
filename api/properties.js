@@ -1,5 +1,7 @@
 const { getDb, isConfigured } = require('./lib/mongo.js');
 
+const { getDb, isConfigured } = require('./lib/mongo');
+
 module.exports = async function handler(req, res) {
   res.setHeader('Content-Type', 'application/json');
   if (req.method !== 'GET') return res.status(405).json({ error: 'Method Not Allowed' });

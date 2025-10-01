@@ -7,7 +7,21 @@
   node_bundler = "esbuild"
   external_node_modules = ["mongodb"]
 
-# Proxy /api/* to Netlify Functions
+# Auth endpoints
+[[redirects]]
+  from = "/api/auth/register"
+  to = "/.netlify/functions/auth-register"
+  status = 200
+[[redirects]]
+  from = "/api/auth/login"
+  to = "/.netlify/functions/auth-login"
+  status = 200
+[[redirects]]
+  from = "/api/auth/profile"
+  to = "/.netlify/functions/auth-profile"
+  status = 200
+
+# Proxy /api/* to Netlify Functions (generic)
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/:splat"

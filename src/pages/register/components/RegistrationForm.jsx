@@ -45,9 +45,9 @@ const RegistrationForm = () => {
     // Email validation
     if (!formData?.email) {
       newErrors.email = 'Email is required';
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/?.test(formData?.email)) {
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData?.email)) {
       newErrors.email = 'Please enter a valid email address';
-    } else if (existingEmails?.includes(formData?.email?.toLowerCase())) {
+    } else if (existingEmails?.includes(String(formData?.email || '').toLowerCase())) {
       newErrors.email = 'An account with this email already exists';
     }
 
@@ -68,7 +68,7 @@ const RegistrationForm = () => {
     // Phone validation
     if (!formData?.phoneNumber) {
       newErrors.phoneNumber = 'Phone number is required';
-    } else if (!/^\+?[\d\s\-\(\)]{10,}$/?.test(formData?.phoneNumber)) {
+    } else if (!/^\+?[\d\s\-\(\)]{10,}$/.test(String(formData?.phoneNumber || '').trim())) {
       newErrors.phoneNumber = 'Please enter a valid phone number';
     }
 
@@ -86,8 +86,6 @@ const RegistrationForm = () => {
     if (!formData?.agreeToPrivacy) {
       newErrors.agreeToPrivacy = 'You must agree to the Privacy Policy';
     }
-
-
 
     setErrors(newErrors);
     return Object.keys(newErrors)?.length === 0;
@@ -126,15 +124,13 @@ const RegistrationForm = () => {
          const dashboardPath = formData?.role === 'landlord' ? '/landlord-dashboard' : '/tenant-dashboard';
       navigate(dashboardPath)
       } catch (err) {
-     
-     toast.error(err.response.data.error || "❌ Registration failed!");
-        // console.error("Login failed:", err);
+        toast.error(err?.response?.data?.error || "❌ Registration failed!");
       }
       // Redirect based on role
-     ;
+      ;
 
     } catch (error) {
-       toast.success('error')
+      toast.error('Registration failed. Please try again.');
       console.error('Registration failed:', error);
       setErrors({ submit: 'Registration failed. Please try again.' });
     } finally {
