@@ -87,6 +87,28 @@ exports.handler = async function handler(event) {
       return { statusCode: 201, headers, body: JSON.stringify({ item: saved }) };
     }
 
+    if (event.httpMethod === 'PUT') {
+      const body = event.body ? JSON.parse(event.body) : {};
+      const id = body.id || body._id;
+      if (!id) return { statusCode: 400, headers, body: JSON.stringify({ error: 'id is required for update' }) };
+      const allowed = ['title','description','location','city','price','type','propertyType','bedrooms','bathrooms','sqft','area','images','image','amenities','status'];
+      const update = {};
+      for (const k of allowed) {
+        if (Object.prototype.hasOwnProperty.call(body, k)) update[k] = body[k];
+      }
+      update.updatedAt = new Date();
+      try {
+        const _id = ObjectId.isValid(id) ? new ObjectId(id) : id;
+        const result = await col.findOneAndUpdate({ _id }, { $set: update }, { returnDocument: 'after' });
+        const item = result.value || null;
+        if (!item) return { statusCode: 404, headers, body: JSON.stringify({ error: 'not found' }) };
+        item.id = String(item._id);
+        return { statusCode: 200, headers, body: JSON.stringify({ item }) };
+      } catch (err) {
+        return { statusCode: 500, headers, body: JSON.stringify({ error: err && err.message ? err.message : 'update failed' }) };
+      }
+    }
+
     return { statusCode: 405, headers, body: JSON.stringify({ error: 'Method Not Allowed' }) };
   } catch (e) {
     return { statusCode: 200, headers, body: JSON.stringify({ items: [], total: 0, source: 'error', error: e && e.message ? e.message : 'unknown error' }) };
