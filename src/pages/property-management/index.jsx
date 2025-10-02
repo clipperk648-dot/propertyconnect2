@@ -30,18 +30,38 @@ const PropertyManagement = () => {
         const res = await fetch('/api/properties');
         const json = await res.json();
         const items = Array.isArray(json?.items) ? json.items : [];
-        const normalized = items.map((p) => ({
-          ...p,
-          id: p.id || p._id,
-          image: p.image || (Array.isArray(p.images) ? p.images[0] : ''),
-          status: p.status || 'active',
-          area: p.area || p.sqft || 0,
-          type: p.type || p.propertyType || 'rent',
-          dateAdded: p.createdAt || new Date().toISOString(),
-          views: p.views || 0,
-          inquiries: p.inquiries || 0,
-          favorites: p.favorites || 0,
-        }));
+        const normalized = items.map((p) => {
+          const listingType = p.listingType || p.type || 'rent';
+          const images = Array.isArray(p.images) ? p.images.filter(Boolean) : [];
+          const videos = Array.isArray(p.videos) ? p.videos.filter(Boolean) : [];
+          const image = p.image || images[0] || '';
+          const video = p.video || videos[0] || '';
+
+          return {
+            ...p,
+            id: p.id || p._id,
+            image,
+            images: images.length ? images : image ? [image] : [],
+            video,
+            videos: videos.length ? videos : video ? [video] : [],
+            status: p.status || 'active',
+            area: p.area || p.sqft || 0,
+            type: listingType,
+            listingType,
+            priceType: p.priceType || (listingType === 'sale' ? 'sale' : 'month'),
+            propertyType: p.propertyType || '',
+            propertyTypeLabel: p.propertyTypeLabel || p.propertyType || '',
+            description: p.description || '',
+            amenities: Array.isArray(p.amenities) ? p.amenities : [],
+            forSale: p.forSale != null ? Boolean(p.forSale) : listingType === 'sale',
+            forRent: p.forRent != null ? Boolean(p.forRent) : listingType !== 'sale',
+            dateAdded: p.createdAt || new Date().toISOString(),
+            views: p.views || 0,
+            inquiries: p.inquiries || 0,
+            favorites: p.favorites || 0,
+            applicationStatus: p.applicationStatus || 'Not Applied',
+          };
+        });
         setProperties(normalized);
       } catch {
         setProperties([]);
