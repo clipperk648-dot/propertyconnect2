@@ -28,7 +28,12 @@ exports.handler = async function handler(event) {
       if (!fullName || !String(fullName).trim()) return { statusCode: 400, headers, body: JSON.stringify({ error: 'fullName is required' }) };
 
       const db = await getDb();
-      if (!db) return { statusCode: 500, headers, body: JSON.stringify({ error: 'Database not configured' }) };
+      if (!db) {
+        const updatedUser = { ...payload, fullName: String(fullName).trim() };
+        const newToken = jwt.sign(updatedUser, getJwtSecret(), { expiresIn: '7d' });
+        headers['Set-Cookie'] = cookie.serialize('auth_token', newToken, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'lax', path: '/', maxAge: 60 * 60 * 24 * 7 });
+        return { statusCode: 200, headers, body: JSON.stringify({ user: updatedUser, token: newToken }) };
+      }
       const users = db.collection('users');
       const email = payload.email;
       await users.updateOne({ email: String(email).toLowerCase() }, { $set: { fullName: String(fullName).trim(), updatedAt: new Date() } });
