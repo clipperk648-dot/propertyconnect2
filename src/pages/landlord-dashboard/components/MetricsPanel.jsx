@@ -181,7 +181,7 @@ const MetricsPanel = ({ metrics }) => {
                   borderRadius: '8px',
                   fontSize: '12px'
                 }}
-                formatter={(value) => [formatCurrency(value * 50), 'Revenue']}
+                formatter={(value) => [formatCurrencyLocal(value * 50), 'Revenue']}
               />
               <Line
                 type="monotone"
