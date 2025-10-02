@@ -94,9 +94,7 @@ const TenantDashboard = () => {
             <ApplicationTracker />
 
             {/* Messages (live) */}
-            <div>
-              {true && <></>}
-            </div>
+            <MessageNotifications />
 
             {/* Recent Activity Feed */}
             <RecentActivityFeed />
