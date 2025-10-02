@@ -30,69 +30,39 @@ const LandlordDashboard = () => {
     })();
   }, []);
 
-  // Mock properties (kept from original mock dataset)
-  const mockProperties = [
-    {
-      id: 1,
-      title: 'Modern Downtown Apartment',
-      location: '123 Oak Street, Downtown',
-      price: 2400,
-      type: 'rent',
-      status: 'available',
-      bedrooms: 2,
-      bathrooms: 2,
-      area: 1200,
-      image:
-        'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=400&h=300&fit=crop',
-      unitsOccupied: 10,
-      unitsTotal: 12,
-    },
-    {
-      id: 2,
-      title: 'Garden View Complex',
-      location: '456 Pine Avenue, Midtown',
-      price: 1800,
-      type: 'rent',
-      status: 'available',
-      bedrooms: 2,
-      bathrooms: 1,
-      area: 900,
-      image:
-        'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop',
-      unitsOccupied: 8,
-      unitsTotal: 8,
-    },
-    {
-      id: 3,
-      title: 'Riverside Condos',
-      location: '789 River Road, Riverside',
-      price: 3200,
-      type: 'rent',
-      status: 'available',
-      bedrooms: 3,
-      bathrooms: 2,
-      area: 1400,
-      image:
-        'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=400&h=300&fit=crop',
-      unitsOccupied: 5,
-      unitsTotal: 6,
-    },
-  ];
+  // Load properties from API (landlord's properties)
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      try {
+        const res = await fetch('/api/properties');
+        const json = await res.json();
+        const items = Array.isArray(json?.items) ? json.items : [];
+        const normalized = items.map((p) => ({
+          ...p,
+          id: p.id || p._id,
+          image: p.image || (Array.isArray(p.images) ? p.images[0] : ''),
+          unitsOccupied: p.unitsOccupied || 0,
+          unitsTotal: p.unitsTotal || 1,
+        }));
+        if (mounted) setProperties(normalized);
+      } catch (e) {
+        if (mounted) setProperties([]);
+      }
+    })();
+    return () => { mounted = false; };
+  }, []);
 
   const dashboardMetrics = {
-    totalProperties: mockProperties.length,
-    occupancyPercent: Math.round(
-      (mockProperties.reduce((acc, p) => acc + (p.unitsOccupied || 0), 0) /
-        mockProperties.reduce((acc, p) => acc + (p.unitsTotal || 0), 0)) *
+    totalProperties: properties.length,
+    occupancyPercent: properties.length === 0 ? 0 : Math.round(
+      (properties.reduce((acc, p) => acc + (p.unitsOccupied || 0), 0) /
+        Math.max(1, properties.reduce((acc, p) => acc + (p.unitsTotal || 0), 0))) *
         100
     ),
-    monthlyRevenue: 24000,
-    requestsPending: 2,
+    monthlyRevenue: properties.reduce((acc, p) => acc + (p.price || 0), 0),
+    requestsPending: 0,
   };
-
-  useEffect(() => {
-    setProperties(mockProperties);
-  }, []);
 
   const formatCurrency = (value) => {
     return new Intl.NumberFormat('en-US', {
