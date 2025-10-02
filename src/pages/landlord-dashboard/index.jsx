@@ -113,7 +113,7 @@ const LandlordDashboard = () => {
 
             <div className="bg-card border border-border rounded-lg p-4">
               <div className="text-sm text-muted-foreground">Revenue</div>
-              <div className="text-xl font-semibold text-foreground">{formatCurrency(dashboardMetrics.monthlyRevenue)}</div>
+              <div className="text-xl font-semibold text-foreground">{formatCurrencyLocal(dashboardMetrics.monthlyRevenue)}</div>
               <div className="text-xs text-muted-foreground">+12% this month</div>
             </div>
 
