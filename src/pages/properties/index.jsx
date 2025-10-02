@@ -43,7 +43,7 @@ const Properties = () => {
     const controller = new AbortController();
     async function load() {
       try {
-        const res = await fetch('/api/properties', { signal: controller.signal });
+        const res = await fetch('/.netlify/functions/properties', { signal: controller.signal });
         const json = await res.json();
         const items = Array.isArray(json?.items) ? json.items : [];
         setProperties(items);
