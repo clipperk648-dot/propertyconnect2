@@ -54,14 +54,25 @@ module.exports = async function handler(req, res) {
       const bedrooms = Number(body.bedrooms || body.beds || 0);
       const bathrooms = Number(body.bathrooms || body.baths || 0);
       const sqft = Number(body.sqft || body.area || 0);
-      const typeRaw = body.type || body.propertyType || 'selfcon';
-      const propertyType = slugify(typeRaw);
+      const propertyCategoryRaw = body.propertyType || body.propertyCategory || body.type || 'selfcon';
+      const propertyType = slugify(propertyCategoryRaw);
+      const propertyTypeLabel = String(body.propertyTypeLabel || propertyCategoryRaw).trim();
+      const description = String(body.description || '').trim();
+      const forSale = body.forSale != null ? Boolean(body.forSale) : false;
+      const forRent = body.forRent != null ? Boolean(body.forRent) : !forSale;
+      const listingType = String(body.listingType || (forSale && !forRent ? 'sale' : 'rent')).toLowerCase();
+      const priceType = String(body.priceType || (listingType === 'sale' ? 'sale' : 'month')).toLowerCase();
       const images = Array.isArray(body.images) ? body.images.filter(Boolean) : [];
       const image = body.image || images[0] || '';
       const videos = Array.isArray(body.videos) ? body.videos.filter(Boolean) : [];
       const video = body.video || videos[0] || '';
       const amenities = Array.isArray(body.amenities) ? body.amenities : [];
       const status = String(body.status || 'active');
+      const ownerId = body.ownerId ? String(body.ownerId) : '';
+      const applicationStatus = body.applicationStatus ? String(body.applicationStatus) : 'Not Applied';
+      const views = Number(body.views || 0);
+      const inquiries = Number(body.inquiries || 0);
+      const favorites = Number(body.favorites || 0);
 
       if (!title || !location || !price) {
         return res.status(400).json({ error: 'title, location and price are required' });
@@ -69,11 +80,15 @@ module.exports = async function handler(req, res) {
 
       const doc = {
         title,
+        description,
         location,
         city,
         price,
-        type: propertyType,
+        type: listingType,
+        listingType,
+        priceType,
         propertyType,
+        propertyTypeLabel,
         bedrooms,
         bathrooms,
         sqft,
@@ -84,6 +99,13 @@ module.exports = async function handler(req, res) {
         video,
         amenities,
         status,
+        forSale,
+        forRent,
+        ownerId,
+        applicationStatus,
+        views,
+        inquiries,
+        favorites,
         createdAt: new Date(),
         updatedAt: new Date(),
       };
@@ -98,7 +120,7 @@ module.exports = async function handler(req, res) {
       const id = body.id || body._id;
       if (!id) return res.status(400).json({ error: 'id is required for update' });
       const update = {};
-      const allowed = ['title','description','location','city','price','type','propertyType','bedrooms','bathrooms','sqft','area','images','image','videos','video','amenities','status'];
+      const allowed = ['title','description','location','city','price','type','listingType','priceType','propertyType','propertyTypeLabel','bedrooms','bathrooms','sqft','area','images','image','videos','video','amenities','status','forSale','forRent','ownerId','views','inquiries','favorites','applicationStatus'];
       for (const k of allowed) {
         if (Object.prototype.hasOwnProperty.call(body, k)) update[k] = body[k];
       }

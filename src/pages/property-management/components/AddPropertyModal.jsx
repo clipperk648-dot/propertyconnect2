@@ -68,13 +68,14 @@ const AddPropertyModal = ({ open = false, onClose = () => {}, onAdd = () => {}, 
 
     // if opening with an initial property (edit), populate form
     if (open && initial) {
+      const listingType = initial.listingType || initial.type || 'rent';
       setForm({
         title: initial.title || '',
         description: initial.description || '',
         price: initial.price || '',
-        forSale: (initial.type === 'sale'),
-        forRent: (initial.type !== 'sale'),
-        type: initial.type || propertyTypes[0],
+        forSale: initial.forSale != null ? Boolean(initial.forSale) : listingType === 'sale',
+        forRent: initial.forRent != null ? Boolean(initial.forRent) : listingType !== 'sale',
+        type: initial.propertyTypeLabel || initial.propertyType || propertyTypes[0],
         bedrooms: initial.bedrooms || 1,
         bathrooms: initial.bathrooms || 1,
         area: initial.area || initial.sqft || '',
@@ -83,12 +84,17 @@ const AddPropertyModal = ({ open = false, onClose = () => {}, onAdd = () => {}, 
         images: [],
         videos: []
       });
-      // show existing image as preview
-      const previews = [];
-      if (initial.image) previews.push(initial.image);
-      if (Array.isArray(initial.images)) previews.push(...initial.images);
-      setImagePreviews(previews);
-      setVideoPreviews([]);
+      // show existing media as preview
+      const imageSources = [];
+      if (initial.image) imageSources.push(initial.image);
+      if (Array.isArray(initial.images)) imageSources.push(...initial.images);
+      setImagePreviews(imageSources);
+
+      const videoSources = [];
+      if (initial.video) videoSources.push(initial.video);
+      if (Array.isArray(initial.videos)) videoSources.push(...initial.videos);
+      setVideoPreviews(videoSources);
+
       setErrors({});
       setIsSubmitting(false);
     }
@@ -174,22 +180,33 @@ const AddPropertyModal = ({ open = false, onClose = () => {}, onAdd = () => {}, 
         }
       }
 
+      const listingType = form.forSale && !form.forRent ? 'sale' : 'rent';
+      const propertyTypeSlug = slugify(form.type);
+      const priceType = listingType === 'sale' ? 'sale' : 'month';
+
       const payload = {
         title: form.title,
         description: form.description,
         location: form.location,
         city: form.location,
         price: Number(form.price),
-        type: slugify(form.type),
+        type: listingType,
+        listingType,
+        priceType,
+        propertyType: propertyTypeSlug,
+        propertyTypeLabel: form.type,
         bedrooms: Number(form.bedrooms),
         bathrooms: Number(form.bathrooms),
         sqft: Number(form.area || 0),
         amenities: form.amenities,
         status: 'active',
+        forSale: form.forSale,
+        forRent: form.forRent,
         images: imagesData,
         image: imagesData[0] || (imagePreviews[0] || ''),
         videos: videosData,
         video: videosData[0] || '',
+        applicationStatus: 'Not Applied',
       };
 
       const isEdit = initial && (initial.id || initial._id);
@@ -216,14 +233,36 @@ const AddPropertyModal = ({ open = false, onClose = () => {}, onAdd = () => {}, 
       }
 
       const saved = json.item || {};
+      const savedListingType = saved.listingType || saved.type || listingType;
+      const savedPriceType = saved.priceType || priceType;
+      const savedPropertyType = saved.propertyType || propertyTypeSlug;
+      const savedPropertyLabel = saved.propertyTypeLabel || form.type;
+      const savedImages = Array.isArray(saved.images) ? saved.images : imagesData;
+      const savedVideos = Array.isArray(saved.videos) ? saved.videos : videosData;
+
       const uiProperty = {
         ...saved,
         id: saved.id || saved._id || saved?._id,
-        image: saved.image || (Array.isArray(saved.images) ? saved.images[0] : ''),
+        title: saved.title || form.title,
+        description: saved.description || form.description,
+        location: saved.location || form.location,
+        city: saved.city || form.location,
+        image: saved.image || (savedImages[0] || ''),
+        images: savedImages,
+        video: saved.video || (savedVideos[0] || ''),
+        videos: savedVideos,
+        type: savedListingType,
+        listingType: savedListingType,
+        priceType: savedPriceType,
+        propertyType: savedPropertyType,
+        propertyTypeLabel: savedPropertyLabel,
+        forSale: typeof saved.forSale === 'boolean' ? saved.forSale : form.forSale,
+        forRent: typeof saved.forRent === 'boolean' ? saved.forRent : form.forRent,
         dateAdded: saved.createdAt || new Date().toISOString(),
         views: saved.views || 0,
         inquiries: saved.inquiries || 0,
         favorites: saved.favorites || 0,
+        applicationStatus: saved.applicationStatus || 'Not Applied',
       };
 
       onAdd(uiProperty);
