@@ -8,6 +8,7 @@ import Button from '../../components/ui/Button';
 import PropertyCard from './components/PropertyCard';
 import Image from '../../components/AppImage';
 import { getProfile } from '../../services/authServices';
+import SlideshowBanner from '../tenant-dashboard/components/SlideshowBanner';
 
 const LandlordDashboard = () => {
   const navigate = useNavigate();
@@ -120,6 +121,15 @@ const LandlordDashboard = () => {
               <NotificationIndicator />
               <UserProfileDropdown user={currentUser} onLogout={() => navigate('/login')} />
             </div>
+          </div>
+
+          {/* Slideshow Banner */}
+          <div className="mb-6">
+            <SlideshowBanner slides={[
+              { id: 1, title: 'List properties in minutes', subtitle: 'Add new listings and start receiving inquiries', image: 'https://images.unsplash.com/photo-1494526585095-c41746248156?w=1600&h=600&fit=crop' },
+              { id: 2, title: 'Track performance easily', subtitle: 'Views, inquiries, and favorites at a glance', image: 'https://images.unsplash.com/photo-1449844908441-8829872d2607?w=1600&h=600&fit=crop' },
+              { id: 3, title: 'Reach verified tenants', subtitle: 'Your listings appear instantly in tenant search', image: 'https://images.unsplash.com/photo-1484154218962-a197022b5858?w=1600&h=600&fit=crop' },
+            ]} interval={3000} />
           </div>
 
           {/* Metrics Grid (mobile-first) */}
