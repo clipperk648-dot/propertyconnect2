@@ -130,8 +130,8 @@ const NotificationIndicator = ({
 
           {/* Notifications List */}
           <div className="max-h-64 overflow-y-auto">
-            {mockNotifications?.length > 0 ? (
-              mockNotifications?.map((notification) => (
+            {list?.length > 0 ? (
+              list?.map((notification) => (
                 <button
                   key={notification?.id}
                   onClick={() => handleNotificationClick(notification)}
