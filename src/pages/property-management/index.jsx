@@ -355,7 +355,8 @@ const PropertyManagement = () => {
 
       <AddPropertyModal
         open={isAddOpen}
-        onClose={() => setIsAddOpen(false)}
+        initial={editProperty}
+        onClose={() => { setIsAddOpen(false); setEditProperty(null); }}
         onAdd={(p) => handleAddPropertySubmit(p)}
       />
     </div>
