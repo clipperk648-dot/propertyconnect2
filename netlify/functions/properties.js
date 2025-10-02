@@ -1,4 +1,5 @@
 const { getDb, isConfigured } = require('../../api/lib/mongo');
+const { ObjectId } = require('mongodb');
 
 function slugify(val) {
   return String(val || '')
