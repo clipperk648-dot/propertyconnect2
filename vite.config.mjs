@@ -17,6 +17,8 @@ function netlifyFunctionsMiddleware() {
           "/api/auth/login": "./netlify/functions/auth-login.js",
           "/api/auth/profile": "./netlify/functions/auth-profile.js",
           "/api/health": "./netlify/functions/health.js",
+          "/api/properties": "./netlify/functions/properties.js",
+          "/api/messages": "./netlify/functions/messages.js",
         };
         const fnRel = map[url];
         if (!fnRel) return next();
