@@ -9,6 +9,7 @@ import SavedPropertiesGrid from './components/SavedPropertiesGrid';
 import RecentActivityFeed from './components/RecentActivityFeed';
 import ApplicationTracker from './components/ApplicationTracker';
 import SlideshowBanner from './components/SlideshowBanner';
+import MessageNotifications from './components/MessageNotifications';
 import MobileAppFooter from '../../components/ui/MobileAppFooter';
 import { getProfile } from '../../services/authServices';
 
