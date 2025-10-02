@@ -28,7 +28,7 @@ const Properties = () => {
   }, []);
 
   // use shared currency formatter
-  const formatCurrencyLocal = (v) => require('../../utils/currency').formatCurrency(v);
+  const formatCurrencyLocal = (v) => formatCurrency(v);
 
   return (
     <div className="min-h-screen bg-background">
