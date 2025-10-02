@@ -65,13 +65,7 @@ const LandlordDashboard = () => {
     requestsPending: 0,
   };
 
-  const formatCurrency = (value) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      maximumFractionDigits: 0,
-    }).format(value);
-  };
+  const formatCurrencyLocal = (value) => formatCurrency(value);
 
   return (
     <div className="min-h-screen bg-background">
