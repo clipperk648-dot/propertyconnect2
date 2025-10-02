@@ -107,7 +107,7 @@ const LandlordDashboard = () => {
             <div className="bg-card border border-border rounded-lg p-4">
               <div className="text-sm text-muted-foreground">Properties</div>
               <div className="text-xl font-semibold text-foreground">{dashboardMetrics.totalProperties}</div>
-              <div className="text-xs text-muted-foreground">{mockProperties.reduce((acc, p) => acc + (p.unitsTotal || 0), 0)} units</div>
+              <div className="text-xs text-muted-foreground">{properties.reduce((acc, p) => acc + (p.unitsTotal || 0), 0)} units</div>
             </div>
 
             <div className="bg-card border border-border rounded-lg p-4">
