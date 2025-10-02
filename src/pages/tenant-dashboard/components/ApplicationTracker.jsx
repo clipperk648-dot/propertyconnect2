@@ -7,39 +7,8 @@ import Button from '../../../components/ui/Button';
 const ApplicationTracker = () => {
   const navigate = useNavigate();
   
-  // Simplified data for dashboard display
-  const [recentApplications] = useState([
-    {
-      id: 1,
-      propertyId: 2,
-      propertyTitle: "Cozy Suburban House",
-      propertyAddress: "456 Oak Avenue, Suburbs",
-      propertyImage: "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?w=400&h=300&fit=crop",
-      status: "approved",
-      submittedDate: "2025-01-05",
-      lastUpdated: "2025-01-08"
-    },
-    {
-      id: 2,
-      propertyId: 3,
-      propertyTitle: "Luxury Condo with View",
-      propertyAddress: "789 Skyline Drive, Uptown",
-      propertyImage: "https://images.pixabay.com/photo/2016/11/18/17/46/house-1836070_1280.jpg?w=400&h=300&fit=crop",
-      status: "under_review",
-      submittedDate: "2025-01-07",
-      lastUpdated: "2025-01-08"
-    },
-    {
-      id: 3,
-      propertyId: 1,
-      propertyTitle: "Modern Downtown Apartment",
-      propertyAddress: "123 Main Street, Downtown",
-      propertyImage: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=400&h=300&fit=crop",
-      status: "pending_documents",
-      submittedDate: "2025-01-08",
-      lastUpdated: "2025-01-09"
-    }
-  ]);
+  // Realtime data will populate when applications exist. No mock data.
+  const [recentApplications] = useState([]);
 
   const getStatusConfig = (status) => {
     switch (status) {
