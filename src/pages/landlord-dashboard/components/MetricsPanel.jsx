@@ -20,14 +20,8 @@ const MetricsPanel = ({ metrics }) => {
     { name: 'Condos', value: 5, color: '#EF4444' }
   ];
 
-  const formatCurrency = (value) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    })?.format(value);
-  };
+  // use shared NGN currency formatter
+  const formatCurrencyLocal = (value) => formatCurrency(value);
 
   const MetricCard = ({ title, value, icon, trend, trendValue, color = 'text-primary' }) => (
     <div className="bg-card border border-border rounded-lg p-4 elevation-1">
