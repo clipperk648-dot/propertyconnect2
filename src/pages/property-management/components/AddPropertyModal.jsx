@@ -162,6 +162,18 @@ const AddPropertyModal = ({ open = false, onClose = () => {}, onAdd = () => {}, 
         }
       }
 
+      // convert any selected File videos to base64 data urls
+      const videosData = [];
+      for (const f of form.videos || []) {
+        if (typeof f === 'string') {
+          videosData.push(f);
+        } else if (f instanceof File) {
+          // eslint-disable-next-line no-await-in-loop
+          const data = await readFileAsDataURL(f);
+          videosData.push(data);
+        }
+      }
+
       const payload = {
         title: form.title,
         description: form.description,
@@ -176,6 +188,8 @@ const AddPropertyModal = ({ open = false, onClose = () => {}, onAdd = () => {}, 
         status: 'active',
         images: imagesData,
         image: imagesData[0] || (imagePreviews[0] || ''),
+        videos: videosData,
+        video: videosData[0] || '',
       };
 
       const isEdit = initial && (initial.id || initial._id);

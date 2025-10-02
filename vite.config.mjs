@@ -82,8 +82,8 @@ export default defineConfig({
     host: "0.0.0.0",
     strictPort: true,
     hmr: {
-      clientPort: 443,
-      protocol: 'wss',
+      clientPort: 4028,
+      protocol: 'ws',
     },
   },
 });

@@ -18,7 +18,23 @@ exports.handler = async function handler(event) {
     if (!email || !password) return { statusCode: 400, headers, body: JSON.stringify({ error: 'Missing email or password' }) };
 
     const db = await getDb();
-    if (!db) return { statusCode: 500, headers, body: JSON.stringify({ error: 'Database not configured' }) };
+    if (!db) {
+      const emailStr = String(email).toLowerCase().trim();
+      const pwd = String(password);
+      const demoUsers = {
+        'landlord@findmyhome.com': { fullName: 'Landlord Demo', role: 'landlord', phoneNumber: '' },
+        'tenant@findmyhome.com': { fullName: 'Tenant Demo', role: 'tenant', phoneNumber: '' },
+      };
+      const valid =
+        (emailStr === 'landlord@findmyhome.com' && pwd === 'landlord123') ||
+        (emailStr === 'tenant@findmyhome.com' && pwd === 'tenant123');
+      if (!valid) return { statusCode: 500, headers, body: JSON.stringify({ error: 'Database not configured' }) };
+      const demo = demoUsers[emailStr];
+      const publicUser = { id: `demo-${demo.role}`, fullName: demo.fullName, email: emailStr, phoneNumber: demo.phoneNumber, role: demo.role };
+      const token = jwt.sign(publicUser, getJwtSecret(), { expiresIn: '7d' });
+      headers['Set-Cookie'] = cookie.serialize('auth_token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'lax', path: '/', maxAge: 60 * 60 * 24 * 7 });
+      return { statusCode: 200, headers, body: JSON.stringify({ user: publicUser, token }) };
+    }
     const users = db.collection('users');
 
     const user = await users.findOne({ email: String(email).toLowerCase() });

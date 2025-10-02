@@ -3,24 +3,16 @@ import Icon from '../../../components/AppIcon';
 
 const LocationMap = ({ location = {} }) => {
   const mockLocation = {
-    address: "123 Main Street",
-    city: "New York",
-    state: "NY",
-    zipCode: "10001",
-    lat: 40.7589,
-    lng: -73.9851,
-    walkScore: 95,
-    transitScore: 88,
-    bikeScore: 72,
-    nearbyPlaces: [
-      { name: "Central Park", distance: "0.3 miles", type: "park", icon: "Trees" },
-      { name: "Whole Foods Market", distance: "0.2 miles", type: "grocery", icon: "ShoppingCart" },
-      { name: "Metro Station", distance: "0.1 miles", type: "transit", icon: "Train" },
-      { name: "Starbucks Coffee", distance: "0.1 miles", type: "cafe", icon: "Coffee" },
-      { name: "24/7 Fitness", distance: "0.4 miles", type: "gym", icon: "Dumbbell" },
-      { name: "Roosevelt Hospital", distance: "0.6 miles", type: "hospital", icon: "Heart" }
-    ],
-    ...location
+    address: location?.address || String(location || ''),
+    city: location?.city || '',
+    state: location?.state || '',
+    zipCode: location?.zipCode || '',
+    lat: location?.lat,
+    lng: location?.lng,
+    walkScore: 0,
+    transitScore: 0,
+    bikeScore: 0,
+    nearbyPlaces: Array.isArray(location?.nearbyPlaces) ? location.nearbyPlaces : [],
   };
 
   const [mapLoaded, setMapLoaded] = useState(false);

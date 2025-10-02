@@ -9,6 +9,7 @@ import SavedPropertiesGrid from './components/SavedPropertiesGrid';
 import RecentActivityFeed from './components/RecentActivityFeed';
 import ApplicationTracker from './components/ApplicationTracker';
 import SlideshowBanner from './components/SlideshowBanner';
+import MessageNotifications from './components/MessageNotifications';
 import MobileAppFooter from '../../components/ui/MobileAppFooter';
 import { getProfile } from '../../services/authServices';
 
@@ -91,8 +92,10 @@ const TenantDashboard = () => {
           <div className="space-y-8">
             {/* Application Tracker */}
             <ApplicationTracker />
-            
-            
+
+            {/* Messages (live) */}
+            <MessageNotifications />
+
             {/* Recent Activity Feed */}
             <RecentActivityFeed />
           </div>
