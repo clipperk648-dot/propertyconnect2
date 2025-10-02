@@ -33,18 +33,18 @@ const PropertyInformation = ({ property = {} }) => {
       {/* Header */}
       <div className="border-b border-border pb-6">
         <h1 className="text-3xl font-bold text-foreground mb-2">
-          {mockProperty?.title}
+          {p?.title}
         </h1>
         <div className="flex items-center text-muted-foreground mb-4">
           <Icon name="MapPin" size={18} className="mr-2" />
           <span>
-            {mockProperty?.location?.address}, {mockProperty?.location?.city}, {mockProperty?.location?.state} {mockProperty?.location?.zipCode}
+            {p?.location?.address}, {p?.location?.city}, {p?.location?.state} {p?.location?.zipCode}
           </span>
         </div>
         <div className="text-3xl font-bold text-primary">
-          {formatPrice(mockProperty?.price)}
+          {formatPrice(p?.price)}
           <span className="text-lg font-normal text-muted-foreground">
-            /{mockProperty?.priceType}
+            /{p?.priceType}
           </span>
         </div>
       </div>
@@ -52,27 +52,27 @@ const PropertyInformation = ({ property = {} }) => {
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         <div className="text-center p-4 bg-muted/50 rounded-lg">
           <Icon name="Bed" size={24} className="mx-auto mb-2 text-primary" />
-          <div className="text-lg font-semibold">{mockProperty?.specifications?.bedrooms}</div>
+          <div className="text-lg font-semibold">{p?.specifications?.bedrooms}</div>
           <div className="text-sm text-muted-foreground">Bedrooms</div>
         </div>
         <div className="text-center p-4 bg-muted/50 rounded-lg">
           <Icon name="Bath" size={24} className="mx-auto mb-2 text-primary" />
-          <div className="text-lg font-semibold">{mockProperty?.specifications?.bathrooms}</div>
+          <div className="text-lg font-semibold">{p?.specifications?.bathrooms}</div>
           <div className="text-sm text-muted-foreground">Bathrooms</div>
         </div>
         <div className="text-center p-4 bg-muted/50 rounded-lg">
           <Icon name="Square" size={24} className="mx-auto mb-2 text-primary" />
-          <div className="text-lg font-semibold">{mockProperty?.specifications?.area?.toLocaleString()}</div>
+          <div className="text-lg font-semibold">{p?.specifications?.area?.toLocaleString()}</div>
           <div className="text-sm text-muted-foreground">Sq Ft</div>
         </div>
         <div className="text-center p-4 bg-muted/50 rounded-lg">
           <Icon name="Car" size={24} className="mx-auto mb-2 text-primary" />
-          <div className="text-lg font-semibold">{mockProperty?.specifications?.parking}</div>
+          <div className="text-lg font-semibold">{p?.specifications?.parking}</div>
           <div className="text-sm text-muted-foreground">Parking</div>
         </div>
         <div className="text-center p-4 bg-muted/50 rounded-lg">
           <Icon name="Sofa" size={24} className="mx-auto mb-2 text-primary" />
-          <div className="text-lg font-semibold">{mockProperty?.specifications?.furnished ? 'Yes' : 'No'}</div>
+          <div className="text-lg font-semibold">{p?.specifications?.furnished ? 'Yes' : 'No'}</div>
           <div className="text-sm text-muted-foreground">Furnished</div>
         </div>
       </div>
@@ -80,14 +80,14 @@ const PropertyInformation = ({ property = {} }) => {
       <div>
         <h2 className="text-xl font-semibold text-foreground mb-4">Description</h2>
         <div className="text-muted-foreground leading-relaxed whitespace-pre-line">
-          {mockProperty?.description}
+          {p?.description}
         </div>
       </div>
       {/* Amenities */}
       <div>
         <h2 className="text-xl font-semibold text-foreground mb-4">Amenities</h2>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-          {mockProperty?.amenities?.map((amenity, index) => (
+          {p?.amenities?.map((amenity, index) => (
             <div key={index} className="flex items-center space-x-2 text-muted-foreground">
               <Icon name="Check" size={16} className="text-success flex-shrink-0" />
               <span className="text-sm">{amenity}</span>
@@ -102,15 +102,15 @@ const PropertyInformation = ({ property = {} }) => {
           <div className="space-y-3">
             <div className="flex justify-between">
               <span className="text-muted-foreground">Available Date:</span>
-              <span className="font-medium">{formatDate(mockProperty?.availabilityDate)}</span>
+              <span className="font-medium">{formatDate(p?.availabilityDate)}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-muted-foreground">Lease Terms:</span>
-              <span className="font-medium">{mockProperty?.leaseTerms}</span>
+              <span className="font-medium">{p?.leaseTerms}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-muted-foreground">Utilities:</span>
-              <span className="font-medium">{mockProperty?.utilities}</span>
+              <span className="font-medium">{p?.utilities}</span>
             </div>
           </div>
         </div>
@@ -120,11 +120,11 @@ const PropertyInformation = ({ property = {} }) => {
           <div className="space-y-3">
             <div className="flex justify-between">
               <span className="text-muted-foreground">Pet Policy:</span>
-              <span className="font-medium">{mockProperty?.petPolicy}</span>
+              <span className="font-medium">{p?.petPolicy}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-muted-foreground">Security Deposit:</span>
-              <span className="font-medium">{formatPrice(mockProperty?.price)}</span>
+              <span className="font-medium">{formatPrice(p?.price)}</span>
             </div>
           </div>
         </div>
