@@ -9,6 +9,7 @@ import PropertyCard from './components/PropertyCard';
 import Image from '../../components/AppImage';
 import { getProfile } from '../../services/authServices';
 import SlideshowBanner from '../tenant-dashboard/components/SlideshowBanner';
+import { formatCurrency } from '../../utils/currency';
 
 const LandlordDashboard = () => {
   const navigate = useNavigate();
