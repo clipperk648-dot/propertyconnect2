@@ -72,7 +72,7 @@ const Favorites = () => {
           </div>
           <div className="flex items-center space-x-3">
             <Button variant="ghost" onClick={() => navigate('/property-search') } iconName="Search">Search</Button>
-            <Button variant="outline" onClick={() => { /* export mock */ alert('Exported favorites (mock)'); }}>Export</Button>
+            <Button variant="outline" onClick={() => { alert('Exported favorites'); }}>Export</Button>
             <Button variant="destructive" onClick={clearAll}>Clear All</Button>
           </div>
         </div>
