@@ -180,22 +180,33 @@ const AddPropertyModal = ({ open = false, onClose = () => {}, onAdd = () => {}, 
         }
       }
 
+      const listingType = form.forSale && !form.forRent ? 'sale' : 'rent';
+      const propertyTypeSlug = slugify(form.type);
+      const priceType = listingType === 'sale' ? 'sale' : 'month';
+
       const payload = {
         title: form.title,
         description: form.description,
         location: form.location,
         city: form.location,
         price: Number(form.price),
-        type: slugify(form.type),
+        type: listingType,
+        listingType,
+        priceType,
+        propertyType: propertyTypeSlug,
+        propertyTypeLabel: form.type,
         bedrooms: Number(form.bedrooms),
         bathrooms: Number(form.bathrooms),
         sqft: Number(form.area || 0),
         amenities: form.amenities,
         status: 'active',
+        forSale: form.forSale,
+        forRent: form.forRent,
         images: imagesData,
         image: imagesData[0] || (imagePreviews[0] || ''),
         videos: videosData,
         video: videosData[0] || '',
+        applicationStatus: 'Not Applied',
       };
 
       const isEdit = initial && (initial.id || initial._id);
