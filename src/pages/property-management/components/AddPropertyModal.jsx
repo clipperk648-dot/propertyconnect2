@@ -68,13 +68,14 @@ const AddPropertyModal = ({ open = false, onClose = () => {}, onAdd = () => {}, 
 
     // if opening with an initial property (edit), populate form
     if (open && initial) {
+      const listingType = initial.listingType || initial.type || 'rent';
       setForm({
         title: initial.title || '',
         description: initial.description || '',
         price: initial.price || '',
-        forSale: (initial.type === 'sale'),
-        forRent: (initial.type !== 'sale'),
-        type: initial.type || propertyTypes[0],
+        forSale: initial.forSale != null ? Boolean(initial.forSale) : listingType === 'sale',
+        forRent: initial.forRent != null ? Boolean(initial.forRent) : listingType !== 'sale',
+        type: initial.propertyTypeLabel || initial.propertyType || propertyTypes[0],
         bedrooms: initial.bedrooms || 1,
         bathrooms: initial.bathrooms || 1,
         area: initial.area || initial.sqft || '',
@@ -83,12 +84,17 @@ const AddPropertyModal = ({ open = false, onClose = () => {}, onAdd = () => {}, 
         images: [],
         videos: []
       });
-      // show existing image as preview
-      const previews = [];
-      if (initial.image) previews.push(initial.image);
-      if (Array.isArray(initial.images)) previews.push(...initial.images);
-      setImagePreviews(previews);
-      setVideoPreviews([]);
+      // show existing media as preview
+      const imageSources = [];
+      if (initial.image) imageSources.push(initial.image);
+      if (Array.isArray(initial.images)) imageSources.push(...initial.images);
+      setImagePreviews(imageSources);
+
+      const videoSources = [];
+      if (initial.video) videoSources.push(initial.video);
+      if (Array.isArray(initial.videos)) videoSources.push(...initial.videos);
+      setVideoPreviews(videoSources);
+
       setErrors({});
       setIsSubmitting(false);
     }
