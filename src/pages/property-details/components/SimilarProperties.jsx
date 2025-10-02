@@ -4,67 +4,14 @@ import Icon from '../../../components/AppIcon';
 import Image from '../../../components/AppImage';
 import Button from '../../../components/ui/Button';
 
+import { formatCurrency } from '../../../utils/currency';
+
 const SimilarProperties = ({ properties = [] }) => {
   const navigate = useNavigate();
 
-  const mockProperties = properties?.length > 0 ? properties : [
-    {
-      id: 1,
-      title: "Luxury High-Rise Apartment",
-      price: 2800,
-      priceType: "month",
-      location: "Downtown District",
-      bedrooms: 2,
-      bathrooms: 2,
-      area: 1350,
-      image: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=400&h=300&fit=crop",
-      featured: true
-    },
-    {
-      id: 2,
-      title: "Modern Studio Loft",
-      price: 1900,
-      priceType: "month",
-      location: "Arts District",
-      bedrooms: 1,
-      bathrooms: 1,
-      area: 850,
-      image: "https://images.unsplash.com/photo-1600566753151-384129cf4e3e?w=400&h=300&fit=crop",
-      featured: false
-    },
-    {
-      id: 3,
-      title: "Spacious Family Home",
-      price: 3200,
-      priceType: "month",
-      location: "Suburban Area",
-      bedrooms: 3,
-      bathrooms: 2.5,
-      area: 1800,
-      image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=400&h=300&fit=crop",
-      featured: false
-    },
-    {
-      id: 4,
-      title: "Cozy Garden Apartment",
-      price: 2200,
-      priceType: "month",
-      location: "Green Valley",
-      bedrooms: 2,
-      bathrooms: 1,
-      area: 1100,
-      image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=400&h=300&fit=crop",
-      featured: true
-    }
-  ];
+  const list = properties || [];
 
-  const formatPrice = (price) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0
-    })?.format(price);
-  };
+  const formatPrice = (price) => formatCurrency(price);
 
   const handlePropertyClick = (propertyId) => {
     // In a real app, this would navigate to the specific property details
