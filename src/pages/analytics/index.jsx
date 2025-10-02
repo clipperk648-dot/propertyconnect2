@@ -1,4 +1,3 @@
-import React from 'react';
 import React, { useEffect, useState } from 'react';
 import RoleBasedNavBar from '../../components/ui/RoleBasedNavBar';
 import MobileAppFooter from '../../components/ui/MobileAppFooter';
