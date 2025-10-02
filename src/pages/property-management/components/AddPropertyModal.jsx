@@ -233,14 +233,36 @@ const AddPropertyModal = ({ open = false, onClose = () => {}, onAdd = () => {}, 
       }
 
       const saved = json.item || {};
+      const savedListingType = saved.listingType || saved.type || listingType;
+      const savedPriceType = saved.priceType || priceType;
+      const savedPropertyType = saved.propertyType || propertyTypeSlug;
+      const savedPropertyLabel = saved.propertyTypeLabel || form.type;
+      const savedImages = Array.isArray(saved.images) ? saved.images : imagesData;
+      const savedVideos = Array.isArray(saved.videos) ? saved.videos : videosData;
+
       const uiProperty = {
         ...saved,
         id: saved.id || saved._id || saved?._id,
-        image: saved.image || (Array.isArray(saved.images) ? saved.images[0] : ''),
+        title: saved.title || form.title,
+        description: saved.description || form.description,
+        location: saved.location || form.location,
+        city: saved.city || form.location,
+        image: saved.image || (savedImages[0] || ''),
+        images: savedImages,
+        video: saved.video || (savedVideos[0] || ''),
+        videos: savedVideos,
+        type: savedListingType,
+        listingType: savedListingType,
+        priceType: savedPriceType,
+        propertyType: savedPropertyType,
+        propertyTypeLabel: savedPropertyLabel,
+        forSale: typeof saved.forSale === 'boolean' ? saved.forSale : form.forSale,
+        forRent: typeof saved.forRent === 'boolean' ? saved.forRent : form.forRent,
         dateAdded: saved.createdAt || new Date().toISOString(),
         views: saved.views || 0,
         inquiries: saved.inquiries || 0,
         favorites: saved.favorites || 0,
+        applicationStatus: saved.applicationStatus || 'Not Applied',
       };
 
       onAdd(uiProperty);
