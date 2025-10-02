@@ -1,11 +1,9 @@
 import React from 'react';
+import React, { useEffect, useState } from 'react';
 import RoleBasedNavBar from '../../components/ui/RoleBasedNavBar';
 import MobileAppFooter from '../../components/ui/MobileAppFooter';
 import MetricsPanel from '../landlord-dashboard/components/MetricsPanel';
 import Button from '../../components/ui/Button';
-
-import React, { useEffect, useState } from 'react';
-import MetricsPanel from '../landlord-dashboard/components/MetricsPanel';
 import { formatCurrency } from '../../utils/currency';
 
 const Analytics = () => {
