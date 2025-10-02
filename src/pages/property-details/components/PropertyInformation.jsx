@@ -1,49 +1,24 @@
 import React from 'react';
 import Icon from '../../../components/AppIcon';
 
+import { formatCurrency } from '../../../utils/currency';
+
 const PropertyInformation = ({ property = {} }) => {
-  const mockProperty = {
-    title: "Modern Downtown Apartment",
-    price: 2500,
-    priceType: "month",
-    location: {
-      address: "123 Main Street",
-      city: "New York",
-      state: "NY",
-      zipCode: "10001"
-    },
-    specifications: {
-      bedrooms: 2,
-      bathrooms: 2,
-      area: 1200,
-      furnished: true,
-      parking: 1
-    },
-    amenities: [
-      "Air Conditioning",
-      "Dishwasher",
-      "Gym/Fitness Center",
-      "Laundry in Building",
-      "Elevator",
-      "Balcony",
-      "Pet Friendly",
-      "Swimming Pool"
-    ],
-    description: `Experience luxury living in this stunning 2-bedroom, 2-bathroom apartment located in the heart of downtown. This modern unit features floor-to-ceiling windows, hardwood floors throughout, and a spacious open-concept living area perfect for entertaining.\n\nThe gourmet kitchen boasts granite countertops, stainless steel appliances, and ample cabinet space. Both bedrooms offer generous closet space and natural light. The master suite includes an en-suite bathroom with modern fixtures.\n\nBuilding amenities include a fitness center, rooftop terrace, and 24/7 concierge service. Located within walking distance of restaurants, shopping, and public transportation.`,
-    availabilityDate: "2025-01-15",
-    leaseTerms: "12 months minimum",
-    petPolicy: "Cats and small dogs allowed with deposit",
-    utilities: "Heat and water included",
-    ...property
+  const p = {
+    title: property.title || 'Property',
+    price: property.price || 0,
+    priceType: property.priceType || (property.type === 'rent' ? 'month' : 'sale'),
+    location: property.location || { address: property.location || '', city: property.city || '', state: property.state || '' , zipCode: '' },
+    specifications: property.specifications || { bedrooms: property.bedrooms || 0, bathrooms: property.bathrooms || 0, area: property.area || property.sqft || 0, furnished: false, parking: 0 },
+    amenities: property.amenities || property.features || [],
+    description: property.description || '',
+    availabilityDate: property.availableFrom || property.availabilityDate || '',
+    leaseTerms: property.leaseTerms || '',
+    petPolicy: property.petPolicy || '',
+    utilities: property.utilities || ''
   };
 
-  const formatPrice = (price) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0
-    })?.format(price);
-  };
+  const formatPrice = (price) => formatCurrency(price);
 
   const formatDate = (dateString) => {
     return new Date(dateString)?.toLocaleDateString('en-US', {
