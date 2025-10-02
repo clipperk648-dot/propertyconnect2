@@ -37,8 +37,8 @@ const AddPropertyModal = ({ open = false, onClose = () => {}, onAdd = () => {}, 
 
   useEffect(() => {
     return () => {
-      imagePreviews.forEach(p => URL.revokeObjectURL(p));
-      videoPreviews.forEach(p => URL.revokeObjectURL(p));
+      imagePreviews.forEach(p => { try { if (typeof p === 'string' && p.startsWith('blob:')) URL.revokeObjectURL(p); } catch {} });
+      videoPreviews.forEach(p => { try { if (typeof p === 'string' && p.startsWith('blob:')) URL.revokeObjectURL(p); } catch {} });
     };
   }, [imagePreviews, videoPreviews]);
 
