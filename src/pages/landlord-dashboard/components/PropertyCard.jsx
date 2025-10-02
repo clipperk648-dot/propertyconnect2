@@ -23,14 +23,7 @@ const PropertyCard = ({ property, onEdit, onViewDetails, onStatusChange }) => {
     }
   };
 
-  const formatPrice = (price) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    })?.format(price);
-  };
+  const formatPrice = (price) => formatCurrency(price);
 
   const handleViewDetails = () => {
     navigate('/property-details', { state: { propertyId: property?.id } });
