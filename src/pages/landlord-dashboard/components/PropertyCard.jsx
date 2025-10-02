@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Icon from '../../../components/AppIcon';
 import Image from '../../../components/AppImage';
 import Button from '../../../components/ui/Button';
+import { formatCurrency } from '../../../utils/currency';
 
 const PropertyCard = ({ property, onEdit, onViewDetails, onStatusChange }) => {
   const navigate = useNavigate();
@@ -22,14 +23,7 @@ const PropertyCard = ({ property, onEdit, onViewDetails, onStatusChange }) => {
     }
   };
 
-  const formatPrice = (price) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    })?.format(price);
-  };
+  const formatPrice = (price) => formatCurrency(price);
 
   const handleViewDetails = () => {
     navigate('/property-details', { state: { propertyId: property?.id } });

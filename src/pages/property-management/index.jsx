@@ -23,168 +23,31 @@ const PropertyManagement = () => {
   const [properties, setProperties] = useState([]);
   const [isAddOpen, setIsAddOpen] = useState(false);
 
-  // Mock user data
-  const currentUser = {
-    name: "David Wilson",
-    email: "david.wilson@findmyhome.com",
-    avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
-    role: "landlord"
-  };
-
-  // Mock properties data with different statuses
-  const mockProperties = [
-    {
-      id: 1,
-      title: "Modern Downtown Apartment",
-      location: "Downtown Seattle, WA",
-      price: 2800,
-      type: "rent",
-      status: "active",
-      bedrooms: 2,
-      bathrooms: 2,
-      area: 1200,
-      image: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=400&h=300&fit=crop",
-      views: 245,
-      inquiries: 12,
-      favorites: 18,
-      dateAdded: "2025-01-05",
-      lastUpdated: "2025-01-08",
-      performance: { viewsLastWeek: 45, inquiriesLastWeek: 3, favoritesLastWeek: 5 }
-    },
-    {
-      id: 2,
-      title: "Luxury Waterfront Condo",
-      location: "Bellevue, WA",
-      price: 4200,
-      type: "rent",
-      status: "active",
-      bedrooms: 3,
-      bathrooms: 2,
-      area: 1800,
-      image: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=400&h=300&fit=crop",
-      views: 189,
-      inquiries: 8,
-      favorites: 25,
-      dateAdded: "2025-01-03",
-      lastUpdated: "2025-01-07",
-      performance: { viewsLastWeek: 32, inquiriesLastWeek: 2, favoritesLastWeek: 8 }
-    },
-    {
-      id: 3,
-      title: "Cozy Studio Near University",
-      location: "University District, Seattle",
-      price: 1600,
-      type: "rent",
-      status: "draft",
-      bedrooms: 1,
-      bathrooms: 1,
-      area: 650,
-      image: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=400&h=300&fit=crop",
-      views: 0,
-      inquiries: 0,
-      favorites: 0,
-      dateAdded: "2025-01-08",
-      lastUpdated: "2025-01-08",
-      draftStatus: "Photos needed"
-    },
-    {
-      id: 4,
-      title: "Family House with Garden",
-      location: "Redmond, WA",
-      price: 3500,
-      type: "rent",
-      status: "archived",
-      bedrooms: 4,
-      bathrooms: 3,
-      area: 2200,
-      image: "https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=400&h=300&fit=crop",
-      views: 98,
-      inquiries: 3,
-      favorites: 12,
-      dateAdded: "2024-12-28",
-      archivedDate: "2025-01-06",
-      archivedReason: "Maintenance required"
-    },
-    {
-      id: 5,
-      title: "Commercial Office Space",
-      location: "Capitol Hill, Seattle",
-      price: 5800,
-      type: "rent",
-      status: "active",
-      bedrooms: 0,
-      bathrooms: 2,
-      area: 1500,
-      image: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=400&h=300&fit=crop",
-      views: 67,
-      inquiries: 4,
-      favorites: 6,
-      dateAdded: "2025-01-02",
-      lastUpdated: "2025-01-05",
-      performance: { viewsLastWeek: 15, inquiriesLastWeek: 1, favoritesLastWeek: 2 }
-    },
-    {
-      id: 6,
-      title: "Penthouse with City View",
-      location: "Belltown, Seattle",
-      price: 850000,
-      type: "sale",
-      status: "active",
-      bedrooms: 3,
-      bathrooms: 3,
-      area: 2500,
-      image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=400&h=300&fit=crop",
-      views: 312,
-      inquiries: 22,
-      favorites: 45,
-      dateAdded: "2025-01-01",
-      lastUpdated: "2025-01-07",
-      performance: { viewsLastWeek: 89, inquiriesLastWeek: 8, favoritesLastWeek: 15 }
-    },
-    {
-      id: 7,
-      title: "Suburban Family Home",
-      location: "Kirkland, WA",
-      price: 2900,
-      type: "rent",
-      status: "draft",
-      bedrooms: 3,
-      bathrooms: 2,
-      area: 1600,
-      image: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=400&h=300&fit=crop",
-      views: 0,
-      inquiries: 0,
-      favorites: 0,
-      dateAdded: "2025-01-07",
-      lastUpdated: "2025-01-08",
-      draftStatus: "Description incomplete"
-    },
-    {
-      id: 8,
-      title: "Vintage Loft Downtown",
-      location: "Pioneer Square, Seattle",
-      price: 3200,
-      type: "rent",
-      status: "archived",
-      bedrooms: 2,
-      bathrooms: 1,
-      area: 1100,
-      image: "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=400&h=300&fit=crop",
-      views: 156,
-      inquiries: 9,
-      favorites: 21,
-      dateAdded: "2024-12-15",
-      archivedDate: "2025-01-04",
-      archivedReason: "Rented successfully"
-    }
-  ];
-
-  // Initialize properties state from mock data
   useEffect(() => {
-    if (properties?.length === 0) setProperties(mockProperties);
+    (async () => {
+      try {
+        const res = await fetch('/.netlify/functions/properties');
+        const json = await res.json();
+        const items = Array.isArray(json?.items) ? json.items : [];
+        const normalized = items.map((p) => ({
+          ...p,
+          id: p.id || p._id,
+          image: p.image || (Array.isArray(p.images) ? p.images[0] : ''),
+          status: p.status || 'active',
+          area: p.area || p.sqft || 0,
+          type: p.type || p.propertyType || 'rent',
+          dateAdded: p.createdAt || new Date().toISOString(),
+          views: p.views || 0,
+          inquiries: p.inquiries || 0,
+          favorites: p.favorites || 0,
+        }));
+        setProperties(normalized);
+      } catch {
+        setProperties([]);
+      }
+    })();
   }, []);
 
-  // Property statistics derived from current properties
   const propertyStats = {
     total: properties?.length || 0,
     active: (properties || []).filter(p => p?.status === 'active')?.length,
@@ -201,15 +64,12 @@ const PropertyManagement = () => {
 
   const applyFiltersAndSort = () => {
     let filtered = (properties || [])?.filter(property => {
-      // Filter by tab status
       if (activeTab === 'active' && property?.status !== 'active') return false;
       if (activeTab === 'draft' && property?.status !== 'draft') return false;
       if (activeTab === 'archived' && property?.status !== 'archived') return false;
-
       return true;
     });
 
-    // Apply additional filters
     if (currentFilters?.type) {
       filtered = filtered?.filter(property => property?.type === currentFilters?.type);
     }
@@ -223,11 +83,10 @@ const PropertyManagement = () => {
     }
     if (currentFilters?.location) {
       filtered = filtered?.filter(property => 
-        property?.location?.toLowerCase()?.includes(currentFilters?.location?.toLowerCase())
+        (property?.location || '')?.toLowerCase()?.includes(currentFilters?.location?.toLowerCase())
       );
     }
 
-    // Apply sorting
     switch (currentSort) {
       case 'price-high':
         filtered?.sort((a, b) => b?.price - a?.price);
@@ -244,7 +103,7 @@ const PropertyManagement = () => {
       case 'alphabetical':
         filtered?.sort((a, b) => a?.title?.localeCompare(b?.title));
         break;
-      default: // 'recent'
+      default:
         filtered?.sort((a, b) => new Date(b?.dateAdded) - new Date(a?.dateAdded));
     }
 
@@ -282,14 +141,11 @@ const PropertyManagement = () => {
   };
 
   const handleAddProperty = () => {
-    // open add property modal
     setIsAddOpen(true);
   };
 
   const handleAddPropertySubmit = (newProperty) => {
-    // prepend newly added property to list
     setProperties(prev => [newProperty, ...(prev || [])]);
-    // ensure selected tab shows active
     setActiveTab('active');
     setSelectedProperties([]);
   };
@@ -300,12 +156,9 @@ const PropertyManagement = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Navigation */}
       <RoleBasedNavBar userRole="landlord" isAuthenticated={true} />
-      {/* Main Content */}
       <div className="pt-16 pb-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          {/* Header Section */}
           <div className="flex items-center justify-between mb-6">
             <div>
               <h1 className="text-3xl font-bold text-foreground">Property Management</h1>
@@ -313,7 +166,6 @@ const PropertyManagement = () => {
                 Manage your property listings and track performance
               </p>
             </div>
-            
             <div className="flex items-center space-x-4">
               <Button
                 variant="default"
@@ -326,7 +178,6 @@ const PropertyManagement = () => {
             </div>
           </div>
 
-          {/* Breadcrumb */}
           <BreadcrumbTrail 
             userRole="landlord" 
             currentPage="Property Management"
@@ -336,17 +187,14 @@ const PropertyManagement = () => {
             ]}
           />
 
-          {/* Property Statistics */}
           <PropertyStats stats={propertyStats} />
 
-          {/* Property Tabs */}
           <PropertyTabs 
             activeTab={activeTab}
             onTabChange={handleTabChange}
             stats={propertyStats}
           />
 
-          {/* Toolbar */}
           <div className="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center mb-6">
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2">
@@ -365,7 +213,6 @@ const PropertyManagement = () => {
                   iconSize={16}
                 />
               </div>
-              
               {selectedProperties?.length > 0 && (
                 <BulkActions
                   selectedCount={selectedProperties?.length}
@@ -383,10 +230,8 @@ const PropertyManagement = () => {
             />
           </div>
 
-          {/* Properties Content */}
           {filteredProperties?.length > 0 ? (
             <>
-              {/* Select All Checkbox */}
               <div className="flex items-center justify-between mb-4 p-4 bg-card border border-border rounded-lg">
                 <label className="flex items-center space-x-2 cursor-pointer">
                   <input
@@ -404,7 +249,6 @@ const PropertyManagement = () => {
                 </span>
               </div>
 
-              {/* Properties Grid/List */}
               {viewMode === 'grid' ? (
                 <PropertyGrid
                   properties={filteredProperties}
@@ -431,9 +275,9 @@ const PropertyManagement = () => {
           ) : (
             <div className="bg-card border border-border rounded-lg p-12 text-center">
               <div className="text-muted-foreground mb-4">
-                {activeTab === 'active' && "📋"}
-                {activeTab === 'draft' && "✏️"}
-                {activeTab === 'archived' && "📁"}
+                {activeTab === 'active' && '📋'}
+                {activeTab === 'draft' && '✏️'}
+                {activeTab === 'archived' && '📁'}
               </div>
               <h3 className="text-lg font-semibold text-foreground mb-2">
                 No {activeTab} properties found
@@ -457,7 +301,6 @@ const PropertyManagement = () => {
           )}
         </div>
       </div>
-      {/* Mobile App Footer */}
       <MobileAppFooter userRole="landlord" showOnDesktop />
 
       <AddPropertyModal

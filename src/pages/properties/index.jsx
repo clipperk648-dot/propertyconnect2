@@ -1,39 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import RoleBasedNavBar from '../../components/ui/RoleBasedNavBar';
 import Button from '../../components/ui/Button';
 import Image from '../../components/AppImage';
 import MobileAppFooter from '../../components/ui/MobileAppFooter';
-
-const mockProperties = [
-  {
-    id: 1,
-    title: 'Modern Downtown Apartment',
-    location: '123 Oak Street, Downtown',
-    price: 2400,
-    type: 'rent',
-    status: 'Available',
-    image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=400&h=300&fit=crop'
-  },
-  {
-    id: 2,
-    title: 'Garden View Complex',
-    location: '456 Pine Avenue, Midtown',
-    price: 1800,
-    type: 'rent',
-    status: 'Available',
-    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop'
-  },
-  {
-    id: 3,
-    title: 'Riverside Condos',
-    location: '789 River Road, Riverside',
-    price: 3200,
-    type: 'rent',
-    status: 'Rented',
-    image: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=400&h=300&fit=crop'
-  }
-];
+import { formatCurrency } from '../../utils/currency';
 
 const Properties = () => {
   const navigate = useNavigate();
@@ -43,7 +15,7 @@ const Properties = () => {
     const controller = new AbortController();
     async function load() {
       try {
-        const res = await fetch('/api/properties', { signal: controller.signal });
+        const res = await fetch('/.netlify/functions/properties', { signal: controller.signal });
         const json = await res.json();
         const items = Array.isArray(json?.items) ? json.items : [];
         setProperties(items);
@@ -55,7 +27,8 @@ const Properties = () => {
     return () => controller.abort();
   }, []);
 
-  const formatCurrency = (v) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(v);
+  // use shared currency formatter
+  const formatCurrencyLocal = (v) => formatCurrency(v);
 
   return (
     <div className="min-h-screen bg-background">

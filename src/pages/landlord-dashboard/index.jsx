@@ -8,6 +8,8 @@ import Button from '../../components/ui/Button';
 import PropertyCard from './components/PropertyCard';
 import Image from '../../components/AppImage';
 import { getProfile } from '../../services/authServices';
+import SlideshowBanner from '../tenant-dashboard/components/SlideshowBanner';
+import { formatCurrency } from '../../utils/currency';
 
 const LandlordDashboard = () => {
   const navigate = useNavigate();
@@ -29,77 +31,41 @@ const LandlordDashboard = () => {
     })();
   }, []);
 
-  // Mock properties (kept from original mock dataset)
-  const mockProperties = [
-    {
-      id: 1,
-      title: 'Modern Downtown Apartment',
-      location: '123 Oak Street, Downtown',
-      price: 2400,
-      type: 'rent',
-      status: 'available',
-      bedrooms: 2,
-      bathrooms: 2,
-      area: 1200,
-      image:
-        'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=400&h=300&fit=crop',
-      unitsOccupied: 10,
-      unitsTotal: 12,
-    },
-    {
-      id: 2,
-      title: 'Garden View Complex',
-      location: '456 Pine Avenue, Midtown',
-      price: 1800,
-      type: 'rent',
-      status: 'available',
-      bedrooms: 2,
-      bathrooms: 1,
-      area: 900,
-      image:
-        'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop',
-      unitsOccupied: 8,
-      unitsTotal: 8,
-    },
-    {
-      id: 3,
-      title: 'Riverside Condos',
-      location: '789 River Road, Riverside',
-      price: 3200,
-      type: 'rent',
-      status: 'available',
-      bedrooms: 3,
-      bathrooms: 2,
-      area: 1400,
-      image:
-        'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=400&h=300&fit=crop',
-      unitsOccupied: 5,
-      unitsTotal: 6,
-    },
-  ];
-
-  const dashboardMetrics = {
-    totalProperties: mockProperties.length,
-    occupancyPercent: Math.round(
-      (mockProperties.reduce((acc, p) => acc + (p.unitsOccupied || 0), 0) /
-        mockProperties.reduce((acc, p) => acc + (p.unitsTotal || 0), 0)) *
-        100
-    ),
-    monthlyRevenue: 24000,
-    requestsPending: 2,
-  };
-
+  // Load properties from API (landlord's properties)
   useEffect(() => {
-    setProperties(mockProperties);
+    let mounted = true;
+    (async () => {
+      try {
+        const res = await fetch('/.netlify/functions/properties');
+        const json = await res.json();
+        const items = Array.isArray(json?.items) ? json.items : [];
+        const normalized = items.map((p) => ({
+          ...p,
+          id: p.id || p._id,
+          image: p.image || (Array.isArray(p.images) ? p.images[0] : ''),
+          unitsOccupied: p.unitsOccupied || 0,
+          unitsTotal: p.unitsTotal || 1,
+        }));
+        if (mounted) setProperties(normalized);
+      } catch (e) {
+        if (mounted) setProperties([]);
+      }
+    })();
+    return () => { mounted = false; };
   }, []);
 
-  const formatCurrency = (value) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      maximumFractionDigits: 0,
-    }).format(value);
+  const dashboardMetrics = {
+    totalProperties: properties.length,
+    occupancyPercent: properties.length === 0 ? 0 : Math.round(
+      (properties.reduce((acc, p) => acc + (p.unitsOccupied || 0), 0) /
+        Math.max(1, properties.reduce((acc, p) => acc + (p.unitsTotal || 0), 0))) *
+        100
+    ),
+    monthlyRevenue: properties.reduce((acc, p) => acc + (p.price || 0), 0),
+    requestsPending: 0,
   };
+
+  const formatCurrencyLocal = (value) => formatCurrency(value);
 
   return (
     <div className="min-h-screen bg-background">
@@ -122,12 +88,21 @@ const LandlordDashboard = () => {
             </div>
           </div>
 
+          {/* Slideshow Banner */}
+          <div className="mb-6">
+            <SlideshowBanner slides={[
+              { id: 1, title: 'List properties in minutes', subtitle: 'Add new listings and start receiving inquiries', image: 'https://images.unsplash.com/photo-1494526585095-c41746248156?w=1600&h=600&fit=crop' },
+              { id: 2, title: 'Track performance easily', subtitle: 'Views, inquiries, and favorites at a glance', image: 'https://images.unsplash.com/photo-1449844908441-8829872d2607?w=1600&h=600&fit=crop' },
+              { id: 3, title: 'Reach verified tenants', subtitle: 'Your listings appear instantly in tenant search', image: 'https://images.unsplash.com/photo-1484154218962-a197022b5858?w=1600&h=600&fit=crop' },
+            ]} interval={3000} />
+          </div>
+
           {/* Metrics Grid (mobile-first) */}
           <div className="grid grid-cols-2 gap-3 mb-6">
             <div className="bg-card border border-border rounded-lg p-4">
               <div className="text-sm text-muted-foreground">Properties</div>
               <div className="text-xl font-semibold text-foreground">{dashboardMetrics.totalProperties}</div>
-              <div className="text-xs text-muted-foreground">{mockProperties.reduce((acc, p) => acc + (p.unitsTotal || 0), 0)} units</div>
+              <div className="text-xs text-muted-foreground">{properties.reduce((acc, p) => acc + (p.unitsTotal || 0), 0)} units</div>
             </div>
 
             <div className="bg-card border border-border rounded-lg p-4">
@@ -138,7 +113,7 @@ const LandlordDashboard = () => {
 
             <div className="bg-card border border-border rounded-lg p-4">
               <div className="text-sm text-muted-foreground">Revenue</div>
-              <div className="text-xl font-semibold text-foreground">{formatCurrency(dashboardMetrics.monthlyRevenue)}</div>
+              <div className="text-xl font-semibold text-foreground">{formatCurrencyLocal(dashboardMetrics.monthlyRevenue)}</div>
               <div className="text-xs text-muted-foreground">+12% this month</div>
             </div>
 

@@ -13,47 +13,8 @@ const NotificationIndicator = ({
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
 
-  // Mock notifications for demo
-  const mockNotifications = notifications?.length > 0 ? notifications : [
-    {
-      id: 1,
-      type: 'message',
-      title: 'New Message from Sarah Johnson',
-      message: 'Interested in viewing the downtown apartment',
-      timestamp: '2 minutes ago',
-      isRead: false,
-      actionUrl: '/messages/1'
-    },
-    {
-      id: 2,
-      type: 'application',
-      title: 'Application Update',
-      message: 'Your application for Oak Street property has been approved',
-      timestamp: '1 hour ago',
-      isRead: false,
-      actionUrl: '/applications/2'
-    },
-    {
-      id: 3,
-      type: 'reminder',
-      title: 'Rent Due Reminder',
-      message: 'Monthly rent payment due in 3 days',
-      timestamp: '2 hours ago',
-      isRead: true,
-      actionUrl: '/payments'
-    },
-    {
-      id: 4,
-      type: 'property',
-      title: 'New Property Match',
-      message: 'Found 3 new properties matching your criteria',
-      timestamp: '1 day ago',
-      isRead: true,
-      actionUrl: '/property-search'
-    }
-  ];
-
-  const displayUnreadCount = unreadCount > 0 ? unreadCount : mockNotifications?.filter(n => !n?.isRead)?.length;
+  const list = Array.isArray(notifications) ? notifications : [];
+  const displayUnreadCount = unreadCount > 0 ? unreadCount : list?.filter(n => !n?.isRead)?.length;
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -168,8 +129,8 @@ const NotificationIndicator = ({
 
           {/* Notifications List */}
           <div className="max-h-64 overflow-y-auto">
-            {mockNotifications?.length > 0 ? (
-              mockNotifications?.map((notification) => (
+            {list?.length > 0 ? (
+              list?.map((notification) => (
                 <button
                   key={notification?.id}
                   onClick={() => handleNotificationClick(notification)}
@@ -211,7 +172,7 @@ const NotificationIndicator = ({
           </div>
 
           {/* Footer */}
-          {mockNotifications?.length > 0 && (
+          {list?.length > 0 && (
             <div className="px-4 py-3 border-t border-border">
               <button
                 onClick={() => {

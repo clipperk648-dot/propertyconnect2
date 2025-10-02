@@ -1,6 +1,7 @@
 import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell } from 'recharts';
 import Icon from '../../../components/AppIcon';
+import { formatCurrency } from '../../../utils/currency';
 
 const MetricsPanel = ({ metrics }) => {
   const monthlyViewsData = [
@@ -19,14 +20,8 @@ const MetricsPanel = ({ metrics }) => {
     { name: 'Condos', value: 5, color: '#EF4444' }
   ];
 
-  const formatCurrency = (value) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    })?.format(value);
-  };
+  // use shared NGN currency formatter
+  const formatCurrencyLocal = (value) => formatCurrency(value);
 
   const MetricCard = ({ title, value, icon, trend, trendValue, color = 'text-primary' }) => (
     <div className="bg-card border border-border rounded-lg p-4 elevation-1">
@@ -186,7 +181,7 @@ const MetricsPanel = ({ metrics }) => {
                   borderRadius: '8px',
                   fontSize: '12px'
                 }}
-                formatter={(value) => [formatCurrency(value * 50), 'Revenue']}
+                formatter={(value) => [formatCurrencyLocal(value * 50), 'Revenue']}
               />
               <Line
                 type="monotone"

@@ -5,6 +5,14 @@ import Input from '../../../components/ui/Input';
 const propertyTypes = ['Selfcon', 'Single room', 'Duplex', 'Hostel', 'Shop', 'Store'];
 const amenitiesList = ['Well tiled', 'Running water', 'Electricity', 'Well water', 'Painted', 'POP', 'Fenced', 'Security', 'Solar', 'Prepaid'];
 
+function slugify(val) {
+  return String(val || '')
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
+}
+
 const AddPropertyModal = ({ open = false, onClose = () => {}, onAdd = () => {} }) => {
   const [form, setForm] = useState({
     title: '',
@@ -28,7 +36,6 @@ const AddPropertyModal = ({ open = false, onClose = () => {}, onAdd = () => {} }
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    // cleanup object URLs on unmount
     return () => {
       imagePreviews.forEach(p => URL.revokeObjectURL(p));
       videoPreviews.forEach(p => URL.revokeObjectURL(p));
@@ -37,7 +44,6 @@ const AddPropertyModal = ({ open = false, onClose = () => {}, onAdd = () => {} }
 
   useEffect(() => {
     if (!open) {
-      // reset form when closing
       setForm({
         title: '',
         description: '',
@@ -108,34 +114,59 @@ const AddPropertyModal = ({ open = false, onClose = () => {}, onAdd = () => {} }
     if (!validate()) return;
     setIsSubmitting(true);
 
-    // Simulate upload delay
-    await new Promise(res => setTimeout(res, 800));
+    try {
+      const payload = {
+        title: form.title,
+        location: form.location,
+        city: form.location,
+        price: Number(form.price),
+        type: slugify(form.type),
+        bedrooms: Number(form.bedrooms),
+        bathrooms: Number(form.bathrooms),
+        sqft: Number(form.area || 0),
+        amenities: form.amenities,
+        status: 'active',
+        images: [],
+        image: '',
+      };
 
-    // Build new property object (images/videos stored as preview URLs for demo)
-    const newProperty = {
-      id: Date.now(),
-      title: form.title,
-      location: form.location,
-      price: Number(form.price),
-      type: form.type.toLowerCase(),
-      status: 'active',
-      bedrooms: Number(form.bedrooms),
-      bathrooms: Number(form.bathrooms),
-      area: form.area,
-      image: imagePreviews?.[0] || '',
-      images: imagePreviews,
-      videos: videoPreviews,
-      amenities: form.amenities,
-      dateAdded: new Date().toISOString(),
-      views: 0,
-      inquiries: 0,
-      favorites: 0
-    };
+      const res = await fetch('/.netlify/functions/properties', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
 
-    // Pass to parent
-    onAdd(newProperty);
-    setIsSubmitting(false);
-    onClose();
+      let json = {};
+      try {
+        const text = await res.text();
+        json = text ? JSON.parse(text) : {};
+      } catch (err) {
+        json = {};
+      }
+
+      if (!res.ok) {
+        const msg = json?.error || res.statusText || 'Failed to save';
+        throw new Error(msg);
+      }
+
+      const saved = json.item || {};
+      const uiProperty = {
+        ...saved,
+        id: saved.id || saved._id,
+        image: saved.image || (Array.isArray(saved.images) ? saved.images[0] : ''),
+        dateAdded: saved.createdAt || new Date().toISOString(),
+        views: saved.views || 0,
+        inquiries: saved.inquiries || 0,
+        favorites: saved.favorites || 0,
+      };
+
+      onAdd(uiProperty);
+      setIsSubmitting(false);
+      onClose();
+    } catch (err) {
+      setIsSubmitting(false);
+      setErrors(prev => ({ ...prev, form: err.message || 'Failed to save property' }));
+    }
   };
 
   if (!open) return null;
@@ -149,6 +180,12 @@ const AddPropertyModal = ({ open = false, onClose = () => {}, onAdd = () => {} }
           <h2 className="text-lg font-semibold">Add New Property</h2>
           <button type="button" onClick={onClose} className="text-muted-foreground hover:text-foreground">Close</button>
         </div>
+
+        {errors.form && (
+          <div className="mb-3 text-sm text-error">
+            {errors.form}
+          </div>
+        )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Input label="Title" name="title" value={form.title} onChange={handleInput} error={errors.title} />

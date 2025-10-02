@@ -7,64 +7,7 @@ import Button from '../../components/ui/Button';
 import { useNavigate } from 'react-router-dom';
 import { formatCurrency } from '../../utils/currency';
 
-const initialSaved = [
-  {
-    id: 1,
-    title: "Modern Downtown Apartment",
-    address: "123 Main Street, Downtown",
-    price: 2500,
-    bedrooms: 2,
-    bathrooms: 2,
-    sqft: 1200,
-    image: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800&h=600&fit=crop",
-    status: "Available",
-    applicationStatus: "Not Applied",
-    savedDate: "2025-01-05",
-    propertyType: "Apartment"
-  },
-  {
-    id: 2,
-    title: "Cozy Suburban House",
-    address: "456 Oak Avenue, Suburbs",
-    price: 3200,
-    bedrooms: 3,
-    bathrooms: 2.5,
-    sqft: 1800,
-    image: "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?w=800&h=600&fit=crop",
-    status: "Available",
-    applicationStatus: "Applied",
-    savedDate: "2025-01-03",
-    propertyType: "House"
-  },
-  {
-    id: 3,
-    title: "Luxury Condo with View",
-    address: "789 Skyline Drive, Uptown",
-    price: 4500,
-    bedrooms: 2,
-    bathrooms: 2,
-    sqft: 1400,
-    image: "https://images.pixabay.com/photo/2016/11/18/17/46/house-1836070_1280.jpg?w=800&h=600&fit=crop",
-    status: "Pending",
-    applicationStatus: "Under Review",
-    savedDate: "2025-01-02",
-    propertyType: "Condo"
-  },
-  {
-    id: 4,
-    title: "Studio Near University",
-    address: "321 College Street, Campus Area",
-    price: 1800,
-    bedrooms: 1,
-    bathrooms: 1,
-    sqft: 600,
-    image: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop",
-    status: "Available",
-    applicationStatus: "Not Applied",
-    savedDate: "2025-01-01",
-    propertyType: "Studio"
-  }
-];
+const initialSaved = [];
 
 const Favorites = () => {
   const navigate = useNavigate();
@@ -129,7 +72,7 @@ const Favorites = () => {
           </div>
           <div className="flex items-center space-x-3">
             <Button variant="ghost" onClick={() => navigate('/property-search') } iconName="Search">Search</Button>
-            <Button variant="outline" onClick={() => { /* export mock */ alert('Exported favorites (mock)'); }}>Export</Button>
+            <Button variant="outline" onClick={() => { alert('Exported favorites'); }}>Export</Button>
             <Button variant="destructive" onClick={clearAll}>Clear All</Button>
           </div>
         </div>

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Icon from '../../../components/AppIcon';
 import Image from '../../../components/AppImage';
 import Button from '../../../components/ui/Button';
+import { formatCurrency } from '../../../utils/currency';
 
 const PropertyCard = ({ property, onSave, onContact, isSaved = false }) => {
   const [isImageLoading, setIsImageLoading] = useState(true);
@@ -41,14 +42,7 @@ const PropertyCard = ({ property, onSave, onContact, isSaved = false }) => {
     onContact(property);
   };
 
-  const formatPrice = (price) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    })?.format(price);
-  };
+  const formatPrice = (price) => formatCurrency(price);
 
   const getPropertyTypeIcon = (type) => {
     switch (type?.toLowerCase()) {
