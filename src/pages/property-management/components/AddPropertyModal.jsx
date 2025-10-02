@@ -63,8 +63,36 @@ const AddPropertyModal = ({ open = false, onClose = () => {}, onAdd = () => {}, 
       setVideoPreviews([]);
       setErrors({});
       setIsSubmitting(false);
+      return;
     }
-  }, [open]);
+
+    // if opening with an initial property (edit), populate form
+    if (open && initial) {
+      setForm({
+        title: initial.title || '',
+        description: initial.description || '',
+        price: initial.price || '',
+        forSale: (initial.type === 'sale'),
+        forRent: (initial.type !== 'sale'),
+        type: initial.type || propertyTypes[0],
+        bedrooms: initial.bedrooms || 1,
+        bathrooms: initial.bathrooms || 1,
+        area: initial.area || initial.sqft || '',
+        location: initial.location || initial.city || '',
+        amenities: Array.isArray(initial.amenities) ? initial.amenities : [],
+        images: [],
+        videos: []
+      });
+      // show existing image as preview
+      const previews = [];
+      if (initial.image) previews.push(initial.image);
+      if (Array.isArray(initial.images)) previews.push(...initial.images);
+      setImagePreviews(previews);
+      setVideoPreviews([]);
+      setErrors({});
+      setIsSubmitting(false);
+    }
+  }, [open, initial]);
 
   const handleInput = (e) => {
     const { name, value, type, checked } = e.target;
