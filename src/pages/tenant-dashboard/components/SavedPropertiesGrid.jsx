@@ -1,70 +1,35 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Icon from '../../../components/AppIcon';
 import Image from '../../../components/AppImage';
 import Button from '../../../components/ui/Button';
 import { formatCurrency } from '../../../utils/currency';
+import api from '../../../utils/api';
+import usePolling from '../../../utils/usePolling';
+import { mapPropertyDoc } from '../../../utils/mapProperty';
 
 const SavedPropertiesGrid = () => {
   const navigate = useNavigate();
-  const [savedProperties, setSavedProperties] = useState([
-    {
-      id: 1,
-      title: "Modern Downtown Apartment",
-      address: "123 Main Street, Downtown",
-      price: 2500,
-      bedrooms: 2,
-      bathrooms: 2,
-      sqft: 1200,
-      image: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=400&h=300&fit=crop",
-      status: "Available",
-      applicationStatus: "Not Applied",
-      savedDate: "2025-01-05",
-      propertyType: "Apartment"
-    },
-    {
-      id: 2,
-      title: "Cozy Suburban House",
-      address: "456 Oak Avenue, Suburbs",
-      price: 3200,
-      bedrooms: 3,
-      bathrooms: 2.5,
-      sqft: 1800,
-      image: "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?w=400&h=300&fit=crop",
-      status: "Available",
-      applicationStatus: "Applied",
-      savedDate: "2025-01-03",
-      propertyType: "House"
-    },
-    {
-      id: 3,
-      title: "Luxury Condo with View",
-      address: "789 Skyline Drive, Uptown",
-      price: 4500,
-      bedrooms: 2,
-      bathrooms: 2,
-      sqft: 1400,
-      image: "https://images.pixabay.com/photo/2016/11/18/17/46/house-1836070_1280.jpg?w=400&h=300&fit=crop",
-      status: "Pending",
-      applicationStatus: "Under Review",
-      savedDate: "2025-01-02",
-      propertyType: "Condo"
-    },
-    {
-      id: 4,
-      title: "Studio Near University",
-      address: "321 College Street, Campus Area",
-      price: 1800,
-      bedrooms: 1,
-      bathrooms: 1,
-      sqft: 600,
-      image: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=400&h=300&fit=crop",
-      status: "Available",
-      applicationStatus: "Not Applied",
-      savedDate: "2025-01-01",
-      propertyType: "Studio"
+  const [savedProperties, setSavedProperties] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  const load = async () => {
+    try {
+      const res = await api.get('/properties?limit=60');
+      const items = Array.isArray(res?.data?.items) ? res.data.items : [];
+      const mapped = items.map(mapPropertyDoc).filter(Boolean);
+      setSavedProperties(mapped);
+      setError('');
+    } catch (e) {
+      setError('Failed to load properties');
+    } finally {
+      setLoading(false);
     }
-  ]);
+  };
+
+  useEffect(() => { load(); }, []);
+  usePolling(load, 5000, []);
 
   const handleRemoveFromSaved = (propertyId) => {
     setSavedProperties(prev => prev?.filter(property => property?.id !== propertyId));
@@ -102,12 +67,29 @@ const SavedPropertiesGrid = () => {
     }
   };
 
+  if (loading) {
+    return (
+      <div className="bg-card rounded-lg border border-border p-8 text-center">
+        <Icon name="Loader" size={32} className="animate-spin text-muted-foreground mx-auto mb-2" />
+        <p className="text-sm text-muted-foreground">Loading properties…</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="bg-card rounded-lg border border-error/30 p-8 text-center">
+        <p className="text-sm text-error">{error}</p>
+      </div>
+    );
+  }
+
   if (savedProperties?.length === 0) {
     return (
       <div className="bg-card rounded-lg border border-border p-8 text-center">
         <Icon name="Heart" size={48} className="text-muted-foreground mx-auto mb-4" />
-        <h3 className="text-lg font-semibold text-foreground mb-2">No Saved Properties</h3>
-        <p className="text-muted-foreground mb-4">Start saving properties you're interested in to keep track of them here.</p>
+        <h3 className="text-lg font-semibold text-foreground mb-2">No Properties</h3>
+        <p className="text-muted-foreground mb-4">Once landlords add properties, they will appear here.</p>
         <Button onClick={() => navigate('/property-search')} iconName="Search" iconPosition="left">
           Search Properties
         </Button>
@@ -118,8 +100,8 @@ const SavedPropertiesGrid = () => {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold text-foreground">Saved Properties</h2>
-        <span className="text-sm text-muted-foreground">{savedProperties?.length} properties saved</span>
+        <h2 className="text-xl font-semibold text-foreground">Latest Properties</h2>
+        <span className="text-sm text-muted-foreground">{savedProperties?.length} properties</span>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {savedProperties?.map((property) => (
@@ -134,7 +116,7 @@ const SavedPropertiesGrid = () => {
                 <button
                   onClick={() => handleRemoveFromSaved(property?.id)}
                   className="p-2 bg-card/90 backdrop-blur-sm rounded-full hover:bg-card transition-colors"
-                  title="Remove from saved"
+                  title="Remove"
                 >
                   <Icon name="Heart" size={16} className="text-error fill-current" />
                 </button>
@@ -207,7 +189,7 @@ const SavedPropertiesGrid = () => {
 
               <div className="mt-3 pt-3 border-t border-border">
                 <p className="text-xs text-muted-foreground">
-                  Saved on {new Date(property.savedDate)?.toLocaleDateString()}
+                  Added on {new Date(property.savedDate)?.toLocaleDateString()}
                 </p>
               </div>
             </div>
