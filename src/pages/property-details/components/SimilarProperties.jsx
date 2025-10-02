@@ -39,7 +39,7 @@ const SimilarProperties = ({ properties = [] }) => {
       </div>
       {/* Properties Grid */}
       <div className="grid md:grid-cols-2 gap-6">
-        {mockProperties?.map((property) => (
+        {list?.map((property) => (
           <div
             key={property?.id}
             className="group cursor-pointer"
