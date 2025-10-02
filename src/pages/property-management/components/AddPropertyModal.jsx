@@ -130,7 +130,7 @@ const AddPropertyModal = ({ open = false, onClose = () => {}, onAdd = () => {} }
         image: '',
       };
 
-      const res = await fetch('/.netlify/functions/properties', {
+      const res = await fetch('/api/properties', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),

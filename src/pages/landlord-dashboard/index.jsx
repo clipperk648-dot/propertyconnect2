@@ -36,7 +36,7 @@ const LandlordDashboard = () => {
     let mounted = true;
     (async () => {
       try {
-        const res = await fetch('/.netlify/functions/properties');
+        const res = await fetch('/api/properties');
         const json = await res.json();
         const items = Array.isArray(json?.items) ? json.items : [];
         const normalized = items.map((p) => ({
