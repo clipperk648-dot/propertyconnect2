@@ -42,14 +42,7 @@ const PropertyCard = ({ property, onSave, onContact, isSaved = false }) => {
     onContact(property);
   };
 
-  const formatPrice = (price) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    })?.format(price);
-  };
+  const formatPrice = (price) => formatCurrency(price);
 
   const getPropertyTypeIcon = (type) => {
     switch (type?.toLowerCase()) {
