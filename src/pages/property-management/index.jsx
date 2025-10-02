@@ -22,11 +22,12 @@ const PropertyManagement = () => {
   const [filteredProperties, setFilteredProperties] = useState([]);
   const [properties, setProperties] = useState([]);
   const [isAddOpen, setIsAddOpen] = useState(false);
+  const [editProperty, setEditProperty] = useState(null);
 
   useEffect(() => {
     (async () => {
       try {
-        const res = await fetch('/.netlify/functions/properties');
+        const res = await fetch('/api/properties');
         const json = await res.json();
         const items = Array.isArray(json?.items) ? json.items : [];
         const normalized = items.map((p) => ({
@@ -136,16 +137,65 @@ const PropertyManagement = () => {
     setSelectedProperties([]);
   };
 
-  const handlePropertyAction = (property, action) => {
-    console.log('Property action:', action, 'for property:', property?.id);
+  const handlePropertyAction = async (property, action) => {
+    // basic client-side actions: edit opens modal, analytics navigates, archive updates status
+    switch (action) {
+      case 'edit':
+        setEditProperty(property);
+        setIsAddOpen(true);
+        break;
+      case 'analytics':
+        // navigate to property details page and request analytics view
+        navigate('/property-details', { state: { propertyId: property?.id || property?._id, focus: 'analytics' } });
+        break;
+      case 'archive':
+        try {
+          // update locally immediately
+          setProperties(prev => prev.map(p => p?.id === property?.id ? { ...p, status: 'archived' } : p));
+          // persist to API (best effort)
+          await fetch('/api/properties', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: property?.id || property?._id, status: 'archived' }),
+          });
+        } catch (e) {
+          console.error('Failed to archive property', e);
+        }
+        break;
+      case 'restore':
+        try {
+          setProperties(prev => prev.map(p => p?.id === property?.id ? { ...p, status: 'active' } : p));
+          await fetch('/api/properties', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: property?.id || property?._id, status: 'active' }),
+          });
+        } catch (e) { console.error(e); }
+        break;
+      case 'delete':
+        try {
+          setProperties(prev => prev.filter(p => p?.id !== property?.id));
+          // best effort delete request (not supported server-side yet)
+          await fetch(`/api/properties`, { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: property?.id || property?._id }) });
+        } catch (e) { console.error(e); }
+        break;
+      default:
+        console.log('Property action:', action, 'for property:', property?.id);
+    }
   };
 
   const handleAddProperty = () => {
+    setEditProperty(null);
     setIsAddOpen(true);
   };
 
   const handleAddPropertySubmit = (newProperty) => {
-    setProperties(prev => [newProperty, ...(prev || [])]);
+    // if editing, replace existing property else prepend
+    setProperties(prev => {
+      const exists = prev?.some(p => p?.id === newProperty?.id);
+      if (exists) return prev.map(p => p?.id === newProperty?.id ? newProperty : p);
+      return [newProperty, ...(prev || [])];
+    });
     setActiveTab('active');
     setSelectedProperties([]);
   };
@@ -305,7 +355,8 @@ const PropertyManagement = () => {
 
       <AddPropertyModal
         open={isAddOpen}
-        onClose={() => setIsAddOpen(false)}
+        initial={editProperty}
+        onClose={() => { setIsAddOpen(false); setEditProperty(null); }}
         onAdd={(p) => handleAddPropertySubmit(p)}
       />
     </div>

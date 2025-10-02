@@ -13,7 +13,7 @@ function slugify(val) {
     .replace(/(^-|-$)/g, '');
 }
 
-const AddPropertyModal = ({ open = false, onClose = () => {}, onAdd = () => {} }) => {
+const AddPropertyModal = ({ open = false, onClose = () => {}, onAdd = () => {}, initial = null }) => {
   const [form, setForm] = useState({
     title: '',
     description: '',
@@ -37,8 +37,8 @@ const AddPropertyModal = ({ open = false, onClose = () => {}, onAdd = () => {} }
 
   useEffect(() => {
     return () => {
-      imagePreviews.forEach(p => URL.revokeObjectURL(p));
-      videoPreviews.forEach(p => URL.revokeObjectURL(p));
+      imagePreviews.forEach(p => { try { if (typeof p === 'string' && p.startsWith('blob:')) URL.revokeObjectURL(p); } catch {} });
+      videoPreviews.forEach(p => { try { if (typeof p === 'string' && p.startsWith('blob:')) URL.revokeObjectURL(p); } catch {} });
     };
   }, [imagePreviews, videoPreviews]);
 
@@ -63,8 +63,36 @@ const AddPropertyModal = ({ open = false, onClose = () => {}, onAdd = () => {} }
       setVideoPreviews([]);
       setErrors({});
       setIsSubmitting(false);
+      return;
     }
-  }, [open]);
+
+    // if opening with an initial property (edit), populate form
+    if (open && initial) {
+      setForm({
+        title: initial.title || '',
+        description: initial.description || '',
+        price: initial.price || '',
+        forSale: (initial.type === 'sale'),
+        forRent: (initial.type !== 'sale'),
+        type: initial.type || propertyTypes[0],
+        bedrooms: initial.bedrooms || 1,
+        bathrooms: initial.bathrooms || 1,
+        area: initial.area || initial.sqft || '',
+        location: initial.location || initial.city || '',
+        amenities: Array.isArray(initial.amenities) ? initial.amenities : [],
+        images: [],
+        videos: []
+      });
+      // show existing image as preview
+      const previews = [];
+      if (initial.image) previews.push(initial.image);
+      if (Array.isArray(initial.images)) previews.push(...initial.images);
+      setImagePreviews(previews);
+      setVideoPreviews([]);
+      setErrors({});
+      setIsSubmitting(false);
+    }
+  }, [open, initial]);
 
   const handleInput = (e) => {
     const { name, value, type, checked } = e.target;
@@ -109,14 +137,34 @@ const AddPropertyModal = ({ open = false, onClose = () => {}, onAdd = () => {} }
     return Object.keys(errs).length === 0;
   };
 
+  const readFileAsDataURL = (file) => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+
   const handleSubmit = async (e) => {
     e?.preventDefault();
     if (!validate()) return;
     setIsSubmitting(true);
 
     try {
+      // convert any selected File images to base64 data urls
+      const imagesData = [];
+      for (const f of form.images || []) {
+        if (typeof f === 'string') {
+          imagesData.push(f);
+        } else if (f instanceof File) {
+          // eslint-disable-next-line no-await-in-loop
+          const data = await readFileAsDataURL(f);
+          imagesData.push(data);
+        }
+      }
+
       const payload = {
         title: form.title,
+        description: form.description,
         location: form.location,
         city: form.location,
         price: Number(form.price),
@@ -126,14 +174,18 @@ const AddPropertyModal = ({ open = false, onClose = () => {}, onAdd = () => {} }
         sqft: Number(form.area || 0),
         amenities: form.amenities,
         status: 'active',
-        images: [],
-        image: '',
+        images: imagesData,
+        image: imagesData[0] || (imagePreviews[0] || ''),
       };
 
-      const res = await fetch('/.netlify/functions/properties', {
-        method: 'POST',
+      const isEdit = initial && (initial.id || initial._id);
+      const method = isEdit ? 'PUT' : 'POST';
+      const url = '/api/properties';
+
+      const res = await fetch(url, {
+        method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
+        body: JSON.stringify(isEdit ? { ...payload, id: initial.id || initial._id } : payload),
       });
 
       let json = {};
@@ -152,7 +204,7 @@ const AddPropertyModal = ({ open = false, onClose = () => {}, onAdd = () => {} }
       const saved = json.item || {};
       const uiProperty = {
         ...saved,
-        id: saved.id || saved._id,
+        id: saved.id || saved._id || saved?._id,
         image: saved.image || (Array.isArray(saved.images) ? saved.images[0] : ''),
         dateAdded: saved.createdAt || new Date().toISOString(),
         views: saved.views || 0,

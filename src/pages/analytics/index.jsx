@@ -1,4 +1,3 @@
-import React from 'react';
 import React, { useEffect, useState } from 'react';
 import RoleBasedNavBar from '../../components/ui/RoleBasedNavBar';
 import MobileAppFooter from '../../components/ui/MobileAppFooter';
@@ -13,7 +12,7 @@ const Analytics = () => {
     let mounted = true;
     (async () => {
       try {
-        const res = await fetch('/.netlify/functions/properties');
+        const res = await fetch('/api/properties');
         const json = await res.json();
         const items = Array.isArray(json?.items) ? json.items : [];
         if (!mounted) return;
