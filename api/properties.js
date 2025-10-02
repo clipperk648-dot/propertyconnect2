@@ -79,6 +79,28 @@ module.exports = async function handler(req, res) {
       return res.status(201).json({ item: saved });
     }
 
+    if (req.method === 'PUT') {
+      const body = req.body || {};
+      const id = body.id || body._id;
+      if (!id) return res.status(400).json({ error: 'id is required for update' });
+      const update = {};
+      const allowed = ['title','description','location','city','price','type','propertyType','bedrooms','bathrooms','sqft','area','images','image','amenities','status'];
+      for (const k of allowed) {
+        if (Object.prototype.hasOwnProperty.call(body, k)) update[k] = body[k];
+      }
+      update.updatedAt = new Date();
+      try {
+        const _id = ObjectId.isValid(id) ? new ObjectId(id) : id;
+        const result = await col.findOneAndUpdate({ _id }, { $set: update }, { returnDocument: 'after' });
+        const item = result.value || null;
+        if (!item) return res.status(404).json({ error: 'not found' });
+        item.id = String(item._id);
+        return res.status(200).json({ item });
+      } catch (err) {
+        return res.status(500).json({ error: err && err.message ? err.message : 'update failed' });
+      }
+    }
+
     return res.status(405).json({ error: 'Method Not Allowed' });
   } catch (e) {
     return res.status(200).json({ items: [], total: 0, source: 'error', error: e && e.message ? e.message : 'unknown error' });
