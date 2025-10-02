@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Icon from '../../../components/AppIcon';
 import Image from '../../../components/AppImage';
 import Button from '../../../components/ui/Button';
+import { formatCurrency } from '../../../utils/currency';
 
 const PropertyCard = ({ property, onEdit, onViewDetails, onStatusChange }) => {
   const navigate = useNavigate();
