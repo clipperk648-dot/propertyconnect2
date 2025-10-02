@@ -22,6 +22,7 @@ const PropertyManagement = () => {
   const [filteredProperties, setFilteredProperties] = useState([]);
   const [properties, setProperties] = useState([]);
   const [isAddOpen, setIsAddOpen] = useState(false);
+  const [editProperty, setEditProperty] = useState(null);
 
   useEffect(() => {
     (async () => {
