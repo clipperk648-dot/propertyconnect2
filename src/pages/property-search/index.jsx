@@ -218,10 +218,22 @@ const PropertySearch = () => {
         const res = await fetch(`/api/properties?${params.toString()}`, { signal: controller.signal });
         const json = await res.json();
         let items = Array.isArray(json?.items) ? json.items : [];
+        // normalize records created by landlord UI
+        items = items.map((p) => ({
+          ...p,
+          id: p.id || p._id,
+          location: p.location || p.city || '',
+          type: p.type || p.propertyType || 'selfcon',
+          status: p.status === 'active' ? 'available' : (p.status || 'available'),
+          images: Array.isArray(p.images) ? p.images : (p.image ? [p.image] : []),
+          bedrooms: p.bedrooms ?? p.beds ?? 0,
+          bathrooms: p.bathrooms ?? p.baths ?? 0,
+          sqft: p.sqft ?? p.area ?? 0,
+        }));
         if (filters?.minPrice) items = items.filter(p => Number(p.price) >= Number(filters.minPrice));
         if (filters?.maxPrice) items = items.filter(p => Number(p.price) <= Number(filters.maxPrice));
-        if (filters?.bedrooms && filters.bedrooms !== 'any') items = items.filter(p => Number(p.beds ?? p.bedrooms ?? 0) >= Number(filters.bedrooms));
-        if (filters?.bathrooms && filters.bathrooms !== 'any') items = items.filter(p => Number(p.baths ?? p.bathrooms ?? 0) >= Number(filters.bathrooms));
+        if (filters?.bedrooms && filters.bedrooms !== 'any') items = items.filter(p => Number(p.bedrooms ?? 0) >= Number(filters.bedrooms));
+        if (filters?.bathrooms && filters.bathrooms !== 'any') items = items.filter(p => Number(p.bathrooms ?? 0) >= Number(filters.bathrooms));
         if (filters?.minSqft) items = items.filter(p => Number(p.sqft ?? 0) >= Number(filters.minSqft));
         if (filters?.maxSqft) items = items.filter(p => Number(p.sqft ?? 0) <= Number(filters.maxSqft));
         setFilteredProperties(items);
