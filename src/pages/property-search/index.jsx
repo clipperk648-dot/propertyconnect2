@@ -215,7 +215,7 @@ const PropertySearch = () => {
         const params = new URLSearchParams();
         if (filters?.location) params.set('city', filters.location);
         if (filters?.propertyType && filters?.propertyType !== 'all') params.set('type', filters.propertyType);
-        const res = await fetch(`/api/properties?${params.toString()}`, { signal: controller.signal });
+        const res = await fetch(`/.netlify/functions/properties?${params.toString()}`, { signal: controller.signal });
         const json = await res.json();
         let items = Array.isArray(json?.items) ? json.items : [];
         // normalize records created by landlord UI
