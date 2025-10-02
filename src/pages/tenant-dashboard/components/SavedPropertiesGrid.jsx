@@ -13,6 +13,9 @@ const SavedPropertiesGrid = () => {
   const [savedProperties, setSavedProperties] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [statusMessage, setStatusMessage] = useState('');
+  const [actionError, setActionError] = useState('');
+  const [applyingId, setApplyingId] = useState('');
 
   const load = async () => {
     try {
