@@ -13,7 +13,7 @@ function slugify(val) {
     .replace(/(^-|-$)/g, '');
 }
 
-const AddPropertyModal = ({ open = false, onClose = () => {}, onAdd = () => {} }) => {
+const AddPropertyModal = ({ open = false, onClose = () => {}, onAdd = () => {}, initial = null }) => {
   const [form, setForm] = useState({
     title: '',
     description: '',
