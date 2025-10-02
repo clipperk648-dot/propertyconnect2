@@ -135,18 +135,29 @@ const AddPropertyModal = ({ open = false, onClose = () => {}, onAdd = () => {} }
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
-      const json = await res.json();
-      if (!res.ok) throw new Error(json?.error || 'Failed to save');
+
+      let json = {};
+      try {
+        const text = await res.text();
+        json = text ? JSON.parse(text) : {};
+      } catch (err) {
+        json = {};
+      }
+
+      if (!res.ok) {
+        const msg = json?.error || res.statusText || 'Failed to save';
+        throw new Error(msg);
+      }
 
       const saved = json.item || {};
       const uiProperty = {
         ...saved,
         id: saved.id || saved._id,
         image: saved.image || (Array.isArray(saved.images) ? saved.images[0] : ''),
-        dateAdded: new Date().toISOString(),
-        views: 0,
-        inquiries: 0,
-        favorites: 0,
+        dateAdded: saved.createdAt || new Date().toISOString(),
+        views: saved.views || 0,
+        inquiries: saved.inquiries || 0,
+        favorites: saved.favorites || 0,
       };
 
       onAdd(uiProperty);
