@@ -1,48 +1,31 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Icon from '../../../components/AppIcon';
+import api from '../../../utils/api';
+import usePolling from '../../../utils/usePolling';
 
 const DashboardStats = () => {
+  const [propsCount, setPropsCount] = useState(0);
+  const [msgCount, setMsgCount] = useState(0);
+
+  const load = async () => {
+    try {
+      const [pRes, mRes] = await Promise.all([
+        api.get('/properties'),
+        api.get('/messages'),
+      ]);
+      setPropsCount(Number(pRes?.data?.total || (Array.isArray(pRes?.data?.items) ? pRes.data.items.length : 0)));
+      setMsgCount(Number(mRes?.data?.total || (Array.isArray(mRes?.data?.items) ? mRes.data.items.length : 0)));
+    } catch {}
+  };
+
+  useEffect(() => { load(); }, []);
+  usePolling(load, 5000, []);
+
   const stats = [
-    {
-      id: 1,
-      title: 'Saved Properties',
-      value: 4,
-      change: '+2 this week',
-      changeType: 'positive',
-      icon: 'Heart',
-      color: 'text-error',
-      bgColor: 'bg-error/10'
-    },
-    {
-      id: 2,
-      title: 'Active Applications',
-      value: 3,
-      change: '+1 pending',
-      changeType: 'neutral',
-      icon: 'FileText',
-      color: 'text-primary',
-      bgColor: 'bg-primary/10'
-    },
-    {
-      id: 3,
-      title: 'Property Views',
-      value: 24,
-      change: '+8 this week',
-      changeType: 'positive',
-      icon: 'Eye',
-      color: 'text-success',
-      bgColor: 'bg-success/10'
-    },
-    {
-      id: 4,
-      title: 'Messages',
-      value: 12,
-      change: '3 unread',
-      changeType: 'attention',
-      icon: 'MessageSquare',
-      color: 'text-blue-600',
-      bgColor: 'bg-blue-50'
-    }
+    { id: 1, title: 'Properties', value: propsCount, change: '', changeType: 'neutral', icon: 'Home', color: 'text-success', bgColor: 'bg-success/10' },
+    { id: 2, title: 'Active Applications', value: 0, change: '', changeType: 'neutral', icon: 'FileText', color: 'text-primary', bgColor: 'bg-primary/10' },
+    { id: 3, title: 'Property Views', value: 0, change: '', changeType: 'neutral', icon: 'Eye', color: 'text-muted-foreground', bgColor: 'bg-muted' },
+    { id: 4, title: 'Messages', value: msgCount, change: '', changeType: 'neutral', icon: 'MessageSquare', color: 'text-blue-600', bgColor: 'bg-blue-50' },
   ];
 
   const getChangeColor = (changeType) => {
@@ -67,15 +50,12 @@ const DashboardStats = () => {
               <Icon name={stat?.icon} size={20} className={stat?.color} />
             </div>
           </div>
-          
           <div className="space-y-2">
             <h3 className="text-sm font-medium text-muted-foreground">{stat?.title}</h3>
             <div className="flex items-baseline space-x-2">
               <span className="text-2xl font-bold text-foreground">{stat?.value}</span>
             </div>
-            <p className={`text-xs font-medium ${getChangeColor(stat?.changeType)}`}>
-              {stat?.change}
-            </p>
+            <p className={`text-xs font-medium ${getChangeColor(stat?.changeType)}`}>{stat?.change}</p>
           </div>
         </div>
       ))}
