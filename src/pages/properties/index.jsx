@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import RoleBasedNavBar from '../../components/ui/RoleBasedNavBar';
 import Button from '../../components/ui/Button';
 import Image from '../../components/AppImage';
 import MobileAppFooter from '../../components/ui/MobileAppFooter';
+import { formatCurrency } from '../../utils/currency';
 
 const Properties = () => {
   const navigate = useNavigate();
