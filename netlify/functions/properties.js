@@ -32,8 +32,19 @@ exports.handler = async function handler(event) {
 
     if (event.httpMethod === 'GET') {
       const params = event.queryStringParameters || {};
-      const { city, type } = params;
+      const { id, city, type } = params;
       const limit = Number(params.limit || 50);
+
+      if (id) {
+        try {
+          const _id = ObjectId.isValid(id) ? new ObjectId(id) : id;
+          const doc = await col.findOne({ _id });
+          if (!doc) return { statusCode: 404, headers, body: JSON.stringify({ error: 'not found' }) };
+          return { statusCode: 200, headers, body: JSON.stringify({ item: { ...doc, id: String(doc._id) } }) };
+        } catch (e) {
+          return { statusCode: 500, headers, body: JSON.stringify({ error: e && e.message ? e.message : 'lookup failed' }) };
+        }
+      }
 
       const query = {};
       if (city) query.city = { $regex: new RegExp(String(city), 'i') };
@@ -56,6 +67,8 @@ exports.handler = async function handler(event) {
       const propertyType = slugify(typeRaw);
       const images = Array.isArray(body.images) ? body.images.filter(Boolean) : [];
       const image = body.image || images[0] || '';
+      const videos = Array.isArray(body.videos) ? body.videos.filter(Boolean) : [];
+      const video = body.video || videos[0] || '';
       const amenities = Array.isArray(body.amenities) ? body.amenities : [];
       const status = String(body.status || 'active');
 
@@ -76,6 +89,8 @@ exports.handler = async function handler(event) {
         area: sqft,
         images,
         image,
+        videos,
+        video,
         amenities,
         status,
         createdAt: new Date(),
@@ -91,7 +106,7 @@ exports.handler = async function handler(event) {
       const body = event.body ? JSON.parse(event.body) : {};
       const id = body.id || body._id;
       if (!id) return { statusCode: 400, headers, body: JSON.stringify({ error: 'id is required for update' }) };
-      const allowed = ['title','description','location','city','price','type','propertyType','bedrooms','bathrooms','sqft','area','images','image','amenities','status'];
+      const allowed = ['title','description','location','city','price','type','propertyType','bedrooms','bathrooms','sqft','area','images','image','videos','video','amenities','status'];
       const update = {};
       for (const k of allowed) {
         if (Object.prototype.hasOwnProperty.call(body, k)) update[k] = body[k];

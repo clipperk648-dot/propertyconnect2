@@ -91,8 +91,12 @@ const TenantDashboard = () => {
           <div className="space-y-8">
             {/* Application Tracker */}
             <ApplicationTracker />
-            
-            
+
+            {/* Messages (live) */}
+            <div>
+              {true && <></>}
+            </div>
+
             {/* Recent Activity Feed */}
             <RecentActivityFeed />
           </div>

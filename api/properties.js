@@ -26,7 +26,17 @@ module.exports = async function handler(req, res) {
     const col = db.collection('properties');
 
     if (req.method === 'GET') {
-      const { city, type, limit = 50 } = req.query || {};
+      const { id, city, type, limit = 50 } = req.query || {};
+      if (id) {
+        try {
+          const _id = ObjectId.isValid(id) ? new ObjectId(id) : id;
+          const doc = await col.findOne({ _id });
+          if (!doc) return res.status(404).json({ error: 'not found' });
+          return res.status(200).json({ item: { ...doc, id: String(doc._id) } });
+        } catch (e) {
+          return res.status(500).json({ error: e && e.message ? e.message : 'lookup failed' });
+        }
+      }
       const query = {};
       if (city) query.city = { $regex: new RegExp(String(city), 'i') };
       if (type) query.propertyType = String(type);
@@ -48,6 +58,8 @@ module.exports = async function handler(req, res) {
       const propertyType = slugify(typeRaw);
       const images = Array.isArray(body.images) ? body.images.filter(Boolean) : [];
       const image = body.image || images[0] || '';
+      const videos = Array.isArray(body.videos) ? body.videos.filter(Boolean) : [];
+      const video = body.video || videos[0] || '';
       const amenities = Array.isArray(body.amenities) ? body.amenities : [];
       const status = String(body.status || 'active');
 
@@ -68,6 +80,8 @@ module.exports = async function handler(req, res) {
         area: sqft,
         images,
         image,
+        videos,
+        video,
         amenities,
         status,
         createdAt: new Date(),
@@ -84,7 +98,7 @@ module.exports = async function handler(req, res) {
       const id = body.id || body._id;
       if (!id) return res.status(400).json({ error: 'id is required for update' });
       const update = {};
-      const allowed = ['title','description','location','city','price','type','propertyType','bedrooms','bathrooms','sqft','area','images','image','amenities','status'];
+      const allowed = ['title','description','location','city','price','type','propertyType','bedrooms','bathrooms','sqft','area','images','image','videos','video','amenities','status'];
       for (const k of allowed) {
         if (Object.prototype.hasOwnProperty.call(body, k)) update[k] = body[k];
       }
